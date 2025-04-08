@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library App</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+
+  <style type="text/css">
+    /* styles.css */
+
+/* Reset and Base Styles */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+}
+
+/* Navbar General Styles */
+.navbar {
+  padding: 0.5rem 1rem;
+  box-shadow: none;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.container-fluid {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo */
+.navbar-logo {
+  width: auto;
+}
+
+.navbar-brand {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #000;
+}
+
+.navbar-brand i {
+  font-size: 1.25rem;
+}
+
+.navbar-toggler {
+  border: none;
+  font-size: 1.25rem;
+  padding: 0;
+  margin-right: 0.5rem;
+}
+.navbar-toggler i {
+  color: #000;
+}
+
+/* Search Bar */
+.search-form {
+  width: 100%;
+}
+
+.input-group {
+  border: 1px solid #d1d1d1;
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.input-group-text {
+  border: none;
+  background: #fff;
+  color: #6c757d;
+}
+
+.form-control {
+  border: none;
+  box-shadow: none;
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.form-control::placeholder {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.close-search {
+  cursor: pointer;
+}
+
+/* Right Side */
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.nav-link {
+  color: #000;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.nav-link i {
+  font-size: 1rem;
+  color: #000;
+}
+
+/* Calendar Dropdown */
+.calendar-dropdown {
+  border: 1px solid #d1d1d1;
+  border-radius: 25px;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Custom Chevron */
+.bi-chevron-down {
+  font-size: 0.625rem;
+  color: #000;
+}
+
+/* Calendar Badge */
+.badge {
+  top: -6px;
+  right: -6px;
+  font-size: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dc3545;
+  color: #fff;
+}
+
+/* User Avatar */
+.nav-link img {
+  border: 1px solid #e5e5e5;
+  width: 24px;
+  height: 24px;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 100%;
+  background-color: #fff;
+  border-right: 1px solid #e5e5e5;
+  height: calc(100vh - 56px); /* Adjust for navbar height */
+  position: fixed;
+  top: 64px; /* Height of the navbar */
+  left: -100%; /* Hidden off-screen on mobile */
+  transition: left 0.3s ease;
+}
+
+.sidebar .nav {
+  padding: 1rem 0;
+}
+
+.sidebar .nav-link {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  color: #000;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar .nav-link i {
+  font-size: 1rem;
+  color: #000;
+}
+
+.sidebar .nav-link.active {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.sidebar .nav-link.active i {
+  color: #fff;
+}
+
+.sidebar .logout {
+  color: #dc3545;
+}
+
+.sidebar .logout i {
+  color: #dc3545;
+}
+
+/* Main Content */
+.content {
+  margin-left: 0;
+  min-height: calc(100vh - 56px); /* Adjust for navbar height */
+}
+
+/* Mobile-First: Sidebar Toggle */
+@media (max-width: 767px) {
+  .sidebar.active {
+    left: 0;
+  }
+}
+
+/* Larger Screens (Tablet and Above) */
+@media (min-width: 768px) {
+  .container-fluid {
+    justify-content: space-between;
+  }
+
+  .navbar-logo {
+    width: auto;
+  }
+
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+
+  .navbar-brand i {
+    font-size: 1.5rem;
+  }
+
+  .search-form {
+    max-width: 400px;
+    margin: 0 1rem;
+    display: flex !important; /* Override d-none for desktop */
+  }
+
+  .search-toggle {
+    display: none !important; /* Hide magnifying glass on desktop */
+  }
+
+  .close-search {
+    display: none; /* Hide close button on desktop */
+  }
+
+  .navbar-right {
+    gap: 1rem;
+  }
+
+  .nav-link {
+    font-size: 0.875rem;
+  }
+
+  .nav-link i {
+    font-size: 1.25rem;
+  }
+
+  .bi-chevron-down {
+    font-size: 0.75rem;
+  }
+
+  .badge {
+    top: -8px;
+    right: -8px;
+    width: 1.25rem;
+    height: 1.25rem;
+    font-size: 0.625rem;
+  }
+
+  .nav-link img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .calendar-dropdown {
+    padding: 0.375rem 0.75rem;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 200px;
+    left: 0; /* Always visible on desktop */
+  }
+
+  .content {
+    margin-left: 200px; /* Adjust for sidebar width */
+  }
+}
+
+
+
+/* Dashboard Section */
+.dashboard-section {
+  padding: 1.5rem;
+}
+
+/* Cards */
+.card {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+.card-title {
+  font-size: 0.875rem;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+.card-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000;
+}
+
+.text-success {
+  color: #28a745;
+  font-size: 0.875rem;
+}
+
+.text-danger {
+  color: #dc3545;
+  font-size: 0.875rem;
+}
+
+/* Additional Stats */
+.stat-item {
+  padding: 1rem;
+}
+
+.stat-title {
+  font-size: 0.875rem;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000;
+}
+
+/* Mobile-First: Stack Vertically */
+@media (max-width: 767px) {
+  .dashboard-section {
+    padding: 1rem;
+  }
+
+  .card, .stat-item {
+    padding: 0.75rem;
+  }
+
+  .card-title, .stat-title {
+    font-size: 0.75rem;
+  }
+
+  .card-number, .stat-number {
+    font-size: 1.25rem;
+  }
+
+  .text-success, .text-danger {
+    font-size: 0.75rem;
+  }
+}
+
+/* Larger Screens: 4-Column Grid */
+@media (min-width: 768px) {
+  .dashboard-section {
+    padding: 1.5rem;
+  }
+
+  .card, .stat-item {
+    padding: 1rem;
+  }
+
+  .card-title, .stat-title {
+    font-size: 0.875rem;
+  }
+
+  .card-number, .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .text-success, .text-danger {
+    font-size: 0.875rem;
+  }
+}
+
+
+
+
+/* Stats Section */
+.stats-section {
+  padding: 1.5rem;
+}
+
+/* Card Styling */
+.stats-section .card {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.stats-section .card-body {
+  padding: 1rem;
+}
+
+.stats-section .card-title {
+  font-size: 1rem;
+  color: #000;
+  margin-bottom: 1rem;
+}
+
+/* Chart Container */
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 200px; /* Fixed height to match the image */
+}
+
+/* Chart Legend */
+.chart-legend {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.legend-dot.borrowed {
+  background-color: #28a745;
+}
+
+.legend-dot.returned {
+  background-color: #dc3545;
+}
+
+/* Table Styling */
+.stats-section .table {
+  margin-bottom: 0;
+}
+
+.stats-section .table th {
+  font-size: 0.875rem;
+  color: #000;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0.75rem;
+}
+
+.stats-section .table td {
+  font-size: 0.875rem;
+  color: #000;
+  padding: 0.75rem;
+  border-top: none;
+}
+
+.stats-section .table tbody tr:nth-child(odd) {
+  background-color: #f8f9fa;
+}
+
+/* Mobile-First: Stack Vertically */
+@media (max-width: 767px) {
+  .stats-section {
+    padding: 1rem;
+  }
+
+  .stats-section .card-body {
+    padding: 0.75rem;
+  }
+
+  .stats-section .card-title {
+    font-size: 0.875rem;
+  }
+
+  .chart-legend {
+    font-size: 0.75rem;
+  }
+
+  .chart-container {
+    height: 150px; /* Smaller height on mobile */
+  }
+
+  .stats-section .table th,
+  .stats-section .table td {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+  }
+}
+
+/* Larger Screens: 2-Column Layout */
+@media (min-width: 768px) {
+  .stats-section {
+    padding: 1.5rem;
+  }
+
+  .stats-section .card-body {
+    padding: 1rem;
+  }
+
+  .stats-section .card-title {
+    font-size: 1rem;
+  }
+
+  .chart-legend {
+    font-size: 0.875rem;
+  }
+
+  .chart-container {
+    height: 200px; /* Fixed height for desktop */
+  }
+
+  .stats-section .table th,
+  .stats-section .table td {
+    font-size: 0.875rem;
+    padding: 0.75rem;
+  }
+}
+
+
+
+
+
+
+
+
+
+/* Checkout Section */
+.checkout-section {
+  padding: 1.5rem;
+}
+
+/* Card Styling */
+.checkout-section .card {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.checkout-section .card-body {
+  padding: 1.5rem; /* Spacious padding to match the image */
+}
+
+.checkout-section .card-title {
+  font-size: 1rem;
+  color: #000;
+}
+
+/* Title Container */
+.checkout-section .title-container {
+  border-bottom: none; /* Ensure no bottom border */
+  padding-bottom: 0.5rem; /* Reduced padding to avoid visual border effect */
+}
+
+/* View All Link */
+.view-all {
+  font-size: 0.875rem;
+  color: #000;
+  text-decoration: none;
+}
+
+.view-all:hover {
+  text-decoration: underline;
+}
+
+/* Buttons for Top Books Sidebar */
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+  font-size: 0.875rem;
+  padding: 0.375rem 1rem; /* Adjusted padding to match the image */
+  border-radius: 25px; /* More rounded corners */
+}
+
+.btn-outline-secondary {
+  font-size: 0.875rem;
+  padding: 0.375rem 1rem; /* Adjusted padding to match the image */
+  border-radius: 25px; /* More rounded corners */
+}
+
+/* Table Styling */
+.checkout-section .table {
+  margin-bottom: 0;
+}
+
+.checkout-section .table th {
+  font-size: 0.875rem;
+  color: #000;
+  border-bottom: none; /* No bottom border to match the image */
+  padding: 1rem; /* Spacious padding */
+}
+
+.checkout-section .table td {
+  font-size: 0.875rem;
+  color: #000;
+  padding: 1rem; /* Spacious padding */
+  border-top: none;
+}
+
+/* Truncate Long Text */
+.checkout-section .truncate {
+  max-width: 150px; /* Adjust based on your layout; ensures enough space for other columns */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.checkout-section .table tbody tr:nth-child(odd) {
+  background-color: #f8f9fa;
+}
+
+/* Top Books */
+.book-title {
+  font-size: 0.875rem;
+  color: #000;
+  font-weight: 500;
+}
+
+.book-author {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.text-success {
+  font-size: 0.875rem;
+  color: #28a745;
+}
+
+/* Mobile-First: Stack Vertically */
+@media (max-width: 767px) {
+  .checkout-section {
+    padding: 1rem;
+  }
+
+  .checkout-section .card-body {
+    padding: 1rem;
+  }
+
+  .checkout-section .card-title {
+    font-size: 0.875rem;
+  }
+
+  .view-all,
+  .btn-success,
+  .btn-outline-secondary {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .checkout-section .table th,
+  .checkout-section .table td {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  .checkout-section .truncate {
+    max-width: 100px; /* Smaller width on mobile to fit the screen */
+  }
+
+  .book-title {
+    font-size: 0.75rem;
+  }
+
+  .book-author {
+    font-size: 0.625rem;
+  }
+
+  .text-success {
+    font-size: 0.75rem;
+  }
+}
+
+/* Larger Screens: 2-Column Layout */
+@media (min-width: 768px) {
+  .checkout-section {
+    padding: 1.5rem;
+  }
+
+  .checkout-section .card-body {
+    padding: 1.5rem;
+  }
+
+  .checkout-section .card-title {
+    font-size: 1rem;
+  }
+
+  .view-all,
+  .btn-success,
+  .btn-outline-secondary {
+    font-size: 0.875rem;
+  }
+
+  .checkout-section .table th,
+  .checkout-section .table td {
+    font-size: 0.875rem;
+    padding: 1rem;
+  }
+
+  .checkout-section .truncate {
+    max-width: 150px; /* Adjust as needed for desktop */
+  }
+
+  .book-title {
+    font-size: 0.875rem;
+  }
+
+  .book-author {
+    font-size: 0.75rem;
+  }
+
+  .text-success {
+    font-size: 0.875rem;
+  }
+}
+  </style>
+<!-- Replace the existing <style> block for .members-section with this -->
+<style>
+  .members-section {
+    font-family: Arial, sans-serif;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px 0;
+    box-sizing: border-box; /* Ensure padding doesn't cause overflow */
+  }
+
+  /* Upper Section Styles */
+  .members-header {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .title-section h2 {
+    font-size: 24px;
+    margin: 0;
+    color: #333;
+  }
+
+  .title-section p {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0 0 0;
+  }
+
+  .controls-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 10px;
+  }
+
+  .search-bar {
+    position: relative;
+  }
+
+  .search-bar input {
+    padding: 8px 30px 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 14px;
+    width: 200px;
+    box-sizing: border-box;
+  }
+
+  .search-bar .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+  }
+
+  .add-member-btn,
+  .import-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap; /* Prevent button text from wrapping */
+  }
+
+  .add-member-btn {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .import-btn {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    color: #333;
+  }
+
+  /* Lower Section Styles */
+  .members-table-section {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .members-table {
+    width: 100%;
+    min-width: 600px; /* Ensures the table doesn't shrink too much */
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .members-table th,
+  .members-table td {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  .members-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .members-table td {
+    border-top: 1px solid #ddd;
+    color: #666;
+  }
+
+  .members-table tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .edit-btn {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    color: #333;
+    margin-right: 5px;
+  }
+
+  .delete-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  /* Responsive Adjustments for Small Screens */
+  @media (max-width: 768px) {
+    .members-section {
+      padding: 10px 0; /* Reduce padding on small screens */
+    }
+
+    .header-content {
+      flex-wrap: wrap;
+      align-items: flex-start;
+      padding: 0 10px; /* Add padding to prevent content from touching edges */
+    }
+
+    .title-section {
+      flex: 1;
+    }
+
+    .title-section h2 {
+      font-size: 20px; /* Slightly smaller title on mobile */
+    }
+
+    .title-section p {
+      font-size: 12px; /* Smaller description on mobile */
+    }
+
+    .controls-section {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      padding: 0 10px; /* Add padding to prevent overflow */
+    }
+
+
+    .search-bar {
+      margin-top: 10px;
+      width: 100%;
+      max-width: 300px; /* Prevent search bar from taking full width */
+    }
+
+    .search-bar input {
+      width: 100%;
+      font-size: 12px; /* Smaller font on mobile */
+    }
+
+    .add-member-btn,
+    .import-btn {
+      padding: 6px 12px; /* Slightly smaller buttons on mobile */
+      font-size: 12px; /* Smaller font on mobile */
+    }
+
+    /* Ensure table doesn't overflow */
+    .members-table-section {
+      width: 100%;
+      padding: 0 10px; /* Add padding to prevent table from touching edges */
+    }
+
+    .table-wrapper {
+      width: 100%;
+    }
+
+    .members-table th,
+    .members-table td {
+      padding: 8px 10px; /* Reduce padding on small screens */
+      font-size: 12px; /* Smaller font on mobile */
+    }
+
+    .edit-btn,
+    .delete-btn {
+      padding: 4px 8px; /* Smaller buttons on mobile */
+      font-size: 10px; /* Smaller font on mobile */
+    }
+  }
+  /* Inside your existing <style> block for styles.css */
+
+/* Main Content */
+.content {
+  margin-left: 0;
+  min-height: calc(100vh - 56px); /* Adjust for navbar height */
+  width: 100%; /* Ensure it takes full width */
+  box-sizing: border-box;
+}
+
+/* Dashboard Section */
+.dashboard-section {
+  padding: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Mobile-First: Sidebar Toggle and Content Adjustments */
+@media (max-width: 767px) {
+  .sidebar.active {
+    left: 0;
+  }
+
+  .content {
+    margin-left: 0 !important; /* Override any margin-left on mobile */
+    width: 100%;
+  }
+
+  .dashboard-section {
+    padding: 1rem; /* Reduce padding on small screens */
+  }
+}
+
+/* Larger Screens (Tablet and Above) */
+@media (min-width: 768px) {
+  .sidebar {
+    width: 200px;
+    left: 0; /* Always visible on desktop */
+  }
+
+  .content {
+    margin-left: 200px; /* Adjust for sidebar width */
+  }
+
+  .dashboard-section {
+    padding: 1.5rem;
+  }
+}
+</style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-light bg-white">
+    <div class="container-fluid">
+      <!-- Logo (Visible on Mobile and Desktop) -->
+      <div class="navbar-logo d-flex">
+        <button class="navbar-toggler d-md-none" onclick="toggleSidebar()">
+  <i class="bi bi-list"></i>
+</button>
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <i class="bi bi-book me-2"></i>
+          <span>Library App</span>
+        </a>
+      </div>
+
+      <!-- Search Bar (Hidden on Mobile by Default) -->
+      <form class="search-form w-100 d-none">
+        <div class="input-group">
+          <span class="input-group-text bg-white border-end-0">
+            <i class="bi bi-search"></i>
+          </span>
+          <input
+            type="text"
+            class="form-control border-start-0"
+            placeholder="Search EX: ISBN, Title, Author, Member, etc"
+            aria-label="Search"
+          >
+          <span class="input-group-text bg-white border-start-0 close-search">
+            <i class="bi bi-x-lg"></i>
+          </span>
+        </div>
+      </form>
+
+      <!-- Right Side (Mobile: Magnifying Glass + User Profile; Desktop: Calendar + Bell + User Profile) -->
+      <div class="navbar-right d-flex align-items-center">
+        <!-- Magnifying Glass (Visible on Mobile Only) -->
+        <a href="#" class="nav-link search-toggle d-block d-md-none me-2">
+          <i class="bi bi-search"></i>
+        </a>
+
+        <!-- Calendar Dropdown (Visible on Desktop Only) -->
+        <div class="dropdown position-relative d-none d-md-block me-2">
+          <a
+            class="nav-link dropdown-toggle d-flex align-items-center calendar-dropdown"
+            href="#"
+            id="calendarDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-calendar3 me-1"></i>
+            <span>Last 6 months</span>
+            <i class="bi bi-chevron-down ms-1"></i>
+          </a>
+          <span class="badge bg-danger rounded-circle position-absolute">6</span>
+          <ul class="dropdown-menu" aria-labelledby="calendarDropdown">
+            <li><a class="dropdown-item" href="#">This month</a></li>
+            <li><a class="dropdown-item" href="#">Last 6 months</a></li>
+            <li><a class="dropdown-item" href="#">Custom range</a></li>
+          </ul>
+        </div>
+
+        <!-- Notification Bell (Visible on Desktop Only) -->
+        <a class="nav-link me-2 d-none d-md-block" href="#">
+          <i class="bi bi-bell"></i>
+        </a>
+
+        <!-- User Profile Dropdown (Visible on Mobile and Desktop) -->
+        <div class="dropdown user-profile">
+          <a
+            class="nav-link dropdown-toggle d-flex align-items-center"
+            href="#"
+            id="userDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              src="https://via.placeholder.com/32"
+              alt="User Avatar"
+              class="rounded-circle me-1"
+              width="32"
+              height="32"
+            >
+            <span>Allison</span>
+            <i class="bi bi-chevron-down ms-1"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Layout -->
+  <div class="d-flex">
+    <!-- Sidebar (Hidden on Mobile by Default) -->
+    <div class="sidebar d-md-block">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">
+            <i class="bi bi-house-door me-2"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="bi bi-people me-2"></i>
+            Members
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="bi bi-book me-2"></i>
+            Books
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="bi bi-check-square me-2"></i>
+            Checkout Books
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="bi bi-gear me-2"></i>
+            Settings
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="bi bi-question-circle me-2"></i>
+            Help
+          </a>
+        </li>
+        <li class="nav-item mt-auto">
+          <a class="nav-link logout" href="#">
+            <i class="bi bi-box-arrow-right me-2"></i>
+            Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+
+   <!-- Main Content -->
+<div class="content flex-grow-1">
+  <!-- Dashboard Section -->
+  <div class="dashboard-section p-3">
+  <section class="members-section">
+  <!-- Upper Section -->
+  <div class="members-header">
+    <div class="header-content">
+      <div class="title-section">
+        <h2>Members</h2>
+        <p>Create a member and view the member report</p>
+      </div>
+      <div class="controls-section">
+        <div class="search-bar">
+          <input type="text" placeholder="Search Member" />
+          <span class="search-icon"><i class="fas fa-search"></i></span>
+        </div>
+        <div class="button-group">
+          <button class="add-member-btn">
+            <i class="fas fa-user-plus"></i> Add Member
+          </button>
+          <button class="import-btn">
+            <i class="fas fa-file-import"></i> Import
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lower Section -->
+  <div class="members-table-section">
+    <div class="table-wrapper">
+      <table class="members-table">
+        <thead>
+          <tr>
+            <th>Member ID</th>
+            <th>Register ID</th>
+            <th>Member</th>
+            <th>Email ID</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>#80964</td>
+            <td>3734</td>
+            <td>Arthos Bergson</td>
+            <td>Arthosbergson@example.com</td>
+            <td>
+              <button class="edit-btn">Edit</button>
+              <button class="delete-btn">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>#80964</td>
+            <td>3734</td>
+            <td>Roger Schleifer</td>
+            <td>Rogerschleifer@example.com</td>
+            <td>
+              <button class="edit-btn">Edit</button>
+              <button class="delete-btn">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>#80964</td>
+            <td>3734</td>
+            <td>Angel Calzoni</td>
+            <td>Angelcalzoni@example.com</td>
+            <td>
+              <button class="edit-btn">Edit</button>
+              <button class="delete-btn">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>#80964</td>
+            <td>3734</td>
+            <td>Roger Schleifer</td>
+            <td>Rogerschleifer@example.com</td>
+            <td>
+              <button class="edit-btn">Edit</button>
+              <button class="delete-btn">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>#80964</td>
+            <td>3734</td>
+            <td>Angel Calzoni</td>
+            <td>Angelcalzoni@example.com</td>
+            <td>
+              <button class="edit-btn">Edit</button>
+              <button class="delete-btn">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>#80964</td>
+            <td>3734</td>
+            <td>Roger Schleifer</td>
+            <td>Rogerschleifer@example.com</td>
+            <td>
+              <button class="edit-btn">Edit</button>
+              <button class="delete-btn">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>#80964</td>
+            <td>3734</td>
+            <td>Angel Calzoni</td>
+            <td>Angelcalzoni@example.com</td>
+            <td>
+              <button class="edit-btn">Edit</button>
+              <button class="delete-btn">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+  </div>
+</div>
+
+
+  <!-- Bootstrap JS and Popper.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+  <!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <!-- Custom JS -->
+  <script src="script.js"></script>
+  <script type="text/javascript">
+    // Chart.js Initialization
+const ctx = document.getElementById("checkoutChart").getContext("2d");
+new Chart(ctx, {
+  type: "line",
+  data: {
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    datasets: [
+      {
+        label: "Borrowed",
+        data: [2000, 3000, 2500, 4000, 3500, 2000, 3000],
+        borderColor: "#28a745",
+        backgroundColor: "#28a745",
+        fill: false,
+        tension: 0.4,
+      },
+      {
+        label: "Returned",
+        data: [1500, 2000, 3500, 3000, 2500, 4000, 2000],
+        borderColor: "#dc3545",
+        backgroundColor: "#dc3545",
+        fill: false,
+        tension: 0.4,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 5000,
+        ticks: {
+          stepSize: 1000,
+          callback: function (value) {
+            return value / 1000 + "K";
+          },
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false, // Hide default legend (we're using custom legend)
+      },
+    },
+  },
+});
+  </script>
+
+
+  <script type="text/javascript">
+    // script.js
+document.addEventListener("DOMContentLoaded", () => {
+  const searchToggle = document.querySelector(".search-toggle");
+  const closeSearch = document.querySelector(".close-search");
+  const searchForm = document.querySelector(".search-form");
+  const navbarLogo = document.querySelector(".navbar-logo");
+  const navbarRight = document.querySelector(".navbar-right");
+  const sidebar = document.querySelector(".sidebar");
+
+  // Toggle search bar on mobile
+  searchToggle.addEventListener("click", (e) => {
+    e.preventDefault();
+    searchForm.classList.toggle("d-none");
+    navbarLogo.classList.toggle("d-none");
+    navbarRight.classList.toggle("d-none");
+  });
+
+  // Close search bar on mobile
+  closeSearch.addEventListener("click", () => {
+    searchForm.classList.add("d-none");
+    navbarLogo.classList.remove("d-none");
+    navbarRight.classList.remove("d-none");
+  });
+
+  // Toggle sidebar on mobile (for now, we'll trigger this manually; you can add a hamburger icon later)
+  window.toggleSidebar = () => {
+    sidebar.classList.toggle("active");
+  };
+});
+  </script>
+</body>
+</html>
