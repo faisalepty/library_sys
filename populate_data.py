@@ -171,6 +171,8 @@ def populate_transactions(num_transactions=50):
 
     print(f"Successfully created {num_transactions} transactions.")
 
+def update
+
 
     
 if __name__ == "__main__":

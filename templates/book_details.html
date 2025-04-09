@@ -8,6 +8,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <!-- Custom CSS -->
   <link rel="stylesheet" href="styles.css">
 
@@ -718,6 +720,320 @@ body {
   }
 }
   </style>
+<!-- Replace the existing <style> block for .members-section with this -->
+<style>
+  .books-section, .members-section {
+    font-family: Arial, sans-serif;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px 0;
+    box-sizing: border-box; /* Ensure padding doesn't cause overflow */
+  }
+
+  /* Upper Section Styles */
+  .books-header, .members-header {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .title-section h2 {
+    font-size: 24px;
+    margin: 0;
+    color: #333;
+  }
+
+  .title-section p {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0 0 0;
+  }
+
+  .controls-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 10px;
+  }
+
+  .search-bar {
+    position: relative;
+  }
+
+  .search-bar input {
+    padding: 8px 30px 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 14px;
+    width: 200px;
+    box-sizing: border-box;
+  }
+
+  .search-bar .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+  }
+
+  .add-book-btn, .add-member-btn,
+  .import-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap; /* Prevent button text from wrapping */
+  }
+
+  .add-book-btn, .add-member-btn {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .import-btn {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    color: #333;
+  }
+
+  /* Lower Section Styles */
+  .books-table-section, .members-table-section {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .books-table, .members-table {
+    width: 100%;
+    min-width: 600px; /* Ensures the table doesn't shrink too much */
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .books-table th, .books-table td, .members-table th,
+  .members-table td {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  .books-table th, .members-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .books-table td, .members-table td {
+    border-top: 1px solid #ddd;
+    color: #666;
+  }
+
+  .books-table tr:hover, .members-table tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .edit-btn {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    color: #333;
+    margin-right: 5px;
+  }
+
+  .delete-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  /* Responsive Adjustments for Small Screens */
+  @media (max-width: 768px) {
+    .books-section, .members-section {
+      padding: 10px 0; /* Reduce padding on small screens */
+    }
+
+    .header-content {
+      flex-wrap: wrap;
+      align-items: flex-start;
+      padding: 0 10px; /* Add padding to prevent content from touching edges */
+    }
+
+    .title-section {
+      flex: 1;
+    }
+
+    .title-section h2 {
+      font-size: 20px; /* Slightly smaller title on mobile */
+    }
+
+    .title-section p {
+      font-size: 12px; /* Smaller description on mobile */
+    }
+
+    .controls-section {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      padding: 0 10px; /* Add padding to prevent overflow */
+    }
+
+
+    .search-bar {
+      margin-top: 10px;
+      width: 100%;
+      max-width: 300px; /* Prevent search bar from taking full width */
+    }
+
+    .search-bar input {
+      width: 100%;
+      font-size: 12px; /* Smaller font on mobile */
+    }
+
+    .add-book-btn, .add-member-btn,
+    .import-btn {
+      padding: 6px 12px; /* Slightly smaller buttons on mobile */
+      font-size: 12px; /* Smaller font on mobile */
+    }
+
+    /* Ensure table doesn't overflow */
+    .books-table-section, .members-table-section {
+      width: 100%;
+      padding: 0 10px; /* Add padding to prevent table from touching edges */
+    }
+
+    .table-wrapper {
+      width: 100%;
+    }
+
+    .books-table th, .books-table td, .members-table th,
+    .members-table td {
+      padding: 8px 10px; /* Reduce padding on small screens */
+      font-size: 12px; /* Smaller font on mobile */
+    }
+
+    .edit-btn,
+    .delete-btn {
+      padding: 4px 8px; /* Smaller buttons on mobile */
+      font-size: 10px; /* Smaller font on mobile */
+    }
+  }
+  /* Inside your existing <style> block for styles.css */
+
+/* Main Content */
+.content {
+  margin-left: 0;
+  min-height: calc(100vh - 56px); /* Adjust for navbar height */
+  width: 100%; /* Ensure it takes full width */
+  box-sizing: border-box;
+}
+
+/* Dashboard Section */
+.dashboard-section {
+  padding: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Mobile-First: Sidebar Toggle and Content Adjustments */
+@media (max-width: 767px) {
+  .sidebar.active {
+    left: 0;
+  }
+
+  .content {
+    margin-left: 0 !important; /* Override any margin-left on mobile */
+    width: 100%;
+  }
+
+  .dashboard-section {
+    padding: 1rem; /* Reduce padding on small screens */
+  }
+}
+
+/* Larger Screens (Tablet and Above) */
+@media (min-width: 768px) {
+  .sidebar {
+    width: 200px;
+    left: 0; /* Always visible on desktop */
+  }
+
+  .content {
+    margin-left: 200px; /* Adjust for sidebar width */
+  }
+
+  .dashboard-section {
+    padding: 1.5rem;
+  }
+}
+</style>
+ <style>
+/* Custom Table Styles */
+.custom-table {
+  font-family: 'Arial', sans-serif; /* Font style */
+  font-size: 14px; /* Font size */
+}
+
+/* Header Row */
+.custom-table thead th {
+  background-color: #f8f9fa; /* Light gray background */
+  color: #333; /* Dark text color */
+  border-bottom: 2px solid #dee2e6; /* Border at the bottom */
+  padding: 10px; /* Padding for better spacing */
+}
+
+/* Table Rows */
+.custom-table tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9; /* Alternate row background */
+}
+
+/* Action Button */
+.action-btn {
+  background-color: #007bff; /* Blue background */
+  color: white; /* White text */
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px; /* Smaller font size for buttons */
+}
+
+.action-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+  </style>
 </head>
 <body>
   <!-- Navbar -->
@@ -870,431 +1186,163 @@ body {
 <div class="content flex-grow-1">
   <!-- Dashboard Section -->
   <div class="dashboard-section p-3">
-    <!-- Cards -->
-    <div class="row g-3 mb-3">
-      <!-- Borrowed Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Borrowed Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">2405</span>
-              <span class="text-success">
-                <i class="bi bi-arrow-up me-1"></i>
-                +0.2%
-              </span>
+<!-- Book Details Page -->
+<div class="container">
+  <div class="row">
+    <!-- Left Section: Same Height as Right Section -->
+    <div class="col-md-8 d-flex flex-column">
+      <div class="card flex-grow-1 mb-4">
+        <div class="card-body">
+          <div class="row">
+            <!-- Book Cover -->
+            <div class="col-md-3">
+              <img src="https://via.placeholder.com/150" alt="Book Cover" class="img-fluid rounded-start" />
+            </div>
+            <!-- Book Details -->
+            <div class="col-md-9">
+              <h2 class="card-title">Catching Fire</h2>
+              <p class="card-text">
+                WINNING MEANS FAME AND FORTUNE. LOSING MEANS CERTAIN DEATH. THE HUNGER GAMES HAVE BEGUN . . . In the ruins of a place once known as North America lies the nation of Panem, a shining Capitol surrounded by twelve outlying districts.
+              </p>
+              <a href="#" class="btn btn-primary">Read more &raquo;</a>
             </div>
           </div>
         </div>
       </div>
-      <!-- Returned Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Returned Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">785</span>
-              <span class="text-danger">
-                <i class="bi bi-arrow-down me-1"></i>
-                -0.5%
-              </span>
-            </div>
-          </div>
+
+      <!-- Borrow History: Occupies Remaining Space -->
+      <div class="card flex-grow-1 transactions-table-section mb-4" >
+        <div>
+          <h3>BORROW HISTORY</h3>
         </div>
-      </div>
-      <!-- Overdue Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Overdue Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">45</span>
-              <span class="text-success">
-                <i class="bi bi-arrow-up me-1"></i>
-                +0.5%
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Missing Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Missing Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">12</span>
-              <span class="text-danger">
-                <i class="bi bi-arrow-down me-1"></i>
-                -0.7%
-              </span>
-            </div>
-          </div>
+        <div class="card-body overflow-auto table-wrapper">
+          <table class="table transactions-table custom-table">
+            <thead>
+              <tr>
+                <th>Transaction ID</th>
+                <th>Book Title</th>
+                <th>Member Name</th>
+                <th>Issue Date</th>
+                <th>Return Date</th>
+                <th>Amount Paid</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#1</td>
+                <td>Catching Fire</td>
+                <td>Sean Huerta</td>
+                <td>2025-04-09</td>
+                <td>2025-03-24</td>
+                <td>195.24</td>
+                <td>
+                  <button class="action-btn">Return</button>
+                </td>
+              </tr>
+              <tr>
+                <td>#2</td>
+                <td>The Name of the Wind</td>
+                <td>Eric Harris</td>
+                <td>2025-04-09</td>
+                <td>2025-04-09</td>
+                <td>150.00</td>
+                <td>
+                  <button class="action-btn">Return</button>
+                </td>
+              </tr>
+              <tr>
+                <td>#3</td>
+                <td>The Great Gatsby</td>
+                <td>Jane Doe</td>
+                <td>2025-04-01</td>
+                <td>-</td>
+                <td>0.00</td>
+                <td>
+                  <button class="action-btn">Return</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
 
-    <div class="row g-3 mb-3">
-      <!-- Borrowed Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Borrowed Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">2405</span>
-              <span class="text-success">
-                <i class="bi bi-arrow-up me-1"></i>
-                +0.2%
-              </span>
-            </div>
-          </div>
+    <!-- Right Section: Metadata -->
+    <div class="col-md-4 d-flex flex-column">
+      <div class="card flex-grow-1">
+        <div class="card-body">
+          <h6>PUBLISHER</h6>
+          <p>Scholastic Press</p>
+          <h6>PUBLICATION DATE</h6>
+          <p>Sept. 14, 2008</p>
+          <h6>EDITION</h6>
+          <p>First Edition</p>
+          <h6>LANGUAGE</h6>
+          <p>English</p>
+          <h6>GENRE</h6>
+          <p>Dystopia, Fantasy, Science Fiction, Romance</p>
+          <h6>NUMBER OF COPIES</h6>
+          <p>4/4 available</p>
+          <h6>PAGES</h6>
+          <p>374</p>
         </div>
-      </div>
-      <!-- Returned Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Returned Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">785</span>
-              <span class="text-danger">
-                <i class="bi bi-arrow-down me-1"></i>
-                -0.5%
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Overdue Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Overdue Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">45</span>
-              <span class="text-success">
-                <i class="bi bi-arrow-up me-1"></i>
-                +0.5%
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Missing Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Missing Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">12</span>
-              <span class="text-danger">
-                <i class="bi bi-arrow-down me-1"></i>
-                -0.7%
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- Checkout Stats and Overdue History Section -->
-<div class="stats-section p-3">
-  <div class="row g-3">
-  <!-- Checkout Stats (Line Chart) -->
-<div class="col-12 col-md-6">
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Checkout Stats</h5>
-      <div class="chart-legend mb-3">
-        <span class="legend-item me-3">
-          <span class="legend-dot borrowed"></span> Borrowed
-        </span>
-        <span class="legend-item">
-          <span class="legend-dot returned"></span> Returned
-        </span>
-      </div>
-      <div class="chart-container">
-        <canvas id="checkoutChart"></canvas>
       </div>
     </div>
   </div>
 </div>
+  </div>
+</div>
 
-    <!-- Overdue History (Table) -->
-    <div class="col-12 col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Overdue History</h5>
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Member ID</th>
-                  <th>Title</th>
-                  <th>ISBN</th>
-                  <th>Due Date</th>
-                  <th>Fine</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>#48564</td>
-                  <td>Magnolia Palace</td>
-                  <td>3234</td>
-                  <td>5</td>
-                  <td>$10</td>
-                </tr>
-                <tr>
-                  <td>#48564</td>
-                  <td>Don Quixote</td>
-                  <td>3234</td>
-                  <td>5</td>
-                  <td>$10</td>
-                </tr>
-                <tr>
-                  <td>#48564</td>
-                  <td>Alice’s Adventures in…</td>
-                  <td>3234</td>
-                  <td>5</td>
-                  <td>$10</td>
-                </tr>
-                <tr>
-                  <td>#48564</td>
-                  <td>Pride and Prejudice</td>
-                  <td>3234</td>
-                  <td>8</td>
-                  <td>$10</td>
-                </tr>
-                <tr>
-                  <td>#48564</td>
-                  <td>Treasure Island</td>
-                  <td>3234</td>
-                  <td>5</td>
-                  <td>$10</td>
-                </tr>
-              </tbody>
-            </table>
+<!-- Add/Edit Member Modal -->
+<div class="modal fade" id="addEditMemberModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add/Edit Member</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="member-form">
+          <input type="hidden" id="member-id" name="id" value="" />
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="name" name="name" class="form-control" required />
           </div>
-        </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email" name="email" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" id="phone_number" name="phone_number" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Address</label>
+            <textarea id="address" name="address" class="form-control"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Outstanding Debt</label>
+            <input type="number" id="outstanding_debt" name="outstanding_debt" class="form-control" step="0.01" />
+          </div>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </form>
       </div>
     </div>
   </div>
 </div>
 
 
-
-
-<!-- Recent Check-out’s Section -->
-<div class="checkout-section p-3">
-  <div class="row g-3">
-    <!-- Recent Check-out’s Table -->
-    <div class="col-12 col-md-8">
-      <div class="card">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-3 title-container">
-            <h5 class="card-title mb-0">Recent Check-out’s</h5>
-            <a href="#" class="view-all">View All</a>
-          </div>
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>ISBN</th>
-                  <th class="truncate">Title</th>
-                  <th class="truncate">Author</th>
-                  <th class="truncate">Member</th>
-                  <th>Issued Date</th>
-                  <th>Return Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>#48964</td>
-                  <td>3234</td>
-                  <td class="truncate">Magnolia Palace</td>
-                  <td class="truncate">Fiona Davis</td>
-                  <td class="truncate">Phillip Workman</td>
-                  <td>5/2/2023</td>
-                  <td>15/2/2023</td>
-                </tr>
-                <tr>
-                  <td>#48964</td>
-                  <td>3234</td>
-                  <td class="truncate">Don Quixote</td>
-                  <td class="truncate">Miguel de Cervantes</td>
-                  <td class="truncate">Kianna Donin</td>
-                  <td>5/2/2023</td>
-                  <td>15/2/2023</td>
-                </tr>
-                <tr>
-                  <td>#48964</td>
-                  <td>3234</td>
-                  <td class="truncate">Alice’s Adventures in Wonder...</td>
-                  <td class="truncate">Lewis Caroll</td>
-                  <td class="truncate">Cristofer Bator</td>
-                  <td>3/2/2023</td>
-                  <td>13/2/2023</td>
-                </tr>
-                <tr>
-                  <td>#48964</td>
-                  <td>3234</td>
-                  <td class="truncate">Pride and Prejudice</td>
-                  <td class="truncate">Hanna Gouse</td>
-                  <td class="truncate">Livia Kenter</td>
-                  <td>3/2/2023</td>
-                  <td>13/2/2023</td>
-                </tr>
-                <tr>
-                  <td>#48964</td>
-                  <td>3234</td>
-                  <td class="truncate">Treasure Island</td>
-                  <td class="truncate">Phillip Siphron</td>
-                  <td class="truncate">Tatiana Arcand</td>
-                  <td>2/2/2023</td>
-                  <td>12/2/2023</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Top Books Sidebar (Unchanged) -->
-    <div class="col-12 col-md-4">
-      <div class="card">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <button class="btn btn-success btn-sm">Top Books</button>
-            <button class="btn btn-outline-secondary btn-sm">New Arrivals</button>
-          </div>
-          <ul class="list-unstyled">
-            <li class="mb-4">
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <div class="book-title">Magnolia Palace</div>
-                  <div class="book-author">Cristofer Bator</div>
-                </div>
-                <span class="text-success">Available</span>
-              </div>
-            </li>
-            <li class="mb-4">
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <div class="book-title">Don Quixote</div>
-                  <div class="book-author">Aspen Siphron</div>
-                </div>
-                <span class="text-success">Available</span>
-              </div>
-            </li>
-            <li>
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <div class="book-title">Pride and Prejudice</div>
-                  <div class="book-author">Kianna Geidt</div>
-                </div>
-                <span class="text-success">Available</span>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-</div>
-
-  <!-- Bootstrap JS and Popper.js -->
+ <!-- Bootstrap JS and Popper.js -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+
+  <!-- jQuery from CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <!-- Custom JS -->
-  <script src="script.js"></script>
-  <script type="text/javascript">
-    // Chart.js Initialization
-const ctx = document.getElementById("checkoutChart").getContext("2d");
-new Chart(ctx, {
-  type: "line",
-  data: {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    datasets: [
-      {
-        label: "Borrowed",
-        data: [2000, 3000, 2500, 4000, 3500, 2000, 3000],
-        borderColor: "#28a745",
-        backgroundColor: "#28a745",
-        fill: false,
-        tension: 0.4,
-      },
-      {
-        label: "Returned",
-        data: [1500, 2000, 3500, 3000, 2500, 4000, 2000],
-        borderColor: "#dc3545",
-        backgroundColor: "#dc3545",
-        fill: false,
-        tension: 0.4,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 5000,
-        ticks: {
-          stepSize: 1000,
-          callback: function (value) {
-            return value / 1000 + "K";
-          },
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        display: false, // Hide default legend (we're using custom legend)
-      },
-    },
-  },
-});
-  </script>
-
-
-  <script type="text/javascript">
-    // script.js
-document.addEventListener("DOMContentLoaded", () => {
-  const searchToggle = document.querySelector(".search-toggle");
-  const closeSearch = document.querySelector(".close-search");
-  const searchForm = document.querySelector(".search-form");
-  const navbarLogo = document.querySelector(".navbar-logo");
-  const navbarRight = document.querySelector(".navbar-right");
-  const sidebar = document.querySelector(".sidebar");
-
-  // Toggle search bar on mobile
-  searchToggle.addEventListener("click", (e) => {
-    e.preventDefault();
-    searchForm.classList.toggle("d-none");
-    navbarLogo.classList.toggle("d-none");
-    navbarRight.classList.toggle("d-none");
-  });
-
-  // Close search bar on mobile
-  closeSearch.addEventListener("click", () => {
-    searchForm.classList.add("d-none");
-    navbarLogo.classList.remove("d-none");
-    navbarRight.classList.remove("d-none");
-  });
-
-  // Toggle sidebar on mobile (for now, we'll trigger this manually; you can add a hamburger icon later)
-  window.toggleSidebar = () => {
-    sidebar.classList.toggle("active");
-  };
-});
-  </script>
 </body>
 </html>
