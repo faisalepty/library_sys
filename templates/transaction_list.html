@@ -10,8 +10,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="styles.css">
 
   <style type="text/css">
     /* styles.css */
@@ -722,7 +720,7 @@ body {
   </style>
 <!-- Replace the existing <style> block for .members-section with this -->
 <style>
-  .members-section {
+  .books-section, .members-section, .transactions-section {
     font-family: Arial, sans-serif;
     max-width: 100%;
     margin: 0 auto;
@@ -731,7 +729,7 @@ body {
   }
 
   /* Upper Section Styles */
-  .members-header {
+  .books-header, .members-header, .transactions-section {
     margin-bottom: 20px;
     width: 100%;
   }
@@ -788,7 +786,7 @@ body {
     color: #666;
   }
 
-  .add-member-btn,
+  .add-book-btn, .add-member-btn, .issue-book-btn,
   .import-btn {
     padding: 8px 15px;
     border: none;
@@ -801,19 +799,19 @@ body {
     white-space: nowrap; /* Prevent button text from wrapping */
   }
 
-  .add-member-btn {
+  .add-book-btn, .add-member-btn, .issue-book-btn {
     background-color: #28a745;
     color: white;
   }
 
-  .import-btn {
+  .import-btn, .return-book-btn {
     background-color: #f8f9fa;
     border: 1px solid #ddd;
     color: #333;
   }
 
   /* Lower Section Styles */
-  .members-table-section {
+  .books-table-section, .members-table-section, .transactions-table-section {
     max-width: 100%;
     width: 100%;
     box-sizing: border-box;
@@ -826,7 +824,7 @@ body {
     box-sizing: border-box;
   }
 
-  .members-table {
+  .books-table, .members-table, .transactions-table {
     width: 100%;
     min-width: 600px; /* Ensures the table doesn't shrink too much */
     border-collapse: collapse;
@@ -836,25 +834,25 @@ body {
     overflow: hidden;
   }
 
-  .members-table th,
-  .members-table td {
+  .books-table th, .books-table td, .members-table th, .transactions-table th,
+  .members-table td, .transactions-table td {
     padding: 12px 15px;
     text-align: left;
     font-size: 14px;
   }
 
-  .members-table th {
+  .books-table th, .members-table th, .transactions-table th {
     background-color: #f8f9fa;
     font-weight: bold;
     color: #333;
   }
 
-  .members-table td {
+  .books-table td, .members-table td, .transactions-table td {
     border-top: 1px solid #ddd;
     color: #666;
   }
 
-  .members-table tr:hover {
+  .books-table tr:hover, .members-table tr:hover, .transactions-table tr:hover {
     background-color: #f1f1f1;
   }
 
@@ -881,7 +879,7 @@ body {
 
   /* Responsive Adjustments for Small Screens */
   @media (max-width: 768px) {
-    .members-section {
+    .books-section, .members-section, .transactions-section {
       padding: 10px 0; /* Reduce padding on small screens */
     }
 
@@ -922,14 +920,14 @@ body {
       font-size: 12px; /* Smaller font on mobile */
     }
 
-    .add-member-btn,
+    .add-book-btn, .add-member-btn, .issue-book-btn, 
     .import-btn {
       padding: 6px 12px; /* Slightly smaller buttons on mobile */
       font-size: 12px; /* Smaller font on mobile */
     }
 
     /* Ensure table doesn't overflow */
-    .members-table-section {
+    .books-table-section, .members-table-section, .transactions-table-section {
       width: 100%;
       padding: 0 10px; /* Add padding to prevent table from touching edges */
     }
@@ -938,7 +936,7 @@ body {
       width: 100%;
     }
 
-    .members-table th,
+    .books-table th, .books-table td, .members-table th, .transactions-table td,
     .members-table td {
       padding: 8px 10px; /* Reduce padding on small screens */
       font-size: 12px; /* Smaller font on mobile */
@@ -1151,217 +1149,307 @@ body {
 <div class="content flex-grow-1">
   <!-- Dashboard Section -->
   <div class="dashboard-section p-3">
-  <section class="members-section">
+<section class="transactions-section">
   <!-- Upper Section -->
-  <div class="members-header">
+  <div class="transactions-header">
     <div class="header-content">
       <div class="title-section">
-        <h2>Members</h2>
-        <p>Create a member and view the member report</p>
+        <h2>Transactions</h2>
+        <p>View and manage book issuance and returns</p>
       </div>
       <div class="controls-section">
-        <div class="search-bar">
-          <input type="text" placeholder="Search Member" />
-          <span class="search-icon"><i class="fas fa-search"></i></span>
-        </div>
-        <div class="button-group">
-          <button class="add-member-btn">
-            <i class="fas fa-user-plus"></i> Add Member
-          </button>
-          <button class="import-btn">
-            <i class="fas fa-file-import"></i> Import
-          </button>
-        </div>
+        <button class="issue-book-btn" data-toggle="modal" data-target="#issueBookModal">
+          <i class="fas fa-plus"></i> Issue Book
+        </button>
+        <button class="return-book-btn" data-toggle="modal" data-target="#returnBookModal">
+          <i class="fas fa-check"></i> Return Book
+        </button>
       </div>
     </div>
   </div>
 
   <!-- Lower Section -->
-  <div class="members-table-section">
+  <div class="transactions-table-section">
     <div class="table-wrapper">
-      <table class="members-table">
+      <table class="transactions-table">
         <thead>
           <tr>
-            <th>Member ID</th>
-            <th>Register ID</th>
-            <th>Member</th>
-            <th>Email ID</th>
+            <th>Transaction ID</th>
+            <th>Book Title</th>
+            <th>Member Name</th>
+            <th>Issue Date</th>
+            <th>Return Date</th>
+            
+            <th>Amount Paid</th>
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>#80964</td>
-            <td>3734</td>
-            <td>Arthos Bergson</td>
-            <td>Arthosbergson@example.com</td>
-            <td>
-              <button class="edit-btn">Edit</button>
-              <button class="delete-btn">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>#80964</td>
-            <td>3734</td>
-            <td>Roger Schleifer</td>
-            <td>Rogerschleifer@example.com</td>
-            <td>
-              <button class="edit-btn">Edit</button>
-              <button class="delete-btn">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>#80964</td>
-            <td>3734</td>
-            <td>Angel Calzoni</td>
-            <td>Angelcalzoni@example.com</td>
-            <td>
-              <button class="edit-btn">Edit</button>
-              <button class="delete-btn">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>#80964</td>
-            <td>3734</td>
-            <td>Roger Schleifer</td>
-            <td>Rogerschleifer@example.com</td>
-            <td>
-              <button class="edit-btn">Edit</button>
-              <button class="delete-btn">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>#80964</td>
-            <td>3734</td>
-            <td>Angel Calzoni</td>
-            <td>Angelcalzoni@example.com</td>
-            <td>
-              <button class="edit-btn">Edit</button>
-              <button class="delete-btn">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>#80964</td>
-            <td>3734</td>
-            <td>Roger Schleifer</td>
-            <td>Rogerschleifer@example.com</td>
-            <td>
-              <button class="edit-btn">Edit</button>
-              <button class="delete-btn">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>#80964</td>
-            <td>3734</td>
-            <td>Angel Calzoni</td>
-            <td>Angelcalzoni@example.com</td>
-            <td>
-              <button class="edit-btn">Edit</button>
-              <button class="delete-btn">Delete</button>
-            </td>
-          </tr>
+        <tbody id="transactions-table-body">
+          <!-- Dynamic rows will be populated here via AJAX -->
         </tbody>
       </table>
+    </div>
+    <!-- Pagination -->
+    <div class="pagination" id="pagination-controls">
+      <!-- Pagination links will be dynamically generated here -->
     </div>
   </div>
 </section>
 
 
+  </div>
+</div>
 
-
-
+<div class="modal fade" id="issueBookModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Issue Book</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="issue-book-form">
+          <div class="form-group">
+            <label>Book</label>
+            <select id="book-id" name="book_id" class="form-control" required>
+              <!-- Options will be populated dynamically -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Member</label>
+            <select id="member-id" name="member_id" class="form-control" required>
+              <!-- Options will be populated dynamically -->
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Issue</button>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 
 
-  <!-- Bootstrap JS and Popper.js -->
+
+<div class="modal fade" id="returnBookModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Return Book</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="return-book-form">
+          <div class="form-group d-none">
+            <label>Transaction</label>
+            <input id="transaction-id" name="transaction_id" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Amount Paid by Member (KES)</label>
+            <input type="number" id="amount-paid" name="amount_paid" class="form-control" step="0.01" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Return</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <!-- jQuery from CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+ <!-- Bootstrap JS and Popper.js -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+
   <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-  <!-- Custom JS -->
-  <script src="script.js"></script>
-  <script type="text/javascript">
-    // Chart.js Initialization
-const ctx = document.getElementById("checkoutChart").getContext("2d");
-new Chart(ctx, {
-  type: "line",
-  data: {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    datasets: [
-      {
-        label: "Borrowed",
-        data: [2000, 3000, 2500, 4000, 3500, 2000, 3000],
-        borderColor: "#28a745",
-        backgroundColor: "#28a745",
-        fill: false,
-        tension: 0.4,
-      },
-      {
-        label: "Returned",
-        data: [1500, 2000, 3500, 3000, 2500, 4000, 2000],
-        borderColor: "#dc3545",
-        backgroundColor: "#dc3545",
-        fill: false,
-        tension: 0.4,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 5000,
-        ticks: {
-          stepSize: 1000,
-          callback: function (value) {
-            return value / 1000 + "K";
-          },
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        display: false, // Hide default legend (we're using custom legend)
-      },
-    },
-  },
+
+
+
+
+   <script type="text/javascript">
+    // Add this function to get the CSRF token from cookies
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Check if the cookie name matches
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Use the CSRF token in all AJAX requests
+$(document).ready(function () {
+    const csrftoken = getCookie('csrftoken'); // Get CSRF token
+
+    // Set up AJAX headers
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
 });
   </script>
 
+<script>
+  $(document).ready(function () {
+    let currentPage = 1; // Global variable to track the current page
 
-  <script type="text/javascript">
-    // script.js
-document.addEventListener("DOMContentLoaded", () => {
-  const searchToggle = document.querySelector(".search-toggle");
-  const closeSearch = document.querySelector(".close-search");
-  const searchForm = document.querySelector(".search-form");
-  const navbarLogo = document.querySelector(".navbar-logo");
-  const navbarRight = document.querySelector(".navbar-right");
-  const sidebar = document.querySelector(".sidebar");
+    // Fetch and display transactions
+    function fetchTransactions(page = 1, member_id = '', book_id = '') {
+        $.ajax({
+            url: '/transactions/',
+            method: 'GET',
+            data: { page: page, member_id: member_id, book_id: book_id },
+            success: function (response) {
+                $('#transactions-table-body').empty();
+                response.transactions.forEach(function (t) {
+                    $('#transactions-table-body').append(`
+                        <tr>
+                            <td>#${t.id}</td>
+                            <td>${t.book_title}</td>
+                            <td>${t.member_name}</td>
+                            <td>${t.issue_date}</td>
+                            <td>${t.return_date}</td>
+                            
+                            <td>${t.amount_paid}</td>
+                            <td>
+                                <button class="return-btn" data-id="${t.id}">Return</button>
+                            </td>
+                        </tr>
+                    `);
+                });
+                updatePagination(response.pagination, page);
+            },
+        });
+    }
 
-  // Toggle search bar on mobile
-  searchToggle.addEventListener("click", (e) => {
-    e.preventDefault();
-    searchForm.classList.toggle("d-none");
-    navbarLogo.classList.toggle("d-none");
-    navbarRight.classList.toggle("d-none");
-  });
+    // Initial load
+    fetchTransactions();
 
-  // Close search bar on mobile
-  closeSearch.addEventListener("click", () => {
-    searchForm.classList.add("d-none");
-    navbarLogo.classList.remove("d-none");
-    navbarRight.classList.remove("d-none");
-  });
+    // Handle "Issue Book" button click
+    $('.issue-book-btn').on('click', function () {
+        // Populate book options
+        $.ajax({
+            url: '/books-details/',
+            method: 'GET',
+            success: function (response) {
+                $('#book-id').empty();
+                response.books.forEach(function (book) {
+                    $('#book-id').append(`<option value="${book.id}">${book.title}</option>`);
+                });
+            },
+        });
 
-  // Toggle sidebar on mobile (for now, we'll trigger this manually; you can add a hamburger icon later)
-  window.toggleSidebar = () => {
-    sidebar.classList.toggle("active");
-  };
+        // Populate member options
+        $.ajax({
+            url: '/members-details/',
+            method: 'GET',
+            success: function (response) {
+                $('#member-id').empty();
+                response.members.forEach(function (member) {
+                    $('#member-id').append(`<option value="${member.id}">${member.name}</option>`);
+                });
+                $('#issueBookModal').modal('show');
+            },
+        });
+    });
+
+    // Handle issue book form submission
+    $('#issue-book-form').on('submit', function (e) {
+        e.preventDefault();
+        const formData = $(this).serialize();
+        $.ajax({
+            url: '/transactions/issue/',
+            method: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    $('#issueBookModal').modal('hide');
+                    fetchTransactions(currentPage);
+                } else {
+                    alert(response.message);
+                }
+            },
+        });
+    });
+
+    // Handle "Return Book" button click
+    $(document).on('click', '.return-btn', function () {
+        const transactionId = $(this).data('id');
+        $('#transaction-id').val(transactionId);
+        $('#returnBookModal').modal('show');
+    });
+
+    // Handle return book form submission
+    $('#return-book-form').on('submit', function (e) {
+        e.preventDefault();
+        const formData = $(this).serialize();
+        $.ajax({
+            url: '/transactions/return/',
+            method: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    $('#returnBookModal').modal('hide');
+                    fetchTransactions(currentPage);
+                    alert(`Book returned successfully.\nTotal Fee: KES ${response.total_fee}\nAmount Paid: KES ${response.amount_paid}\nRemaining Fee: KES ${response.remaining_fee}`);
+                } else {
+                    alert(response.message);
+                }
+            },
+        });
+    });
+
+    // Update pagination controls
+    function updatePagination(pagination, currentPage) {
+        const paginationControls = $('#pagination-controls');
+        paginationControls.empty();
+        if (pagination.has_previous) {
+            paginationControls.append(`
+                <button class="page-btn" data-page="${pagination.previous_page_number}">Previous</button>
+            `);
+        }
+        paginationControls.append(`<span>Page ${pagination.current_page} of ${pagination.total_pages}</span>`);
+        if (pagination.has_next) {
+            paginationControls.append(`
+                <button class="page-btn" data-page="${pagination.next_page_number}">Next</button>
+            `);
+        }
+    }
+
+    // Handle pagination button clicks
+    $(document).on('click', '.page-btn', function () {
+        currentPage = $(this).data('page');
+        fetchTransactions(currentPage);
+    });
+
+
+    
+    
+
+    // Open Return Book Modal
+    $('.return-book-btn').on('click', function () {
+        $('#returnBookModal').modal('show');
+    });
 });
-  </script>
+</script>
 </body>
 </html>
