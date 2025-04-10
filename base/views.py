@@ -125,6 +125,41 @@ def fetch_book_details(request, book_id):
 
         return JsonResponse(data)
 
+
+def book_details(request, book_id):
+    # Fetch the book
+    book = get_object_or_404(Book, id=book_id)
+
+    # Fetch related transactions (borrow history)
+    transactions = Transaction.objects.filter(book=book).order_by('-issue_date')
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Return JSON response for AJAX requests
+        data = {
+            'id': book.id,
+            'title': book.title,
+            'author': book.author,
+            'genre': book.genre,
+            'isbn': book.isbn,
+            'publication_date': book.publication_date.strftime('%Y-%m-%d') if book.publication_date else '-',
+            'description': book.description or '-',
+            'stock': book.stock,
+            'transactions': [
+                {
+                    'transaction_id': t.id,
+                    'member_name': t.member.name,
+                    'issue_date': t.issue_date.strftime('%Y-%m-%d'),
+                    'return_date': t.return_date.strftime('%Y-%m-%d') if t.return_date else '-',
+                    'amount_paid': str(t.amount_paid) if t.amount_paid else '0.00',
+                }
+                for t in transactions
+            ],
+        }
+        return JsonResponse(data)
+
+    # Render the template for non-AJAX requests
+    return render(request, 'book_details.html', {'book': book, 'transactions': transactions})
+
 def fetch_all_books(request):
 
     books = Book.objects.all()
@@ -192,7 +227,7 @@ def add_or_edit_member(request):
         email = request.POST.get('email')
         phone_number = request.POST.get('phone_number', '')
         address = request.POST.get('address', '')
-        outstanding_debt = request.POST.get('outstanding_debt', 0)
+        outstanding_debt = request.POST.get('outstanding_debt') or 0
 
         # Validate input
         if not name or not email:
@@ -260,6 +295,40 @@ def fetch_all_members(request):
                 'is_active': member.is_active, } for member in members]}
 
     return JsonResponse(data)
+
+def member_details(request, member_id):
+    # Fetch the member
+    member = get_object_or_404(Member, id=member_id)
+
+    # Fetch related transactions (borrow history)
+    transactions = Transaction.objects.filter(member=member).order_by('-issue_date')
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Return JSON response for AJAX requests
+        data = {
+            'id': member.id,
+            'name': member.name,
+            'email': member.email,
+            'phone_number': member.phone_number or '-',
+            'address': member.address or '-',
+            'outstanding_debt': str(member.outstanding_debt),
+            'is_active': member.is_active,
+            'transactions': [
+                {
+                    'transaction_id': t.id,
+                    'book_title': t.book.title,
+                    'issue_date': t.issue_date.strftime('%Y-%m-%d'),
+                    'return_date': t.return_date.strftime('%Y-%m-%d') if t.return_date else '-',
+                    'fee': str(t.fee) if t.fee else '0.00',
+                    'amount_paid': str(t.amount_paid) if t.amount_paid else '0.00',
+                }
+                for t in transactions
+            ],
+        }
+        return JsonResponse(data)
+
+    # Render the template for non-AJAX requests
+    return render(request, 'member_details.html', {'member': member, 'transactions': transactions})
 
 
 
@@ -402,4 +471,4 @@ def transaction_list(request):
         return JsonResponse(data)
 
     # Render the template for non-AJAX requests
-    return render(request, 'transaction_list.html')
+    return render(request, 'transaction_list.html', {'transactions': transactions_page, 'filters': {'member_id': member_id, 'book_id': book_id}})
