@@ -122,7 +122,7 @@
     <div class="sidebar d-md-block">
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link" href="#">
+          <a class="nav-link {% if d %} active {% endif %}" href="{% url 'dashboard'%}">
             <i class="bi bi-house-door me-2"></i>
             Dashboard
           </a>
@@ -417,6 +417,25 @@
   </div>
 </div>
 
+<!-- Confirmation Modal -->
+<div class="modal fade confirm-modal" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmModalLabel">Confirm Action</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmModalBtn">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
  <!-- Bootstrap JS and Popper.js -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
@@ -432,5 +451,56 @@
 <script src="{% static 'js/books_crud.js' %}"></script>
 <script src="{% static 'js/members_crud.js' %}"></script>
 <script src="{% static 'js/transactions_crud.js' %}"></script>
+
+ <script type="text/javascript">
+    // Chart.js Initialization
+const ctx = document.getElementById("checkoutChart").getContext("2d");
+new Chart(ctx, {
+  type: "line",
+  data: {
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    datasets: [
+      {
+        label: "Borrowed",
+        data: [2000, 3000, 2500, 4000, 3500, 2000, 3000],
+        borderColor: "#28a745",
+        backgroundColor: "#28a745",
+        fill: false,
+        tension: 0.4,
+      },
+      {
+        label: "Returned",
+        data: [1500, 2000, 3500, 3000, 2500, 4000, 2000],
+        borderColor: "#dc3545",
+        backgroundColor: "#dc3545",
+        fill: false,
+        tension: 0.4,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 5000,
+        ticks: {
+          stepSize: 1000,
+          callback: function (value) {
+            return value / 1000 + "K";
+          },
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false, // Hide default legend (we're using custom legend)
+      },
+    },
+  },
+});
+  
+  </script>
 </body>
 </html>

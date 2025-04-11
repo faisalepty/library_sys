@@ -56,11 +56,10 @@
                             <i class="fas fa-ellipsis-h"></i>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="transactionActionsDropdown-{{transaction.id}}">
-                          {% if transasaction.return_date%}
+                          {% if not transaction.return_date %}
                             <li><a class="dropdown-item return-btn" href="#" data-id="{{transaction.id}}">Return</a></li>
-                            {% if transaction.balance > 0%}
+                          {% elif transaction.balance > 0 %}
                             <li><a class="dropdown-item pay-debt-btn" href="#" data-id="{{transaction.id}}" data-balance="{{transaction.balance}}">Pay Debt</a></li>
-                            {% endif %}
                           {% else %}
                           <li><a class="dropdown-item return-btn" href="#" data-id="{{transaction.id}}">No actoins required</a></li>
                           {% endif %}

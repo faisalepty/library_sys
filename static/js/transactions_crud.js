@@ -226,6 +226,34 @@ $(document).on('click', '.issue-book-link', function (e) {
         });
     });
 
+    $(document).on('click', '#submitPaymentBtn', function () {
+    const transactionId = $('#transactionId').val();
+    const paymentAmount = $('#paymentAmount').val();
+    $.ajax({
+        url: '/pay-debt/',  // URL to the pay_debt view
+        method: 'POST',
+        data: {
+            transaction_id: transactionId,
+            payment_amount: paymentAmount,
+        },
+        success: function (response) {
+            if (response.success) {
+                $('#payDebtModal').modal('hide');
+                fetchTransactions(currentPage, memberId, bookId);
+                showSuccessModal(response.message);
+                
+            } else {
+                $('#payDebtModal').modal('hide');
+                showErrorModal(response.message);
+            }
+        },
+        error: function () {
+            $('#payDebtModal').modal('hide');
+            showErrorModal('An error occurred while processing the payment.');
+        }
+    });
+});
+
    function updateTransactionsPagination(pagination, currentPage) {
     const queryParams = getQueryParams(); // Get existing query parameters
     const paginationControls = $('#transactions-pagination-controls');
@@ -269,6 +297,8 @@ $(document).on('click', '.issue-book-link', function (e) {
 });
 
 
+
+
 $(document).on('click', '.pay-debt-btn', function () {
     const transactionId = $(this).data('id');
     const balance = $(this).data('balance');
@@ -281,29 +311,3 @@ $(document).on('click', '.pay-debt-btn', function () {
     $('#payDebtModal').modal('show');
 });
 
-$(document).on('click', '#submitPaymentBtn', function () {
-    const transactionId = $('#transactionId').val();
-    const paymentAmount = $('#paymentAmount').val();
-    $.ajax({
-        url: '/pay-debt/',  // URL to the pay_debt view
-        method: 'POST',
-        data: {
-            transaction_id: transactionId,
-            payment_amount: paymentAmount,
-        },
-        success: function (response) {
-            if (response.success) {
-                $('#payDebtModal').modal('hide');
-                showSuccessModal(response.message);
-                location.reload();  // Reload the page to reflect changes
-            } else {
-                $('#payDebtModal').modal('hide');
-                showErrorModal(response.message);
-            }
-        },
-        error: function () {
-            $('#payDebtModal').modal('hide');
-            showErrorModal('An error occurred while processing the payment.');
-        }
-    });
-});

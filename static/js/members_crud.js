@@ -115,12 +115,21 @@ $(document).ready(function () {
         });
     });
 
+
+let delmemberId
+$(document).on('click', '.delete-member-action', function () {
+    delmemberId = $(this).data('id');
+    $('.confirm-modal .modal-body').html('Are you sure you want to delete this member?');
+    $('.confirm-modal .modal-footer .btn-primary').attr('id', 'confirmModalBtn-member');
+    $('.confirm-modal').modal('show')
+
+
+})
     // Handle "Delete Member" button click
-    $(document).on('click', '.delete-member-action', function () {
-        const memberId = $(this).data('id');
-        if (confirm('Are you sure you want to delete this member?')) {
+    $(document).on('click', '#confirmModalBtn-member', function () {
+        $('.confirm-modal').modal('hide')
             $.ajax({
-                url: `/members/delete/${memberId}/`,
+                url: `/members/delete/${delmemberId}/`,
                 method: 'POST',
                 success: function (response) {
                     if (response.success) {
@@ -134,7 +143,7 @@ $(document).ready(function () {
                     showErrorModal('Error deleting member.');
                 },
             });
-        }
+        
     });
 
     // Update pagination controls

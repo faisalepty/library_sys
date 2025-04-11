@@ -149,12 +149,20 @@
         });
     });
 
+let delbookId
+$(document).on('click', '.delete-book-action', function () {
+    delbookId = $(this).data('id');
+    $('.confirm-modal .modal-body').html('Are you sure you want to delete this book?');
+    $('.confirm-modal .modal-footer .btn-primary').attr('id', 'confirmModalBtn-book');
+    $('.confirm-modal').modal('show')
+
+
+})
     // Handle "Delete Book" button click
-    $(document).on('click', '.delete-book-action', function () {
-        const bookId = $(this).data('id');
-        if (confirm('Are you sure you want to delete this book?')) {
+    $(document).on('click', '#confirmModalBtn-book', function () {
+            $('.confirm-modal').modal('hide')
             $.ajax({
-                url: `/books/delete/${bookId}/`,
+                url: `/books/delete/${delbookId}/`,
                 method: 'POST',
                 success: function (response) {
                     if (response.success) {
@@ -167,7 +175,7 @@
                     }
                 },
             });
-        }
+
     });
 
 });

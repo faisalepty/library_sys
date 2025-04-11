@@ -6,6 +6,11 @@ from datetime import date
 
 from decimal import Decimal 
 
+
+
+def dashboard(request):
+    return render(request, 'dashboard.html', {'d': 'd'})
+
 def book_list(request):
     # Get query parameters
     page = request.GET.get('page', 1)
@@ -150,14 +155,16 @@ def book_details(request, book_id):
                     'member_name': t.member.name,
                     'issue_date': t.issue_date.strftime('%Y-%m-%d'),
                     'return_date': t.return_date.strftime('%Y-%m-%d') if t.return_date else '-',
-                    'amount_paid': str(t.amount_paid) if t.amount_paid else '0.00',
-                    'balance': t.balance,
+                    'amount_paid': str(t.amount_paid) if t.amount_paid else 0,
+                    'balance': t.balance if t.balance else 0,
                 }
                 for t in transactions
             ],
         }
+        
         return JsonResponse(data)
-
+    for transaction in transactions:
+        print(transaction.id, transaction.return_date)
     # Render the template for non-AJAX requests
     return render(request, 'book_details.html', {'book': book, 'transactions': transactions, 'b_d': 'b_d'})
 
