@@ -151,6 +151,7 @@ def book_details(request, book_id):
                     'issue_date': t.issue_date.strftime('%Y-%m-%d'),
                     'return_date': t.return_date.strftime('%Y-%m-%d') if t.return_date else '-',
                     'amount_paid': str(t.amount_paid) if t.amount_paid else '0.00',
+                    'balance': t.balance,
                 }
                 for t in transactions
             ],
@@ -158,7 +159,7 @@ def book_details(request, book_id):
         return JsonResponse(data)
 
     # Render the template for non-AJAX requests
-    return render(request, 'book_details.html', {'book': book, 'transactions': transactions})
+    return render(request, 'book_details.html', {'book': book, 'transactions': transactions, 'b_d': 'b_d'})
 
 def fetch_all_books(request):
 
@@ -321,6 +322,7 @@ def member_details(request, member_id):
                     'return_date': t.return_date.strftime('%Y-%m-%d') if t.return_date else '-',
                     'fee': str(t.fee) if t.fee else '0.00',
                     'amount_paid': str(t.amount_paid) if t.amount_paid else '0.00',
+                    'balance': t.balance,
                 }
                 for t in transactions
             ],
@@ -328,7 +330,7 @@ def member_details(request, member_id):
         return JsonResponse(data)
 
     # Render the template for non-AJAX requests
-    return render(request, 'member_details.html', {'member': member, 'transactions': transactions})
+    return render(request, 'member_details.html', {'member': member, 'transactions': transactions, 'm_d': 'm_d'})
 
 
 
@@ -442,6 +444,8 @@ def transaction_list(request):
     paginator = Paginator(transactions, 10)  # 10 transactions per page
     transactions_page = paginator.get_page(page)
 
+    
+
     # Prepare data for response
     data = {
         'transactions': [
@@ -453,6 +457,7 @@ def transaction_list(request):
                 'return_date': t.return_date.strftime('%Y-%m-%d') if t.return_date else '-',
                 'fee': str(t.fee) if t.fee else '-',
                 'amount_paid': str(t.amount_paid) if t.amount_paid else '-',
+                'balance': t.balance if t.balance else 0
             }
             for t in transactions_page
         ],
@@ -466,9 +471,47 @@ def transaction_list(request):
         },
     }
 
+
     # Return JSON for AJAX requests
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         return JsonResponse(data)
 
     # Render the template for non-AJAX requests
     return render(request, 'transaction_list.html', {'transactions': transactions_page, 'filters': {'member_id': member_id, 'book_id': book_id}})
+
+
+def pay_debt(request):
+    if request.method == 'POST':
+        transaction_id = request.POST.get('transaction_id')
+        payment_amount = request.POST.get('payment_amount')
+
+        try:
+            # Fetch the transaction and validate payment amount
+            transaction = get_object_or_404(Transaction, id=transaction_id)
+            payment_amount = Decimal(payment_amount)
+
+            if payment_amount <= 0:
+                return JsonResponse({'success': False, 'message': 'Payment amount must be greater than zero.'})
+
+            # Ensure the payment does not exceed the remaining balance
+            if payment_amount > transaction.balance:
+                return JsonResponse({'success': False, 'message': 'Payment amount exceeds the remaining balance.'})
+
+            # Update the transaction
+            transaction.amount_paid += payment_amount
+            transaction.save()  # This will recalculate the balance
+
+            # Update the member's outstanding debt
+            member = transaction.member
+            member.outstanding_debt -= payment_amount
+            member.save()
+
+            return JsonResponse({
+                'success': True,
+                'message': f'Payment of {payment_amount} successfully applied.',
+                'new_balance': str(transaction.balance),
+                'outstanding_debt': str(member.outstanding_debt)
+            })
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})

@@ -22,15 +22,25 @@ $(document).ready(function () {
                             <td>${member.outstanding_debt}</td>
                             <td>${member.is_active ? 'Active' : 'Inactive'}</td>
                             <td>
-                                <button class="edit-member-btn" data-id="${member.id}">Edit</button>
-                                <button class="delete-member-btn" data-id="${member.id}">Delete</button>
+                                <!-- Dropdown Menu -->
+                                <div class="dropdown">
+                                    <button class="action-dropdown-btn" type="button" id="memberActionsDropdown-${member.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ...
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="memberActionsDropdown-${member.id}">
+                                        <li><a class="dropdown-item " href="/member/${member.id}/">View details</a></li>
+                                        <li><a class="dropdown-item issue-book-link" href="#" data-id="${member.id}" data-type="member">Issue Book</a></li>
+                                        <li><a class="dropdown-item edit-member-action" href="#" data-id="${member.id}">Edit</a></li>
+                                        <li><a class="dropdown-item delete-member-action" href="#" data-id="${member.id}">Delete</a></li>
+                                    </ul>
+                                </div>
                             </td>
                         </tr>
                     `);
                 });
 
                 // Update pagination controls
-                updatePagination(response.pagination, page);
+                updateMemberPagination(response.pagination, page);
             },
             error: function () {
                 alert('Error fetching members.');
@@ -59,7 +69,7 @@ $(document).ready(function () {
     });
 
     // Handle "Edit Member" button click
-    $(document).on('click', '.edit-member-btn', function () {
+    $(document).on('click', '.edit-member-action', function () {
         const memberId = $(this).data('id');
         $.ajax({
             url: `/members/${memberId}/`,
@@ -102,7 +112,7 @@ $(document).ready(function () {
     });
 
     // Handle "Delete Member" button click
-    $(document).on('click', '.delete-member-btn', function () {
+    $(document).on('click', '.delete-member-action', function () {
         const memberId = $(this).data('id');
         if (confirm('Are you sure you want to delete this member?')) {
             $.ajax({
@@ -123,27 +133,25 @@ $(document).ready(function () {
     });
 
     // Update pagination controls
-    function updatePagination(pagination, currentPage) {
-        const paginationControls = $('#pagination-controls');
-        paginationControls.empty();
-
-        if (pagination.has_previous) {
-            paginationControls.append(`
-                <button class="page-btn" data-page="${pagination.previous_page_number}">Previous</button>
-            `);
-        }
-
-        paginationControls.append(`<span>Page ${pagination.current_page} of ${pagination.total_pages}</span>`);
-
-        if (pagination.has_next) {
-            paginationControls.append(`
-                <button class="page-btn" data-page="${pagination.next_page_number}">Next</button>
-            `);
-        }
+ function updateMemberPagination(pagination, currentPage) {
+    const paginationControls = $('#member-pagination-controls'); // Unique ID
+    paginationControls.empty();
+    if (pagination.has_previous) {
+        paginationControls.append(`
+            <button class="page-btn member-page-btn" data-page="${pagination.previous_page_number}">Previous</button>
+        `);
     }
+    paginationControls.append(`<span>Page ${pagination.current_page} of ${pagination.total_pages}</span>`);
+    if (pagination.has_next) {
+        paginationControls.append(`
+            <button class="page-btn member-page-btn" data-page="${pagination.next_page_number}">Next</button>
+        `);
+    }
+}
+
 
     // Handle pagination button clicks
-    $(document).on('click', '.page-btn', function () {
+    $(document).on('click', '.member-page-btn', function () {
         currentPage = $(this).data('page'); // Update the current page
         const searchQuery = $('#search-members').val();
         fetchMembers(currentPage, searchQuery);

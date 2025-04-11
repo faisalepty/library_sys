@@ -24,21 +24,48 @@ function fetchTransactions(page = 1, member_id = '', book_id = '') {
         success: function (response) {
             $('#transactions-table-body').empty();
             response.transactions.forEach(function (t) {
-                $('#transactions-table-body').append(`
-                    <tr>
-                        <td>#${t.id}</td>
-                        <td>${t.book_title}</td>
-                        <td>${t.member_name}</td>
-                        <td>${t.issue_date}</td>
-                        <td>${t.return_date}</td>
-                        <td>${t.amount_paid}</td>
-                        <td>
-                            <button class="return-btn" data-id="${t.id}">Return</button>
-                        </td>
-                    </tr>
-                `);
+            let dropdownAction = '';
+            if (t.return_date === '-') {
+                // No return date: show "Return"
+                dropdownAction = `
+                    <li><a class="dropdown-item return-btn" href="#" data-id="${t.id}">Return</a></li>
+                `;
+            } else if (t.balance > 0) {
+                // Has return date and balance > 0: show "Pay Debt"
+                dropdownAction = `
+                    <li><a class="dropdown-item pay-debt-btn" href="#" data-id="${t.id}" data-balance="${t.balance}">Pay Debt</a></li>
+                `;
+            } else {
+                // Has return date and balance <= 0: show "No actions required"
+                dropdownAction = `
+                    <li><a class="dropdown-item disabled" href="#" data-id="${t.id}">No actions required</a></li>
+                `;
+            }
+
+             $('#transactions-table-body').append(`
+                        <tr>
+                            <td>#${t.id}</td>
+                            <td>${t.book_title}</td>
+                            <td>${t.member_name}</td>
+                            <td>${t.issue_date}</td>
+                            <td>${t.return_date || '-'}</td>
+                            <td>${t.amount_paid || '0.00'}</td>
+                            <td>${t.balance || '0.00'}</td>
+                            <td>
+                                <!-- Dropdown Menu -->
+                                <div class="dropdown">
+                                    <button class="action-dropdown-btn" type="button" id="transactionActionsDropdown-${t.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="transactionActionsDropdown-${t.id}">
+                                       ${dropdownAction}
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    `);
             });
-            updatePagination(response.pagination, page);
+            updateTransactionsPagination(response.pagination, page);
         },
     });
 }
@@ -59,9 +86,9 @@ fetchTransactions(currentPage, memberId, bookId);
             url: '/books-details/',
             method: 'GET',
             success: function (response) {
-                $('#book-id').empty();
+                $('#book-id-option').empty();
                 response.books.forEach(function (book) {
-                    $('#book-id').append(`<option value="${book.id}">${book.title}</option>`);
+                    $('#book-id-option').append(`<option value="${book.id}">${book.title}</option>`);
                 });
             },
         });
@@ -71,21 +98,93 @@ fetchTransactions(currentPage, memberId, bookId);
             url: '/members-details/',
             method: 'GET',
             success: function (response) {
-                $('#member-id').empty();
+                $('#member-id-option').empty();
                 response.members.forEach(function (member) {
-                    $('#member-id').append(`<option value="${member.id}">${member.name}</option>`);
+                    $('#member-id-option').append(`<option value="${member.id}">${member.name}</option>`);
                 });
                 $('#issueBookModal').modal('show');
             },
         });
     });
 
+
+    // Handle "Issue Book" button click
+$(document).on('click', '.issue-book-link', function (e) {
+    e.preventDefault(); // Prevent default link behavior
+
+    // Get the selected ID and type from the clicked link
+    const selectedId = $(this).data('id'); // ID of the selected book or member
+    const selectedType = $(this).data('type'); // Type ('book' or 'member')
+
+    // Populate book options
+    $.ajax({
+        url: '/books-details/',
+        method: 'GET',
+        success: function (response) {
+            $('#book-id-option').empty(); // Clear the dropdown
+
+            // Populate book options
+            response.books.forEach(function (book) {
+                $('#book-id-option').append(`<option value="${book.id}">${book.title}</option>`);
+                console.log(`<option value="${book.id}">${book.title}</option>`)
+            });
+
+            // Pre-select the book if applicable
+            if (selectedType === 'book' && selectedId) {
+                $('#book-id-option').val(selectedId); // Pre-select the book
+                $('#book-id-option').prop('disabled', true); // Make the dropdown read-only
+                $('#member-id-option').prop('disabled', false); // Ensure member dropdown is editable
+                console.log(`<option value="${book.id}">${book.title}</option>`)
+            }
+        },
+    });
+
+    // Populate member options
+    $.ajax({
+        url: '/members-details/',
+        method: 'GET',
+        success: function (response) {
+            $('#member-id-option').empty(); // Clear the dropdown
+
+            // Populate member options
+            response.members.forEach(function (member) {
+                $('#member-id-option').append(`<option value="${member.id}">${member.name}</option>`);
+            });
+
+            // Pre-select the member if applicable
+            if (selectedType === 'member' && selectedId) {
+                $('#member-id-option').val(selectedId); // Pre-select the member
+                $('#member-id-option').prop('disabled', true); // Make the dropdown read-only
+                $('#book-id-option').prop('disabled', false); // Ensure book dropdown is editable
+            }
+
+            // Show the modal after both dropdowns are populated
+            $('#issueBookModal').modal('show');
+        },
+    });
+});
+
     // Handle issue book form submission
     $('#issue-book-form').on('submit', function (e) {
         e.preventDefault();
+        // Temporarily enable disabled fields
+        $('#book-id-option, #member-id-option').prop('disabled', false);
+
+        // Serialize the form data
         const formData = $(this).serialize();
+        console.log('Form Data:', formData); // Debug to verify both fields are included
+
+        // Re-disable fields if necessary (optional, based on UI needs)
+        if ($('#book-id-option').data('was-disabled')) {
+            $('#book-id-option').prop('disabled', true);
+        }
+        if ($('#member-id-option').data('was-disabled')) {
+            $('#member-id-option').prop('disabled', true);
+        }
+        const issueBookurl = $("#issue-book-form").data('url')
+        console.log(formData, issueBookurl)
         $.ajax({
-            url: '/transactions/issue/',
+            url: issueBookurl,
             method: 'POST',
             data: formData,
             success: function (response) {
@@ -126,16 +225,16 @@ fetchTransactions(currentPage, memberId, bookId);
         });
     });
 
-   function updatePagination(pagination, currentPage) {
+   function updateTransactionsPagination(pagination, currentPage) {
     const queryParams = getQueryParams(); // Get existing query parameters
-    const paginationControls = $('#pagination-controls');
+    const paginationControls = $('#transactions-pagination-controls');
     paginationControls.empty();
 
     // Add "Previous" button
     if (pagination.has_previous) {
         const prevPage = pagination.previous_page_number;
         paginationControls.append(`
-            <button class="page-btn" data-page="${prevPage}">
+            <button class="page-btn transaction-page-btn" data-page="${prevPage}">
                 Previous
             </button>
         `);
@@ -148,14 +247,14 @@ fetchTransactions(currentPage, memberId, bookId);
     if (pagination.has_next) {
         const nextPage = pagination.next_page_number;
         paginationControls.append(`
-            <button class="page-btn" data-page="${nextPage}">
+            <button class="page-btn transaction-page-btn" data-page="${nextPage}">
                 Next
             </button>
         `);
     }
 
     // Handle pagination button clicks
-    $('.page-btn').on('click', function () {
+    $('.transaction-page-btn').on('click', function () {
         const newPage = $(this).data('page');
         queryParams.page = newPage; // Update the page in query parameters
         const queryString = new URLSearchParams(queryParams).toString(); // Convert to query string
@@ -165,5 +264,44 @@ fetchTransactions(currentPage, memberId, bookId);
     // Open Return Book Modal
     $('.return-book-btn').on('click', function () {
         $('#returnBookModal').modal('show');
+    });
+});
+
+
+$(document).on('click', '.pay-debt-btn', function () {
+    const transactionId = $(this).data('id');
+    const balance = $(this).data('balance');
+    console.log('clicked')
+
+    // Populate the modal with transaction details
+    $('#transactionId').val(transactionId);
+    $('#remainingBalance').text(balance);
+
+    // Show the modal
+    $('#payDebtModal').modal('show');
+});
+
+$(document).on('click', '#submitPaymentBtn', function () {
+    const transactionId = $('#transactionId').val();
+    const paymentAmount = $('#paymentAmount').val();
+    console.log('clicked')
+    $.ajax({
+        url: '/pay-debt/',  // URL to the pay_debt view
+        method: 'POST',
+        data: {
+            transaction_id: transactionId,
+            payment_amount: paymentAmount,
+        },
+        success: function (response) {
+            if (response.success) {
+                alert(response.message);
+                location.reload();  // Reload the page to reflect changes
+            } else {
+                alert(response.message);
+            }
+        },
+        error: function () {
+            alert('An error occurred while processing the payment.');
+        }
     });
 });

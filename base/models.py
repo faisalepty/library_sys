@@ -35,8 +35,14 @@ class Transaction(models.Model):
     member = models.ForeignKey('Member', on_delete=models.CASCADE)
     issue_date = models.DateField(auto_now_add=True)  # Date book was issued
     return_date = models.DateField(blank=True, null=True)  # Date book was returned
-    fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)  # Total fee charged
-    amount_paid = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)  # Amount paid by member
+    fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=150)  # Total fee charged
+    amount_paid = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0)  # Amount paid by member
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Remaining balance
+
+    def save(self, *args, **kwargs):
+        # Automatically calculate balance when saving
+        self.balance = self.fee - self.amount_paid
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.book.title} issued to {self.member.name}"

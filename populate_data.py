@@ -171,16 +171,24 @@ def populate_transactions(num_transactions=50):
 
     print(f"Successfully created {num_transactions} transactions.")
 
-def update
+def update_balance():
+    transactions = Transaction.objects.all()
+
+    for transaction in transactions:
+        # transaction.fee = int(transaction.fee) if transaction.fee else 0
+        # transaction.amount_paid = int(transaction.amount_paid) if transaction.amount_paid else 0,
+        transaction.save()
 
 
     
 if __name__ == "__main__":
-    # Populate books
-    populate_books()
+    # # Populate books
+    # populate_books()
 
-    # Populate members
-    create_members()
+    # # Populate members
+    # create_members()
 
-    # Populate transactions
-    populate_transactions()
+    # # Populate transactions
+    # populate_transactions()
+
+    update_balance()
