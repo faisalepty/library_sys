@@ -61,3 +61,25 @@ $(document).ready(function () {
     });
 
 });
+
+// Function to show the Success Modal
+function showSuccessModal(message, duration = 3000) {
+    $('#successModalBody').text(message); // Set the success message
+    $('#successModal').modal('show'); // Show the modal
+
+    // Automatically hide the modal after the specified duration
+    setTimeout(function () {
+        $('#successModal').modal('hide'); // Hide the modal
+    }, duration);
+}
+
+// Function to show the Error Modal
+function showErrorModal(message, duration = 3000) {
+    $('#errorModalBody').text(message); // Set the error message
+    $('#errorModal').modal('show'); // Show the modal
+
+    // Automatically hide the modal after the specified duration
+    setTimeout(function () {
+        $('#errorModal').modal('hide'); // Hide the modal
+    }, duration);
+}

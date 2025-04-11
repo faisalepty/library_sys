@@ -126,7 +126,7 @@ $(document).on('click', '.issue-book-link', function (e) {
             // Populate book options
             response.books.forEach(function (book) {
                 $('#book-id-option').append(`<option value="${book.id}">${book.title}</option>`);
-                console.log(`<option value="${book.id}">${book.title}</option>`)
+                
             });
 
             // Pre-select the book if applicable
@@ -134,7 +134,7 @@ $(document).on('click', '.issue-book-link', function (e) {
                 $('#book-id-option').val(selectedId); // Pre-select the book
                 $('#book-id-option').prop('disabled', true); // Make the dropdown read-only
                 $('#member-id-option').prop('disabled', false); // Ensure member dropdown is editable
-                console.log(`<option value="${book.id}">${book.title}</option>`)
+               
             }
         },
     });
@@ -172,7 +172,6 @@ $(document).on('click', '.issue-book-link', function (e) {
 
         // Serialize the form data
         const formData = $(this).serialize();
-        console.log('Form Data:', formData); // Debug to verify both fields are included
 
         // Re-disable fields if necessary (optional, based on UI needs)
         if ($('#book-id-option').data('was-disabled')) {
@@ -182,7 +181,6 @@ $(document).on('click', '.issue-book-link', function (e) {
             $('#member-id-option').prop('disabled', true);
         }
         const issueBookurl = $("#issue-book-form").data('url')
-        console.log(formData, issueBookurl)
         $.ajax({
             url: issueBookurl,
             method: 'POST',
@@ -191,8 +189,10 @@ $(document).on('click', '.issue-book-link', function (e) {
                 if (response.success) {
                     $('#issueBookModal').modal('hide');
                     fetchTransactions(currentPage, memberId, bookId);
+                    showSuccessModal(response.message);
                 } else {
-                    alert(response.message);
+                    $('#issueBookModal').modal('hide');
+                    showErrorModal(response.message);
                 }
             },
         });
@@ -217,9 +217,10 @@ $(document).on('click', '.issue-book-link', function (e) {
                 if (response.success) {
                     $('#returnBookModal').modal('hide');
                     fetchTransactions(currentPage, memberId, bookId);
-                    alert(`Book returned successfully.\nTotal Fee: KES ${response.total_fee}\nAmount Paid: KES ${response.amount_paid}\nRemaining Fee: KES ${response.remaining_fee}`);
+                    showSuccessModal(`Book returned successfully.\nTotal Fee: KES ${response.total_fee}\nAmount Paid: KES ${response.amount_paid}\nRemaining Fee: KES ${response.remaining_fee}`);
                 } else {
-                    alert(response.message);
+                    $('#returnBookModal').modal('hide');
+                    showErrorModal(response.message);
                 }
             },
         });
@@ -271,7 +272,6 @@ $(document).on('click', '.issue-book-link', function (e) {
 $(document).on('click', '.pay-debt-btn', function () {
     const transactionId = $(this).data('id');
     const balance = $(this).data('balance');
-    console.log('clicked')
 
     // Populate the modal with transaction details
     $('#transactionId').val(transactionId);
@@ -284,7 +284,6 @@ $(document).on('click', '.pay-debt-btn', function () {
 $(document).on('click', '#submitPaymentBtn', function () {
     const transactionId = $('#transactionId').val();
     const paymentAmount = $('#paymentAmount').val();
-    console.log('clicked')
     $.ajax({
         url: '/pay-debt/',  // URL to the pay_debt view
         method: 'POST',
@@ -294,14 +293,17 @@ $(document).on('click', '#submitPaymentBtn', function () {
         },
         success: function (response) {
             if (response.success) {
-                alert(response.message);
+                $('#payDebtModal').modal('hide');
+                showSuccessModal(response.message);
                 location.reload();  // Reload the page to reflect changes
             } else {
-                alert(response.message);
+                $('#payDebtModal').modal('hide');
+                showErrorModal(response.message);
             }
         },
         error: function () {
-            alert('An error occurred while processing the payment.');
+            $('#payDebtModal').modal('hide');
+            showErrorModal('An error occurred while processing the payment.');
         }
     });
 });

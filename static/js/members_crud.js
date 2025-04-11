@@ -84,7 +84,7 @@ $(document).ready(function () {
                 $('#addEditMemberModal').modal('show');
             },
             error: function () {
-                alert('Error fetching member details.');
+                showErrorModal('Error fetching member details.');
             },
         });
     });
@@ -100,13 +100,17 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.success) {
                     $('#addEditMemberModal').modal('hide');
-                    fetchMembers(currentPage); // Refresh table with current page
+                    fetchMembers(currentPage);
+                    $('#addEditMemberModal').modal('hide'); 
+                    showSuccessModal(response.message);
                 } else {
-                    alert(response.message);
+                    $('#addEditMemberModal').modal('hide');
+                    showErrorModal(response.message);
                 }
             },
             error: function () {
-                alert('Error saving member.');
+                $('#addEditMemberModal').modal('hide');
+                showErrorModal('Error saving member.');
             },
         });
     });
@@ -120,13 +124,14 @@ $(document).ready(function () {
                 method: 'POST',
                 success: function (response) {
                     if (response.success) {
-                        fetchMembers(currentPage); // Refresh table with current page
+                        fetchMembers(currentPage);
+                        showSuccessModal(response.message);
                     } else {
-                        alert(response.message);
+                        showErrorModal(response.message);
                     }
                 },
                 error: function () {
-                    alert('Error deleting member.');
+                    showErrorModal('Error deleting member.');
                 },
             });
         }
@@ -134,7 +139,7 @@ $(document).ready(function () {
 
     // Update pagination controls
  function updateMemberPagination(pagination, currentPage) {
-    const paginationControls = $('#member-pagination-controls'); // Unique ID
+    const paginationControls = $('#members-pagination-controls'); // Unique ID
     paginationControls.empty();
     if (pagination.has_previous) {
         paginationControls.append(`

@@ -60,7 +60,7 @@
 
     // Function to update pagination controls
   function updateBookPagination(pagination) {
-    const paginationControls = $('#book-pagination-controls'); // Unique ID
+    const paginationControls = $('#books-pagination-controls'); // Unique ID
     paginationControls.empty();
     if (pagination.has_previous) {
         paginationControls.append(`
@@ -117,7 +117,7 @@
                 $('#addEditBookModal').modal('show');
             },
             error: function () {
-                alert('Error fetching book details.');
+                showErrorModal('Error fetching book details.');
             },
         });
     });
@@ -138,10 +138,12 @@
                     $('#addEditBookModal').modal('hide');
                     let page = $('#page-btn').innerHtml;
                     let searchQuery = $('#search-books').val();
-                    console.log(page)
                     fetchBooks(page, searchQuery);
+                    $('#addEditBookModal').modal('hide');
+                    showSuccessModal(response.message);
                 } else {
-                    alert(response.message);
+                    $('#addEditBookModal').modal('hide');
+                    showErrorModal(response.message);
                 }
             },
         });
@@ -159,9 +161,9 @@
                         let page = $('#page-btn').innerHtml;
                         let searchQuery = $('#search-books').val();
                         fetchBooks(page, searchQuery);
-                        console.log(page)
+                        showSuccessModal(response.message);
                     } else {
-                        alert(response.message);
+                        showErrorModal(response.message);
                     }
                 },
             });
