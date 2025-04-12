@@ -4,22 +4,42 @@
 {% block content %}
 <section class="transactions-section">
   <!-- Upper Section -->
-  <div class="transactions-header">
+<div class="transactions-header">
     <div class="header-content">
-      <div class="title-section">
-        <h2>Transactions</h2>
-        <p>View and manage book issuance and returns</p>
-      </div>
-      <div class="controls-section">
-        <button class="issue-book-btn" data-toggle="modal" data-target="#issueBookModal">
-          <i class="fas fa-plus"></i> Issue Book
-        </button>
-        <button class="return-book-btn d-none" data-toggle="modal" data-target="#returnBookModal">
-          <i class="fas fa-check"></i> Return Book
-        </button>
-      </div>
+        <div class="title-section">
+            <h2>Transactions</h2>
+            <p>View and manage book issuance and returns</p>
+        </div>
+        <div class="controls-section">
+            <!-- Magnifying Glass Icon (Visible on Small Devices) -->
+            <button class="transaction-search-toggle-btn d-lg-none">
+                <i class="fas fa-search"></i>
+            </button>
+            <!-- Search Bar -->
+            <div class="search-bar transaction-search-bar d-lg-flex">
+                <div class="transaction-search-filter-wrapper">
+                    <button class="transaction-search-type-btn" type="button">
+                        <span class="transaction-search-filter-display">Title: </span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="transaction-search-type-options">
+                        <li data-value="title" class="selected">Title</li>
+                        <li data-value="member">Member</li>
+                    </ul>
+                </div>
+                <input type="text" id="transaction-search-query" placeholder="Search..." />
+            </div>
+            <!-- Issue Book Button -->
+            <button class="issue-book-btn" data-toggle="modal" data-target="#issueBookModal">
+                <i class="fas fa-plus"></i> Issue Book
+            </button>
+            <!-- Return Book Button -->
+            <button class="return-book-btn d-none" data-toggle="modal" data-target="#returnBookModal">
+                <i class="fas fa-check"></i> Return Book
+            </button>
+        </div>
     </div>
-  </div>
+</div>
 
   <!-- Lower Section -->
   <div class="transactions-table-section">

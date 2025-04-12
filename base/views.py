@@ -11,15 +11,41 @@ from decimal import Decimal
 def dashboard(request):
     return render(request, 'dashboard.html', {'d': 'd'})
 
-def book_list(request):
-    # Get query parameters
-    page = request.GET.get('page', 1)
-    search_query = request.GET.get('search', '')
+def general_search(request):
+    search_type = request.GET.get('search_type', '')
+    search_query = request.GET.get('search_query', '')
 
-    # Filter books based on search query and order them
-    books = Book.objects.filter(
-        title__icontains=search_query) | Book.objects.filter(author__icontains=search_query)
-    books = books.order_by('id') 
+    # Initialize results
+    results = []
+
+    if search_type == 'book_title':
+        results = list(Book.objects.filter(title__icontains=search_query).values('id', 'title', 'author'))
+    elif search_type == 'book_author':
+        results = list(Book.objects.filter(author__icontains=search_query).values('id', 'title', 'author'))
+    elif search_type == 'member_name':
+        results = list(Member.objects.filter(name__icontains=search_query).values('id', 'name', 'email'))
+
+    # Add a "type" field to distinguish between books and members
+    for result in results:
+        if 'author' in result:
+            result['type'] = 'book'
+        elif 'email' in result:
+            result['type'] = 'member'
+
+    return JsonResponse(results, safe=False)
+
+def book_list(request):
+    page = request.GET.get('page', 1)
+    search_type = request.GET.get('search_type', '')
+    search_query = request.GET.get('search_query', '')
+
+    # Filter books
+    books = Book.objects.all()
+
+    if search_type == 'title':
+        books = books.filter(title__icontains=search_query)
+    elif search_type == 'author':
+        books = books.filter(author__icontains=search_query)
 
     # Paginate results
     paginator = Paginator(books, 10)  # 10 books per page
@@ -52,8 +78,7 @@ def book_list(request):
         return JsonResponse(data)
 
     # Render the template for non-AJAX requests
-    return render(request, 'book_list.html')
-
+    return render(request, 'book_list.html', {'books': books_page})
 
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -439,19 +464,26 @@ def transaction_list(request):
     page = request.GET.get('page', 1)
     member_id = request.GET.get('member_id', '')
     book_id = request.GET.get('book_id', '')
+    search_type = request.GET.get('search_type', '')
+    search_query = request.GET.get('search_query', '')
 
     # Filter transactions
     transactions = Transaction.objects.all()
+
     if member_id:
         transactions = transactions.filter(member_id=member_id)
     if book_id:
         transactions = transactions.filter(book_id=book_id)
 
+    # Apply search filters
+    if search_type == 'title':
+        transactions = transactions.filter(book__title__icontains=search_query)
+    elif search_type == 'member':
+        transactions = transactions.filter(member__name__icontains=search_query)
+
     # Paginate results
     paginator = Paginator(transactions, 10)  # 10 transactions per page
     transactions_page = paginator.get_page(page)
-
-    
 
     # Prepare data for response
     data = {
@@ -477,7 +509,6 @@ def transaction_list(request):
             'total_pages': paginator.num_pages,
         },
     }
-
 
     # Return JSON for AJAX requests
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':

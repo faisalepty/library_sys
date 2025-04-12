@@ -83,3 +83,159 @@ function showErrorModal(message, duration = 3000) {
         $('#errorModal').modal('hide'); // Hide the modal
     }, duration);
 }
+
+// Toggle Search Bar on Small Devices
+$(document).on('click', '.search-toggle-btn', function () {
+  const $searchBar = $('.transaction-search-bar');
+  const $toggleBtn = $(this);
+  
+  $searchBar.toggleClass('active');
+  
+  // Toggle magnifying glass icon between search and close
+  if ($searchBar.hasClass('active')) {
+    $toggleBtn.html('<i class="fas fa-times"></i>'); // Show close icon when search bar is visible
+  } else {
+    $toggleBtn.html('<i class="fas fa-search"></i>'); // Show search icon when search bar is hidden
+  }
+});
+
+
+
+// Function to fetch search results
+function fetchSearchResults(searchType, searchQuery) {
+  $.ajax({
+    url: '/general-search/',
+    method: 'GET',
+    data: {
+      search_type: searchType,
+      search_query: searchQuery,
+    },
+    success: function (results) {
+      const resultsDropdown = $('#search-results');
+      resultsDropdown.empty();
+
+      if (results.length > 0) {
+        // Populate dropdown with results
+        results.forEach(function (result) {
+          let displayText = '';
+          let link = '#';
+
+          if (result.type === 'book') {
+            displayText = `${result.title} by ${result.author}`;
+            link = `/book/${result.id}/`;
+          } else if (result.type === 'member') {
+            displayText = `${result.name} (${result.email})`;
+            link = `/member/${result.id}/`;
+          }
+
+          resultsDropdown.append(`
+            <div class="dropdown-item">
+              <a href="${link}" style="text-decoration: none; color: inherit;">${displayText}</a>
+            </div>
+          `);
+        });
+
+        // Show the dropdown
+        resultsDropdown.removeClass('d-none').addClass('active');
+        $('.modern-search-bar').addClass('results-open');
+      } else {
+        // Hide the dropdown if no results are found
+        resultsDropdown.removeClass('active').addClass('d-none');
+        $('.modern-search-bar').removeClass('results-open');
+      }
+    },
+    error: function (xhr, status, error) {
+      console.error('Error fetching search results:', error);
+      alert('An error occurred while searching. Please try again.');
+    },
+  });
+}
+
+// Toggle Filter Dropdown Options
+$(document).on('click', '.modern-search-bar .general-search-type-btn', function (e) {
+  e.stopPropagation();
+  const $dropdown = $(this).siblings('.general-search-type-options');
+  $dropdown.toggleClass('active');
+});
+
+// Handle Filter Dropdown Option Selection
+$(document).on('click', '.modern-search-bar .general-search-type-options li', function (e) {
+  e.stopPropagation();
+  const value = $(this).data('value');
+  let displayText = '';
+  switch (value) {
+    case 'book_title':
+      displayText = 'Book Title: ';
+      break;
+    case 'book_author':
+      displayText = 'Book Author: ';
+      break;
+    case 'member_name':
+      displayText = 'Member Name: ';
+      break;
+  }
+  $(this).closest('.general-search-filter-wrapper').find('.general-search-filter-display').text(displayText);
+  $(this).siblings().removeClass('selected');
+  $(this).addClass('selected');
+  $(this).closest('.general-search-type-options').removeClass('active');
+});
+
+// Close Filter Dropdown When Clicking Outside
+$(document).on('click', function () {
+  $('.modern-search-bar .general-search-type-options').removeClass('active');
+});
+
+// Initialize Filter Display on Page Load
+$(document).ready(function () {
+  const selectedOption = $('.modern-search-bar .general-search-type-options li.selected');
+  const value = selectedOption.data('value');
+  let displayText = '';
+  switch (value) {
+    case 'book_title':
+      displayText = 'Book Title: ';
+      break;
+    case 'book_author':
+      displayText = 'Book Author: ';
+      break;
+    case 'member_name':
+      displayText = 'Member Name: ';
+      break;
+  }
+  $('.modern-search-bar .general-search-filter-display').text(displayText);
+});
+
+// Listen for Changes in the Search Input
+let debounceTimer;
+$('#search-query').on('input', function () {
+  const searchType = $('.modern-search-bar .general-search-type-options li.selected').data('value');
+  const searchQuery = $(this).val().trim();
+
+  // Clear previous timeout
+  clearTimeout(debounceTimer);
+
+  // Debounce the search input to avoid excessive AJAX calls
+  debounceTimer = setTimeout(function () {
+    if (searchQuery.length > 2) { // Only trigger search if query is longer than 2 characters
+      fetchSearchResults(searchType, searchQuery);
+    } else {
+      $('#search-results').removeClass('active').addClass('d-none');
+      $('.modern-search-bar').removeClass('results-open');
+    }
+  }, 300); // Wait 300ms before triggering the search
+});
+
+// Hide the Dropdown When Clicking Outside
+$(document).on('click', function (e) {
+  if (!$(e.target).closest('.search-form').length) {
+    $('#search-results').removeClass('active').addClass('d-none');
+    $('.modern-search-bar').removeClass('results-open');
+  }
+});
+
+// Close Search Results When Clicking the Close Icon
+$(document).on('click', '.modern-search-bar .close-search', function () {
+  $('#search-query').val('');
+  $('#search-results').removeClass('active').addClass('d-none');
+  $('.modern-search-bar').removeClass('results-open');
+});
+

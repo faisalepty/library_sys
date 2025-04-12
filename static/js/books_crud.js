@@ -1,20 +1,18 @@
    $(document).ready(function () {
-    // Function to fetch and display books
-    function fetchBooks(page = 1, search = '') {
-        $.ajax({
-            url: '/books/',
-            method: 'GET',
-            data: {
-                page: page,
-                search: search,
-            },
-            success: function (response) {
-                // Clear existing rows
-                $('#books-table-body').empty();
-
-                // Populate table with new rows
-                response.books.forEach(function (book) {
-                    $('#books-table-body').append(`
+    // Function to fetch books with search functionality
+function fetchBooks(page = 1, searchType = '', searchQuery = '') {
+    $.ajax({
+        url: '/books/',
+        method: 'GET',
+        data: {
+            page: page,
+            search_type: searchType,
+            search_query: searchQuery
+        },
+        success: function (response) {
+            $('#books-table-body').empty();
+            response.books.forEach(function (book) {
+                $('#books-table-body').append(`
                     <tr>
                         <td>#${book.id}</td>
                         <td>${book.title}</td>
@@ -24,9 +22,8 @@
                         <td>
                             <!-- Dropdown Menu -->
                             <div class="dropdown">
-
                                 <button class="action-dropdown-btn" type="button" id="actionsDropdown-${book.id}" data-bs-toggle="dropdown" aria-expanded="false">
-                                    ...
+                                    <i class="fas fa-ellipsis-h"></i>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="actionsDropdown-${book.id}">
                                     <li><a class="dropdown-item" href="/book/${book.id}/">View details</a></li>
@@ -37,26 +34,38 @@
                             </div>
                         </td>
                     </tr>
-                    `);
-                });
-
-                // Update pagination controls
-                updateBookPagination(response.pagination);
-            },
-            error: function () {
-                alert('Error fetching books.');
-            },
-        });
-    }
+                `);
+            });
+            updateBookPagination(response.pagination, page);
+        },
+        error: function () {
+            alert('Error fetching books.');
+        },
+    });
+}
 
     // Initial load
     fetchBooks();
 
-    // Handle search input
-    $('#search-books').on('input', function () {
-        const searchQuery = $(this).val();
-        fetchBooks(1, searchQuery); // Reset to page 1 when searching
-    });
+let bookSearchType = $('.books-search-bar .book-search-type-options li.selected').data('value');
+let bookSearchQuery = $('#book-search-query').val();
+// Listen for changes in the search input
+$('#book-search-query').on('input', function () {
+    currentPage = 1; // Reset to the first page when searching
+    const searchType = $('.books-search-bar .book-search-type-options li.selected').data('value');
+    const searchQuery = $(this).val();
+    fetchBooks(currentPage, searchType, searchQuery);
+});
+
+// Listen for changes in the search type dropdown
+$(document).on('click', '.books-search-bar .book-search-type-options li', function () {
+    currentPage = 1; // Reset to the first page when changing search type
+    const searchType = $(this).data('value');
+    const searchQuery = $('#book-search-query').val();
+    fetchBooks(currentPage, searchType, searchQuery);
+});
+
+
 
     // Function to update pagination controls
   function updateBookPagination(pagination) {
@@ -80,7 +89,10 @@
     $(document).on('click', '.book-page-btn', function () {
         let page = $(this).data('page');
         let searchQuery = $('#search-books').val();
-        fetchBooks(page, searchQuery);
+        let bookSearchType = $('.books-search-bar .search-type-options li.selected').data('value');
+        let bookSearchQuery = $('#search-query').val();
+       
+        fetchBooks(page, bookSearchType, bookSearchQuery);
     });
 
 
@@ -138,7 +150,9 @@
                     $('#addEditBookModal').modal('hide');
                     let page = $('#page-btn').innerHtml;
                     let searchQuery = $('#search-books').val();
-                    fetchBooks(page, searchQuery);
+                    let bookSearchType = $('.books-search-bar .search-type-options li.selected').data('value');
+                    let bookSearchQuery = $('#search-query').val();
+                    fetchBooks(page, bookSearchType, bookSearchQuery);
                     $('#addEditBookModal').modal('hide');
                     showSuccessModal(response.message);
                 } else {
@@ -168,7 +182,9 @@ $(document).on('click', '.delete-book-action', function () {
                     if (response.success) {
                         let page = $('#page-btn').innerHtml;
                         let searchQuery = $('#search-books').val();
-                        fetchBooks(page, searchQuery);
+                        let bookSearchType = $('.books-search-bar .search-type-options li.selected').data('value');
+                        let bookSearchQuery = $('#search-query').val();
+                        fetchBooks(page, bookSearchType, bookSearchQuery);
                         showSuccessModal(response.message);
                     } else {
                         showErrorModal(response.message);
@@ -178,4 +194,63 @@ $(document).on('click', '.delete-book-action', function () {
 
     });
 
+});
+
+
+// Toggle Search Bar on Small Devices
+$(document).on('click', '.books-header .book-search-toggle-btn', function () {
+  const $searchBar = $('.books-search-bar');
+  const $toggleBtn = $(this);
+  
+  $searchBar.toggleClass('active');
+  
+  // Toggle magnifying glass icon between search and close
+  if ($searchBar.hasClass('active')) {
+    $toggleBtn.html('<i class="fas fa-times"></i>'); // Show close icon when search bar is visible
+  } else {
+    $toggleBtn.html('<i class="fas fa-search"></i>'); // Show search icon when search bar is hidden
+  }
+});
+
+$(document).on('click', '.books-search-bar .book-search-type-btn', function (e) {
+  e.stopPropagation(); // Prevent event bubbling
+  const dropdown = $(this).siblings('.book-search-type-options');
+  dropdown.addClass('active');
+});
+
+// Handle Dropdown Option Selection
+$(document).on('click', '.books-search-bar .book-search-type-options li', function (e) {
+  e.stopPropagation(); // Prevent event bubbling
+  const value = $(this).data('value');
+  let displayText = '';
+  switch (value) {
+    case 'title':
+      displayText = 'Title: ';
+      break;
+    case 'author':
+      displayText = 'Author: ';
+      break;
+  }
+  $(this).closest('.book-search-filter-wrapper').find('.book-search-filter-display').text(displayText);
+  $(this).siblings().removeClass('selected');
+  $(this).addClass('selected');
+  $(this).closest('.book-search-type-options').removeClass('active'); // Close dropdown
+});
+
+
+
+// Initialize Filter Display on Page Load
+$(document).ready(function () {
+  const selectedOption = $('.books-search-bar .book-search-type-options li.selected');
+  const value = selectedOption.data('value');
+  let displayText = '';
+  switch (value) {
+    case 'title':
+      displayText = 'Title: ';
+      break;
+    case 'author':
+      displayText = 'Author: ';
+      break;
+  }
+  $('.books-search-bar .book-search-filter-display').text(displayText);
 });

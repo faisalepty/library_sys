@@ -3,27 +3,39 @@
 {% block content %}
 
   <section class="books-section">
-  <!-- Upper Section -->
-  <div class="books-header">
+ <!-- Upper Section -->
+<div class="books-header">
     <div class="header-content">
-      <div class="title-section">
-        <h2>Books</h2>
-        <p>Manage books and view their details</p>
-      </div>
-      <div class="controls-section">
-        <div class="search-bar">
-          <input type="text" id="search-books" placeholder="Search by Title or Author" />
-          <span class="search-icon"><i class="fas fa-search"></i></span>
+        <div class="title-section">
+            <h2>Books</h2>
+            <p>Manage books and view their details</p>
         </div>
-        <div class="button-group">
-          <button class="add-book-btn" data-toggle="modal" data-target="#addBookModal">
-            <i class="fas fa-plus"></i> Add Book
-          </button>
+        <div class="controls-section">
+            <!-- Magnifying Glass Icon (Visible on Small Devices) -->
+            <button class="book-search-toggle-btn d-lg-none">
+                <i class="fas fa-search"></i>
+            </button>
+            <!-- Search Bar -->
+            <div class="search-bar books-search-bar d-lg-flex">
+                <div class="book-search-filter-wrapper">
+                    <button class="book-search-type-btn" type="button">
+                        <span class="book-search-filter-display">Title: </span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="book-search-type-options">
+                        <li data-value="title" class="selected">Title</li>
+                        <li data-value="author">Author</li>
+                    </ul>
+                </div>
+                <input type="text" id="book-search-query" placeholder="Search..." />
+            </div>
+            <!-- Add Book Button -->
+            <button class="add-book-btn" data-toggle="modal" data-target="#addBookModal">
+                <i class="fas fa-plus"></i> Add Book
+            </button>
         </div>
-      </div>
     </div>
-  </div>
-
+</div>
   <!-- Lower Section -->
   <div class="books-table-section">
     <div class="table-wrapper">

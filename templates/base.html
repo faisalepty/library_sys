@@ -34,23 +34,42 @@
       </a>
     </div>
 
-    <!-- Search Bar (Hidden on Mobile by Default) -->
-    <form class="search-form w-100 d-none">
-      <div class="input-group">
-        <span class="input-group-text bg-white border-end-0">
-          <i class="bi bi-search"></i>
-        </span>
-        <input
-          type="text"
-          class="form-control border-start-0"
-          placeholder="Search EX: ISBN, Title, Author, Member, etc"
-          aria-label="Search"
-        >
-        <span class="input-group-text bg-white border-start-0 close-search">
-          <i class="bi bi-x-lg"></i>
-        </span>
-      </div>
-    </form>
+
+<!-- Search Bar -->
+<form class="search-form w-100" style="position: relative;">
+  <div class="input-group modern-search-bar">
+    <span class="input-group-text bg-white border-end-0">
+      <i class="bi bi-search"></i>
+    </span>
+    <div class="general-search-filter-wrapper">
+      <button class="general-search-type-btn" type="button">
+        <span class="general-search-filter-display">Book Title: </span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <ul class="general-search-type-options">
+        <li data-value="book_title" class="selected">Book Title</li>
+        <li data-value="book_author">Book Author</li>
+        <li data-value="member_name">Member Name</li>
+      </ul>
+    </div>
+    <input
+      type="text"
+      id="search-query"
+      class="form-control border-start-0"
+      placeholder="Search EX: ISBN, Title, Author, Member, etc"
+      aria-label="Search"
+    />
+    <span class="input-group-text bg-white border-start-0 close-search">
+      <i class="bi bi-x-lg"></i>
+    </span>
+  </div>
+  <!-- Custom Dropdown for Search Results -->
+  <div id="search-results" class="modern-search-results d-none">
+    <!-- Results will be dynamically populated here -->
+  </div>
+</form>
+
+
 
     <!-- Right Side (Mobile: Magnifying Glass + User Profile; Desktop: Calendar + Bell + User Profile) -->
     <div class="navbar-right d-flex align-items-center">
@@ -284,7 +303,7 @@
         <form id="issue-book-form" data-url="{% url 'issue_book'%}">
           <div class="mb-3">
             <label for="book-id-option" class="form-label">Book <span class="text-danger">*</span></label>
-            <select id="book-id-option" name="book_id" class="form-control" required>
+            <select id="book-id-option" name="book_id" class="form-control custom-select" required>
               <!-- Options will be populated dynamically -->
             </select>
           </div>

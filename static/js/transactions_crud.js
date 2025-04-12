@@ -13,68 +13,90 @@
 }
 
 
-    let currentPage = 1; // Global variable to track the current page
+let currentPage = 1; // Global variable to track the current page
 
-// Fetch and display transactions
+// Function to fetch transactions with search functionality
 function fetchTransactions(page = 1, member_id = '', book_id = '') {
+    // Get the current search type and query
+    const searchType = $('.transaction-search-type-options li.selected').data('value');
+    const searchQuery = $('#transaction-search-query').val();
+
     $.ajax({
         url: '/transactions/',
         method: 'GET',
-        data: { page: page, member_id: member_id, book_id: book_id },
+        data: {
+            page: page,
+            member_id: member_id,
+            book_id: book_id,
+            search_type: searchType,
+            search_query: searchQuery
+        },
         success: function (response) {
             $('#transactions-table-body').empty();
             response.transactions.forEach(function (t) {
-            let dropdownAction = '';
-            if (t.return_date === '-') {
-                // No return date: show "Return"
-                dropdownAction = `
-                    <li><a class="dropdown-item return-btn" href="#" data-id="${t.id}">Return</a></li>
-                `;
-            } else if (t.balance > 0) {
-                // Has return date and balance > 0: show "Pay Debt"
-                dropdownAction = `
-                    <li><a class="dropdown-item pay-debt-btn" href="#" data-id="${t.id}" data-balance="${t.balance}">Pay Debt</a></li>
-                `;
-            } else {
-                // Has return date and balance <= 0: show "No actions required"
-                dropdownAction = `
-                    <li><a class="dropdown-item disabled" href="#" data-id="${t.id}">No actions required</a></li>
-                `;
-            }
+                let dropdownAction = '';
+                if (t.return_date === '-') {
+                    dropdownAction = `
+                        <li><a class="dropdown-item return-btn" href="#" data-id="${t.id}">Return</a></li>
+                    `;
+                } else if (t.balance > 0) {
+                    dropdownAction = `
+                        <li><a class="dropdown-item pay-debt-btn" href="#" data-id="${t.id}" data-balance="${t.balance}">Pay Debt</a></li>
+                    `;
+                } else {
+                    dropdownAction = `
+                        <li><a class="dropdown-item disabled" href="#" data-id="${t.id}">No actions required</a></li>
+                    `;
+                }
 
-             $('#transactions-table-body').append(`
-                        <tr>
-                            <td>#${t.id}</td>
-                            <td>${t.book_title}</td>
-                            <td>${t.member_name}</td>
-                            <td>${t.issue_date}</td>
-                            <td>${t.return_date || '-'}</td>
-                            <td>${t.amount_paid || '0.00'}</td>
-                            <td>${t.balance || '0.00'}</td>
-                            <td>
-                                <!-- Dropdown Menu -->
-                                <div class="dropdown">
-                                    <button class="action-dropdown-btn" type="button" id="transactionActionsDropdown-${t.id}" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-h"></i>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="transactionActionsDropdown-${t.id}">
-                                       ${dropdownAction}
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                    `);
+                $('#transactions-table-body').append(`
+                    <tr>
+                        <td>#${t.id}</td>
+                        <td>${t.book_title}</td>
+                        <td>${t.member_name}</td>
+                        <td>${t.issue_date}</td>
+                        <td>${t.return_date || '-'}</td>
+                        <td>${t.amount_paid || '0.00'}</td>
+                        <td>${t.balance || '0.00'}</td>
+                        <td>
+                            <!-- Dropdown Menu -->
+                            <div class="dropdown">
+                                <button class="action-dropdown-btn" type="button" id="transactionActionsDropdown-${t.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="transactionActionsDropdown-${t.id}">
+                                   ${dropdownAction}
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                `);
             });
             updateTransactionsPagination(response.pagination, page);
         },
     });
 }
 
+
+
+// Listen for changes in the search input
+$('#transaction-search-query').on('input', function () {
+    currentPage = 1; // Reset to the first page when searching
+    fetchTransactions(currentPage);
+});
+
+// Listen for changes in the search type dropdown
+$('.transaction-search-type-options li').on('click', function () {
+    currentPage = 1; // Reset to the first page when changing search type
+    fetchTransactions(currentPage);
+});
 // Initial load
 const queryParams = getQueryParams(); // Parse query parameters from the URL
 currentPage = parseInt(queryParams.page) || 1; // Use the current page from the URL or default to 1
 const memberId = queryParams.member_id || ''; // Use the member_id filter if present
 const bookId = queryParams.book_id || ''; // Use the book_id filter if present
+
+
 
 // Fetch transactions with the parsed query parameters
 fetchTransactions(currentPage, memberId, bookId);
@@ -254,6 +276,7 @@ $(document).on('click', '.issue-book-link', function (e) {
     });
 });
 
+
    function updateTransactionsPagination(pagination, currentPage) {
     const queryParams = getQueryParams(); // Get existing query parameters
     const paginationControls = $('#transactions-pagination-controls');
@@ -281,19 +304,24 @@ $(document).on('click', '.issue-book-link', function (e) {
             </button>
         `);
     }
-
-    // Handle pagination button clicks
-    $('.transaction-page-btn').on('click', function () {
-        const newPage = $(this).data('page');
-        queryParams.page = newPage; // Update the page in query parameters
-        const queryString = new URLSearchParams(queryParams).toString(); // Convert to query string
-        window.location.search = queryString; // Update the URL
-    });
 }
-    // Open Return Book Modal
-    $('.return-book-btn').on('click', function () {
-        $('#returnBookModal').modal('show');
-    });
+
+// Handle pagination button clicks
+$(document).on('click', '.transaction-page-btn', function() {
+    const newPage = $(this).data('page');
+    queryParams.page = newPage; 
+    currentPage = newPage; 
+    const queryString = new URLSearchParams(queryParams).toString()
+  
+    fetchTransactions(newPage, memberId, bookId);
+    history.pushState(null, '', '?' + queryString);
+});
+
+    
+// Open Return Book Modal
+$('.return-book-btn').on('click', function () {
+    $('#returnBookModal').modal('show');
+});
 });
 
 
@@ -311,3 +339,61 @@ $(document).on('click', '.pay-debt-btn', function () {
     $('#payDebtModal').modal('show');
 });
 
+
+// Toggle Dropdown Options
+$(document).on('click', '.transaction-search-type-btn', function (e) {
+  e.stopPropagation(); // Prevent closing when clicking the button
+  $('.transaction-search-type-options').toggleClass('active');
+});
+
+// Handle Dropdown Option Selection
+$(document).on('click', '.transaction-search-type-options li', function (e) {
+  e.stopPropagation(); // Prevent closing when clicking an option
+  const value = $(this).data('value');
+  let displayText = '';
+  switch (value) {
+    case 'isbn':
+      displayText = 'ISBN: ';
+      break;
+    case 'title':
+      displayText = 'Title: ';
+      break;
+    case 'author':
+      displayText = 'Author: ';
+      break;
+    case 'member':
+      displayText = 'Member: ';
+      break;
+  }
+  $('.transaction-search-filter-display').text(displayText);
+  $('.transaction-search-type-options li').removeClass('selected');
+  $(this).addClass('selected');
+  $('.transaction-search-type-options').removeClass('active'); // Close dropdown
+});
+
+// Close Dropdown When Clicking Outside
+$(document).on('click', function () {
+  $('.transaction-search-type-options').removeClass('active');
+});
+
+// Initialize Filter Display on Page Load
+$(document).ready(function () {
+  const selectedOption = $('.transaction-search-type-options li.selected');
+  const value = selectedOption.data('value');
+  let displayText = '';
+  switch (value) {
+    case 'isbn':
+      displayText = 'ISBN: ';
+      break;
+    case 'title':
+      displayText = 'Title: ';
+      break;
+    case 'author':
+      displayText = 'Author: ';
+      break;
+    case 'member':
+      displayText = 'Member: ';
+      break;
+  }
+  $('.search-filter-display').text(displayText);
+});

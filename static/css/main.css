@@ -1950,3 +1950,497 @@ body {
     padding: 0.25rem;
   }
 }
+
+
+
+
+
+/* Transaction Search Bar (Scoped to .transaction-search-bar) */
+.transaction-search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 0.25rem;
+  width: 300px; /* Fixed width for desktop */
+  transition: all 0.3s ease;
+}
+
+/* Search Filter Wrapper */
+.transaction-search-bar .transaction-search-filter-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #f5f6fa;
+  border-radius: 25px 0 0 25px;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Search Filter Button */
+.transaction-search-bar .transaction-search-type-btn {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  font-size: 0.875rem;
+  color: #343a40;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Filter Display (e.g., "Title: ") */
+.transaction-search-bar .transaction-search-filter-display {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-right: 0.25rem;
+}
+
+/* Chevron-Down Icon */
+.transaction-search-bar .transaction-search-type-btn i {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-left: 0.25rem;
+}
+
+/* Dropdown Options */
+.transaction-search-bar .transaction-search-type-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  list-style: none;
+  padding: 0.5rem 0;
+  margin: 0.25rem 0 0 0;
+  min-width: 120px;
+  z-index: 1000;
+}
+
+.transaction-search-bar .transaction-search-type-options.active {
+  display: block;
+}
+
+.transaction-search-bar .transaction-search-type-options li {
+  font-size: 0.875rem;
+  color: #343a40;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.transaction-search-bar .transaction-search-type-options li:hover {
+  background-color: #f1f8f3; /* Light green on hover */
+}
+
+.transaction-search-bar .transaction-search-type-options li.selected {
+  background-color: #e9f4ec; /* Slightly darker green for selected */
+  color: #28a745;
+  font-weight: 500;
+}
+
+/* Search Input */
+.transaction-search-bar input[type="text"] {
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  color: #343a40;
+  padding: 0.5rem 1rem;
+  flex: 1;
+  background: transparent;
+}
+
+.transaction-search-bar input[type="text"]::placeholder {
+  color: #adb5bd;
+}
+
+/* Magnifying Glass Toggle Button (Visible on Small Devices) */
+.transaction-search-toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.transaction-search-toggle-btn:hover {
+  color: #28a745; /* Green on hover */
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+  /* Hide Search Bar by Default on Small Devices */
+  .transaction-search-bar {
+    display: none;
+    width: 100%; /* Full width on mobile when toggled */
+    margin-bottom: 1rem;
+  }
+
+  /* Show Search Bar When Toggled */
+  .transaction-search-bar.active {
+    display: flex;
+  }
+
+  /* Hide Issue Book Button When Search Bar is Toggled */
+  .transaction-search-bar.active ~ .issue-book-btn {
+    display: none;
+  }
+
+  /* Show Magnifying Glass on Small Devices */
+  .transaction-search-toggle-btn {
+    display: block;
+  }
+}
+
+@media (min-width: 992px) {
+  /* Always Show Search Bar on Larger Devices */
+  .transaction-search-bar {
+    display: flex;
+  }
+
+  /* Hide Magnifying Glass on Larger Devices */
+  .transaction-search-toggle-btn {
+    display: none;
+  }
+}
+
+
+
+/* Books Search Bar (Scoped to .books-search-bar) */
+.books-search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 0.25rem;
+  width: 300px; /* Fixed width for desktop */
+  transition: all 0.3s ease;
+}
+
+/* Search Filter Wrapper */
+.books-search-bar .book-search-filter-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #f5f6fa;
+  border-radius: 25px 0 0 25px;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Search Filter Button */
+.books-search-bar .book-search-type-btn {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  font-size: 0.875rem;
+  color: #343a40;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Filter Display (e.g., "Title: ") */
+.books-search-bar .book-search-filter-display {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-right: 0.25rem;
+}
+
+/* Chevron-Down Icon */
+.books-search-bar .book-search-type-btn i {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-left: 0.25rem;
+}
+
+/* Dropdown Options */
+.books-search-bar .book-search-type-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  list-style: none;
+  padding: 0.5rem 0;
+  margin: 0.25rem 0 0 0;
+  min-width: 120px;
+  z-index: 1000;
+}
+
+.books-search-bar .book-search-type-options.active {
+  display: block;
+}
+
+.books-search-bar .book-search-type-options li {
+  font-size: 0.875rem;
+  color: #343a40;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.books-search-bar .book-search-type-options li:hover {
+  background-color: #f1f8f3; /* Light green on hover */
+}
+
+.books-search-bar .book-search-type-options li.selected {
+  background-color: #e9f4ec; /* Slightly darker green for selected */
+  color: #28a745;
+  font-weight: 500;
+}
+
+/* Search Input */
+.books-search-bar input[type="text"] {
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  color: #343a40;
+  padding: 0.5rem 1rem;
+  flex: 1;
+  background: transparent;
+}
+
+.books-search-bar input[type="text"]::placeholder {
+  color: #adb5bd;
+}
+
+/* Magnifying Glass Toggle Button (Visible on Small Devices) */
+.book-search-toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.book-search-toggle-btn:hover {
+  color: #28a745; /* Green on hover */
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+  /* Hide Search Bar by Default on Small Devices */
+  .books-search-bar {
+    display: none;
+    width: 100%; /* Full width on mobile when toggled */
+    margin-bottom: 1rem;
+  }
+
+  /* Show Search Bar When Toggled */
+  .books-search-bar.active {
+    display: flex;
+  }
+
+  /* Hide Add Book Button When Search Bar is Toggled */
+  .books-search-bar.active ~ .add-book-btn {
+    display: none;
+  }
+
+  /* Show Magnifying Glass on Small Devices */
+  .book-search-toggle-btn {
+    display: block;
+  }
+}
+
+@media (min-width: 992px) {
+  /* Always Show Search Bar on Larger Devices */
+  .books-search-bar {
+    display: flex;
+  }
+
+  /* Hide Magnifying Glass on Larger Devices */
+  .book-search-toggle-btn {
+    display: none;
+  }
+}
+
+
+
+
+
+
+/* Modern Search Bar (Scoped to .modern-search-bar) */
+.modern-search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: border-radius 0.3s ease;
+}
+
+/* Seamless Border Transition When Results Dropdown is Open */
+.modern-search-bar.results-open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: none;
+}
+
+/* Search Icon */
+.modern-search-bar .input-group-text {
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0.75rem;
+}
+
+.modern-search-bar .bi-search {
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+/* Search Filter Wrapper */
+.modern-search-bar .general-search-filter-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #f5f6fa;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Search Filter Button */
+.modern-search-bar .general-search-type-btn {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  font-size: 0.875rem;
+  color: #343a40;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Filter Display (e.g., "Book Title: ") */
+.modern-search-bar .general-search-filter-display {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-right: 0.25rem;
+}
+
+/* Chevron-Down Icon */
+.modern-search-bar .general-search-type-btn i {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-left: 0.25rem;
+}
+
+/* Filter Dropdown Options */
+.modern-search-bar .general-search-type-options {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  list-style: none;
+  padding: 0.5rem 0;
+  margin: 0;
+  min-width: 150px;
+  z-index: 1001;
+}
+
+.modern-search-bar .general-search-type-options.active {
+  display: block;
+}
+
+.modern-search-bar .general-search-type-options li {
+  font-size: 0.875rem;
+  color: #343a40;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modern-search-bar .general-search-type-options li:hover {
+  background-color: #f1f8f3; /* Light green on hover */
+}
+
+.modern-search-bar .general-search-type-options li.selected {
+  background-color: #e9f4ec; /* Slightly darker green for selected */
+  color: #28a745;
+  font-weight: 500;
+}
+
+/* Search Input */
+.modern-search-bar .form-control {
+  border: none;
+  font-size: 0.875rem;
+  color: #343a40;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+}
+
+.modern-search-bar .form-control::placeholder {
+  color: #adb5bd;
+}
+
+/* Close Icon */
+.modern-search-bar .close-search {
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.modern-search-bar .bi-x-lg {
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.modern-search-bar .close-search:hover .bi-x-lg {
+  color: #dc3545; /* Red on hover */
+}
+
+/* Modern Search Results Dropdown (Scoped to .modern-search-results) */
+.modern-search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-top: none;
+  border-radius: 0 0 25px 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: none;
+}
+
+.modern-search-results.active {
+  display: block;
+}
+
+/* Style for Individual Dropdown Items */
+.modern-search-results .dropdown-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.875rem;
+  color: #343a40;
+  transition: background-color 0.3s ease;
+}
+
+.modern-search-results .dropdown-item:hover {
+  background-color: #f1f8f3; /* Light green on hover */
+}
+
+.modern-search-results .dropdown-item:last-child {
+  border-bottom: none;
+}
