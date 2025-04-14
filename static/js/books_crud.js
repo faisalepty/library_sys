@@ -57,13 +57,7 @@ $('#book-search-query').on('input', function () {
     fetchBooks(currentPage, searchType, searchQuery);
 });
 
-// Listen for changes in the search type dropdown
-$(document).on('click', '.books-search-bar .book-search-type-options li', function () {
-    currentPage = 1; // Reset to the first page when changing search type
-    const searchType = $(this).data('value');
-    const searchQuery = $('#book-search-query').val();
-    fetchBooks(currentPage, searchType, searchQuery);
-});
+
 
 
 

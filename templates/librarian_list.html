@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <section class="librarians-section">
+    <!-- Upper Section -->
+    <div class="librarians-header">
+      <div class="header-content">
+        <div class="title-section">
+          <h2>Librarians</h2>
+          <p>Manage librarians and view their details</p>
+        </div>
+        <div class="controls-section">
+          <div class="search-bar">
+            <input type="text" id="search-librarians" placeholder="Search by Username or Email" />
+            <span class="search-icon"><i class="fas fa-search"></i></span>
+          </div>
+          <div class="button-group">
+            <button class="add-librarian-btn" data-bs-toggle="modal" data-bs-target="#addEditLibrarianModal">
+              <i class="fas fa-plus"></i> Add Librarian
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lower Section -->
+    <div class="librarians-table-section">
+      <div class="table-wrapper">
+        <table class="librarians-table">
+          <thead>
+            <tr>
+              <th>Librarian ID</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Phone Number</th>
+              <th>Address</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="librarians-table-body">
+            <!-- Dynamic rows will be populated here via AJAX -->
+          </tbody>
+        </table>
+      </div>
+      <!-- Pagination -->
+      <div class="pagination" id="librarians-pagination-controls">
+        <!-- Pagination links will be dynamically generated here -->
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

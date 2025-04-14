@@ -8,8 +8,86 @@ from decimal import Decimal
 
 
 
+from django.shortcuts import render
+from django.db.models import Count, Q
+from datetime import date
+from .models import Book, Member, Transaction
+from datetime import timedelta
+from django.utils.timezone import now
+
 def dashboard(request):
-    return render(request, 'dashboard.html', {'d': 'd'})
+    
+
+    # Fetch data for the "Overdue History" table
+    overdue_history = Transaction.objects.filter(
+        return_date__isnull=True
+    ).select_related('book', 'member').values(
+        'member__id', 'book__title', 'book__isbn'
+    )[:5] 
+
+    # Fetch data for the "Recent Check-out’s" table
+    recent_checkouts = Transaction.objects.filter(
+        return_date__isnull=True
+    ).select_related('book', 'member').order_by('-issue_date').values(
+        'id', 'book__isbn', 'book__title', 'book__author', 'member__name', 'issue_date'
+    )[:5] 
+    six_months_ago = now().date() - timedelta(days=180)
+
+    # Fetch raw data for borrowed and returned books
+    checkout_stats = Transaction.objects.all(
+        
+    ).values('issue_date', 'return_date')
+
+    # Initialize a single dictionary to store counts for both borrowed and returned books
+    monthly_stats = {}
+
+    # Process each transaction
+    for entry in checkout_stats:
+        month_key = entry['issue_date'].strftime('%b %Y')  # Format: "Jan 2023"
+        
+        # Initialize the month if not already present
+        if month_key not in monthly_stats:
+            monthly_stats[month_key] = {'borrowed': 0, 'returned': 0}
+        
+        # Count borrowed books (return_date is null)
+        if entry['return_date'] is None:
+            monthly_stats[month_key]['borrowed'] += 1
+        
+        # Count returned books (return_date is not null)
+        else:
+            monthly_stats[month_key]['returned'] += 1
+
+    # Extract sorted months and prepare data for Chart.js
+    months = sorted(monthly_stats.keys())  # Sort months chronologically
+    borrowed_data = [monthly_stats[month]['borrowed'] for month in months]
+    returned_data = [monthly_stats[month]['returned'] for month in months]
+
+    members_count = Member.objects.all().count()
+    books_count = Book.objects.all().count()
+    issued_books = Transaction.objects.filter(return_date__isnull=True).count()
+    overdue_books = Transaction.objects.filter(
+                    return_date__isnull=True, 
+                    issue_date__lt=now().date() - timedelta(days=7)).count()
+
+    # Pass data to the template
+    context = {
+        'members_count': members_count,
+        'books_count': books_count,
+        'issued_books': issued_books,
+        'overdue_books': overdue_books,
+
+
+        'overdue_history': overdue_history,
+        'recent_checkouts': recent_checkouts,
+
+
+        'checkout_stats_months': months,
+        'checkout_stats_borrowed': borrowed_data,
+        'checkout_stats_returned': returned_data,
+        'd': 'd'
+    }
+
+    return render(request, 'dashboard.html', context)
 
 def general_search(request):
     search_type = request.GET.get('search_type', '')
@@ -553,3 +631,95 @@ def pay_debt(request):
 
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
+
+
+
+def librarian_list(request):
+    # Get query parameters
+    page = request.GET.get('page', 1)
+    search_query = request.GET.get('search', '')
+
+    # Filter librarians based on search query
+    librarians = User.objects.filter(
+        Q(username__icontains=search_query) | 
+        Q(email__icontains=search_query)
+    ).order_by('id')
+
+    # Paginate results
+    from django.core.paginator import Paginator
+    paginator = Paginator(librarians, 10)  # 10 librarians per page
+    librarians_page = paginator.get_page(page)
+
+    # Prepare data for response
+    data = {
+        'librarians': [
+            {
+                'id': librarian.id,
+                'username': librarian.username,
+                'email': librarian.email,
+            }
+            for librarian in librarians_page
+        ],
+        'pagination': {
+            'has_previous': librarians_page.has_previous(),
+            'has_next': librarians_page.has_next(),
+            'previous_page_number': librarians_page.previous_page_number() if librarians_page.has_previous() else None,
+            'next_page_number': librarians_page.next_page_number() if librarians_page.has_next() else None,
+            'current_page': librarians_page.number,
+            'total_pages': paginator.num_pages,
+        },
+    }
+
+    # Return JSON for AJAX requests
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse(data)
+
+    # Render the template for non-AJAX requests
+    return render(request, 'librarian_list.html', {'librarians': librarians_page})
+
+
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+
+def add_or_edit_librarian(request):
+    if request.method == 'POST':
+        librarian_id = request.POST.get('librarian_id')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        try:
+            if librarian_id:  # Edit existing librarian
+                librarian = get_object_or_404(User, id=librarian_id)
+                librarian.username = username
+                librarian.email = email
+                if password:  # Only update password if provided
+                    librarian.set_password(password)
+                librarian.save()
+
+                return JsonResponse({'success': True, 'message': 'Librarian updated successfully.'})
+            else:  # Add new librarian
+                user = User.objects.create_user(username=username, email=email, password=password)
+                return JsonResponse({'success': True, 'message': 'Librarian added successfully.'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+
+def get_librarian_details(request, pk):
+    librarian = get_object_or_404(User, pk=pk)
+
+    data = {
+        'id': librarian.id,
+        'username': librarian.username,
+        'email': librarian.email,
+    }
+    return JsonResponse(data)
+
+
+def delete_librarian(request, pk):
+    librarian = get_object_or_404(User, pk=pk)
+    librarian.delete()
+    return JsonResponse({'success': True, 'message': 'Librarian deleted successfully.'})

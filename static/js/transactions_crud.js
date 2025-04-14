@@ -85,11 +85,7 @@ $('#transaction-search-query').on('input', function () {
     fetchTransactions(currentPage);
 });
 
-// Listen for changes in the search type dropdown
-$('.transaction-search-type-options li').on('click', function () {
-    currentPage = 1; // Reset to the first page when changing search type
-    fetchTransactions(currentPage);
-});
+
 // Initial load
 const queryParams = getQueryParams(); // Parse query parameters from the URL
 currentPage = parseInt(queryParams.page) || 1; // Use the current page from the URL or default to 1
@@ -396,4 +392,27 @@ $(document).ready(function () {
       break;
   }
   $('.search-filter-display').text(displayText);
+});
+
+// Toggle Search Bar on Small Devices
+$(document).on('click', '.transactions-header .transaction-search-toggle-btn', function () {
+    console.log('click')
+  const $transactionsearchBar = $('.transaction-search-bar');
+  const $transactiontoggleBtn = $(this);
+  console.log($transactionsearchBar, '\n',$transactiontoggleBtn )
+  
+  $transactionsearchBar.toggleClass('active');
+  
+  // Toggle magnifying glass icon between search and close
+  if ($transactionsearchBar.hasClass('active')) {
+    $transactiontoggleBtn.html('<i class="fas fa-times"></i>'); // Show close icon when search bar is visible
+  } else {
+    $transactiontoggleBtn.html('<i class="fas fa-search"></i>'); // Show search icon when search bar is hidden
+  }
+});
+
+$(document).on('click', '.transactions-search-bar .transaction-search-type-btn', function (e) {
+  e.stopPropagation(); // Prevent event bubbling
+  const dropdown = $(this).siblings('.transaction-search-type-options');
+  dropdown.addClass('active');
 });

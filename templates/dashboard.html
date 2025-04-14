@@ -2,233 +2,82 @@
 
 {% load static %}
 {% block content %}
-    <!-- Cards -->
-    <div class="row g-2 mb-2">
-      <!-- Borrowed Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Borrowed Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">2405</span>
-              <span class="text-success">
-                <i class="bi bi-arrow-up me-1"></i>
-                +0.2%
-              </span>
-            </div>
-          </div>
+ <!-- Cards -->
+<div class="row g-2 mb-2">
+  <!-- Borrowed Books -->
+  <div class="col-sm-6 col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Total members</h6>
+        <div class="d-flex align-items-center">
+          <span class="card-number me-2">{{ members_count }}</span>
+          <span class="text-success">
+            <i class="bi bi-arrow-up me-1"></i>
+            +0.2%
+          </span>
         </div>
-      </div>
-      <!-- Returned Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Returned Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">785</span>
-              <span class="text-danger">
-                <i class="bi bi-arrow-down me-1"></i>
-                -0.5%
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Overdue Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Overdue Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">45</span>
-              <span class="text-success">
-                <i class="bi bi-arrow-up me-1"></i>
-                +0.5%
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Missing Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Missing Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">12</span>
-              <span class="text-danger">
-                <i class="bi bi-arrow-down me-1"></i>
-                -0.7%
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row g-2 mb-2">
-      <!-- Borrowed Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Borrowed Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">2405</span>
-              <span class="text-success">
-                <i class="bi bi-arrow-up me-1"></i>
-                +0.2%
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Returned Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Returned Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">785</span>
-              <span class="text-danger">
-                <i class="bi bi-arrow-down me-1"></i>
-                -0.5%
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Overdue Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Overdue Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">45</span>
-              <span class="text-success">
-                <i class="bi bi-arrow-up me-1"></i>
-                +0.5%
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Missing Books -->
-      <div class="col-sm-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-title">Missing Books</h6>
-            <div class="d-flex align-items-center">
-              <span class="card-number me-2">12</span>
-              <span class="text-danger">
-                <i class="bi bi-arrow-down me-1"></i>
-                -0.7%
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- Checkout Stats and Overdue History Section -->
-<div class="stats-section p-3">
-  <div class="row g-3">
-  <!-- Checkout Stats (Line Chart) -->
-<div class="col-12 col-md-6">
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Checkout Stats</h5>
-      <div class="chart-legend mb-3">
-        <span class="legend-item me-3">
-          <span class="legend-dot borrowed"></span> Borrowed
-        </span>
-        <span class="legend-item">
-          <span class="legend-dot returned"></span> Returned
-        </span>
-      </div>
-      <div class="chart-container">
-        <canvas id="checkoutChart"></canvas>
       </div>
     </div>
   </div>
-</div>
-
-    <!-- Overdue History (Table) -->
-    <div class="col-12 col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Overdue History</h5>
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Member ID</th>
-                  <th>Title</th>
-                  <th>ISBN</th>
-                  <th>Due Date</th>
-                  <th>Fine</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>#48564</td>
-                  <td>Magnolia Palace</td>
-                  <td>3234</td>
-                  <td>5</td>
-                  <td>$10</td>
-                </tr>
-                <tr>
-                  <td>#48564</td>
-                  <td>Don Quixote</td>
-                  <td>3234</td>
-                  <td>5</td>
-                  <td>$10</td>
-                </tr>
-                <tr>
-                  <td>#48564</td>
-                  <td>Alice’s Adventures in…</td>
-                  <td>3234</td>
-                  <td>5</td>
-                  <td>$10</td>
-                </tr>
-                <tr>
-                  <td>#48564</td>
-                  <td>Pride and Prejudice</td>
-                  <td>3234</td>
-                  <td>8</td>
-                  <td>$10</td>
-                </tr>
-                <tr>
-                  <td>#48564</td>
-                  <td>Treasure Island</td>
-                  <td>3234</td>
-                  <td>5</td>
-                  <td>$10</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+  <!-- Returned Books -->
+  <div class="col-sm-6 col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Total Books</h6>
+        <div class="d-flex align-items-center">
+          <span class="card-number me-2">{{ books_count }}</span>
+          <span class="text-danger">
+            <i class="bi bi-arrow-down me-1"></i>
+            -0.5%
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Overdue Books -->
+  <div class="col-sm-6 col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Borrowed Books</h6>
+        <div class="d-flex align-items-center">
+          <span class="card-number me-2">{{ issued_books }}</span>
+          <span class="text-success">
+            <i class="bi bi-arrow-up me-1"></i>
+            +0.5%
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Missing Books -->
+  <div class="col-sm-6 col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Overdue Books</h6>
+        <div class="d-flex align-items-center">
+          <span class="card-number me-2">{{ overdue_books }}</span>
+          <span class="text-danger">
+            <i class="bi bi-arrow-down me-1"></i>
+            -0.7%
+          </span>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-
-
-
-<!-- Recent Check-out’s Section -->
-<div class="checkout-section p-3">
+<!-- Checkout Stats and Overdue History Section -->
+<div class="checkout-section">
   <div class="row g-3">
-    <!-- Recent Check-out’s Table -->
-    <div class="col-12 col-md-8">
-      <div class="card">
-        <div class="card-body">
+    <!-- Checkout Stats (Line Chart) -->
+    <div class="col-12 col-md-6 d-flex">
+      <div class="card h-100">
+        <div class="card-body d-flex flex-column">
           <div class="d-flex justify-content-between align-items-center mb-3 title-container">
             <h5 class="card-title mb-0">Recent Check-out’s</h5>
             <a href="#" class="view-all">View All</a>
           </div>
-          <div class="table-responsive">
+          <div class="table-responsive flex-fill">
             <table class="table">
               <thead>
                 <tr>
@@ -242,61 +91,83 @@
                 </tr>
               </thead>
               <tbody>
+                {% for entry in recent_checkouts %}
                 <tr>
-                  <td>#48964</td>
-                  <td>3234</td>
-                  <td class="truncate">Magnolia Palace</td>
-                  <td class="truncate">Fiona Davis</td>
-                  <td class="truncate">Phillip Workman</td>
-                  <td>5/2/2023</td>
-                  <td>15/2/2023</td>
+                  <td>#{{ entry.id }}</td>
+                  <td>{{ entry.book__isbn }}</td>
+                  <td class="truncate">{{ entry.book__title }}</td>
+                  <td class="truncate">{{ entry.book__author }}</td>
+                  <td class="truncate">{{ entry.member__name }}</td>
+                  <td>{{ entry.issue_date }}</td>
+                  <td>{{ entry.due_date }}</td>
                 </tr>
-                <tr>
-                  <td>#48964</td>
-                  <td>3234</td>
-                  <td class="truncate">Don Quixote</td>
-                  <td class="truncate">Miguel de Cervantes</td>
-                  <td class="truncate">Kianna Donin</td>
-                  <td>5/2/2023</td>
-                  <td>15/2/2023</td>
-                </tr>
-                <tr>
-                  <td>#48964</td>
-                  <td>3234</td>
-                  <td class="truncate">Alice’s Adventures in Wonder...</td>
-                  <td class="truncate">Lewis Caroll</td>
-                  <td class="truncate">Cristofer Bator</td>
-                  <td>3/2/2023</td>
-                  <td>13/2/2023</td>
-                </tr>
-                <tr>
-                  <td>#48964</td>
-                  <td>3234</td>
-                  <td class="truncate">Pride and Prejudice</td>
-                  <td class="truncate">Hanna Gouse</td>
-                  <td class="truncate">Livia Kenter</td>
-                  <td>3/2/2023</td>
-                  <td>13/2/2023</td>
-                </tr>
-                <tr>
-                  <td>#48964</td>
-                  <td>3234</td>
-                  <td class="truncate">Treasure Island</td>
-                  <td class="truncate">Phillip Siphron</td>
-                  <td class="truncate">Tatiana Arcand</td>
-                  <td>2/2/2023</td>
-                  <td>12/2/2023</td>
-                </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
+    <!-- Overdue History (Table) -->
+    <div class="col-12 col-md-6 ">
+      <div class="card h-100">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Overdue History</h5>
+          <div class="table-responsive flex-fill">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Member ID</th>
+                  <th>Title</th>
+                  <th>ISBN</th>
+                  <th>Due Date</th>
+                  <th>Fine</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for entry in overdue_history %}
+                <tr>
+                  <td>#{{ entry.member__id }}</td>
+                  <td>{{ entry.book__title }}</td>
+                  <td>{{ entry.book__isbn }}</td>
+                  <td>{{ entry.due_date }}</td>
+                  <td>$10</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Recent Check-out’s Section -->
+<div class="stats-section pt-3">
+  <div class="row g-3">
+    <!-- Recent Check-out’s Table -->
+    <div class="col-12 col-md-6">
+      <div class="card h-100">
+         <div class="card-body">
+          <h5 class="card-title">Checkout Stats</h5>
+          <div class="chart-legend mb-3">
+            <span class="legend-item me-3">
+              <span class="legend-dot borrowed"></span> Borrowed
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot returned"></span> Returned
+            </span>
+          </div>
+          <div class="chart-container">
+            <canvas id="checkoutChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <!-- Top Books Sidebar (Unchanged) -->
-    <div class="col-12 col-md-4">
-      <div class="card">
+    <!-- Top Books Sidebar -->
+    <div class="col-12 col-md-6">
+      <div class="card h-100">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center mb-4">
             <button class="btn btn-success btn-sm">Top Books</button>
@@ -335,8 +206,6 @@
       </div>
     </div>
   </div>
-</div>
-</div>
 </div>
  
 {% endblock %}

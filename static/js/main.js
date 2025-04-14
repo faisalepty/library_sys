@@ -1,4 +1,4 @@
-    // script.js
+// script.js
 document.addEventListener("DOMContentLoaded", () => {
   const searchToggle = document.querySelector(".search-toggle");
   const closeSearch = document.querySelector(".close-search");
@@ -138,10 +138,12 @@ function fetchSearchResults(searchType, searchQuery) {
         // Show the dropdown
         resultsDropdown.removeClass('d-none').addClass('active');
         $('.modern-search-bar').addClass('results-open');
+        $('.general-search-filter-wrapper').addClass('results-filter-open')
       } else {
         // Hide the dropdown if no results are found
         resultsDropdown.removeClass('active').addClass('d-none');
         $('.modern-search-bar').removeClass('results-open');
+        $('.general-search-filter-wrapper').removeClass('results-filter-open')
       }
     },
     error: function (xhr, status, error) {
@@ -220,6 +222,7 @@ $('#search-query').on('input', function () {
     } else {
       $('#search-results').removeClass('active').addClass('d-none');
       $('.modern-search-bar').removeClass('results-open');
+      $('.general-search-filter-wrapper').removeClass('results-filter-open')
     }
   }, 300); // Wait 300ms before triggering the search
 });
@@ -229,6 +232,8 @@ $(document).on('click', function (e) {
   if (!$(e.target).closest('.search-form').length) {
     $('#search-results').removeClass('active').addClass('d-none');
     $('.modern-search-bar').removeClass('results-open');
+    $('.general-search-filter-wrapper').removeClass('results-filter-open')
+
   }
 });
 
@@ -237,5 +242,6 @@ $(document).on('click', '.modern-search-bar .close-search', function () {
   $('#search-query').val('');
   $('#search-results').removeClass('active').addClass('d-none');
   $('.modern-search-bar').removeClass('results-open');
+  $('.general-search-filter-wrapper').removeClass('results-filter-open')
 });
 

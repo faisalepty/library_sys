@@ -28,7 +28,12 @@ urlpatterns = [
     path('transactions/issue/', views.issue_book, name='issue_book'),
     path('transactions/return/', views.return_book, name='return_book'),
 
-    path('pay-debt/', views.pay_debt, name='pay_debt')
+    path('pay-debt/', views.pay_debt, name='pay_debt'),
 
- 
+
+    path('librarians/', views.librarian_list, name='librarian_list'),
+    path('librarians/add-or-edit/', views.add_or_edit_librarian, name='add_or_edit_librarian'),
+    path('librarians/get/<int:pk>/', views.get_librarian_details, name='get_librarian_details'),
+    path('librarians/delete/<int:pk>/', views.delete_librarian, name='delete_librarian'),
+
     ]
