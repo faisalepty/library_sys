@@ -2,35 +2,47 @@
 
 {% load static %}
 {% block content %}
- <!-- Cards -->
+<!-- Cards -->
 <div class="row g-2 mb-2">
+  <!-- Total Members -->
+  <div class="col-sm-6 col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-2">
+          <div class="icon-wrapper icon-members me-2">
+            <i class="bi bi-people card-icon card-icon-members"></i>
+          </div>
+          <h6 class="card-title mb-0">Total Members</h6>
+        </div>
+        <span class="card-number ps-2">{{ members_count }}</span>
+      </div>
+    </div>
+  </div>
+  <!-- Total Books -->
+  <div class="col-sm-6 col-lg-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-2">
+          <div class="icon-wrapper icon-books me-2">
+            <i class="bi bi-book card-icon card-icon-books"></i>
+          </div>
+          <h6 class="card-title mb-0">Total Books</h6>
+        </div>
+        <span class="card-number ps-2">{{ books_count }}</span>
+      </div>
+    </div>
+  </div>
   <!-- Borrowed Books -->
   <div class="col-sm-6 col-lg-3">
     <div class="card">
       <div class="card-body">
-        <h6 class="card-title">Total members</h6>
-        <div class="d-flex align-items-center">
-          <span class="card-number me-2">{{ members_count }}</span>
-          <span class="text-success">
-            <i class="bi bi-arrow-up me-1"></i>
-            +0.2%
-          </span>
+        <div class="d-flex align-items-center mb-2">
+          <div class="icon-wrapper icon-borrowed me-2">
+            <i class="bi bi-box-arrow-up card-icon card-icon-borrowed"></i>
+          </div>
+          <h6 class="card-title mb-0">Borrowed Books</h6>
         </div>
-      </div>
-    </div>
-  </div>
-  <!-- Returned Books -->
-  <div class="col-sm-6 col-lg-3">
-    <div class="card">
-      <div class="card-body">
-        <h6 class="card-title">Total Books</h6>
-        <div class="d-flex align-items-center">
-          <span class="card-number me-2">{{ books_count }}</span>
-          <span class="text-danger">
-            <i class="bi bi-arrow-down me-1"></i>
-            -0.5%
-          </span>
-        </div>
+        <span class="card-number ps-2">{{ issued_books }}</span>
       </div>
     </div>
   </div>
@@ -38,29 +50,13 @@
   <div class="col-sm-6 col-lg-3">
     <div class="card">
       <div class="card-body">
-        <h6 class="card-title">Borrowed Books</h6>
-        <div class="d-flex align-items-center">
-          <span class="card-number me-2">{{ issued_books }}</span>
-          <span class="text-success">
-            <i class="bi bi-arrow-up me-1"></i>
-            +0.5%
-          </span>
+        <div class="d-flex align-items-center mb-2">
+          <div class="icon-wrapper icon-overdue me-2">
+            <i class="bi bi-clock card-icon card-icon-overdue"></i>
+          </div>
+          <h6 class="card-title mb-0">Overdue Books</h6>
         </div>
-      </div>
-    </div>
-  </div>
-  <!-- Missing Books -->
-  <div class="col-sm-6 col-lg-3">
-    <div class="card">
-      <div class="card-body">
-        <h6 class="card-title">Overdue Books</h6>
-        <div class="d-flex align-items-center">
-          <span class="card-number me-2">{{ overdue_books }}</span>
-          <span class="text-danger">
-            <i class="bi bi-arrow-down me-1"></i>
-            -0.7%
-          </span>
-        </div>
+        <span class="card-number ps-2">{{ overdue_books }}</span>
       </div>
     </div>
   </div>
@@ -68,14 +64,14 @@
 
 <!-- Checkout Stats and Overdue History Section -->
 <div class="checkout-section">
-  <div class="row g-3">
+  <div class="row g-3  mt-1">
     <!-- Checkout Stats (Line Chart) -->
     <div class="col-12 col-md-6 d-flex">
       <div class="card h-100">
         <div class="card-body d-flex flex-column">
           <div class="d-flex justify-content-between align-items-center mb-3 title-container">
             <h5 class="card-title mb-0">Recent Check-out’s</h5>
-            <a href="#" class="view-all">View All</a>
+            <a href="{% url 'transaction_list' %}" class="view-all">View All</a>
           </div>
           <div class="table-responsive flex-fill">
             <table class="table">
@@ -170,37 +166,24 @@
       <div class="card h-100">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center mb-4">
-            <button class="btn btn-success btn-sm">Top Books</button>
-            <button class="btn btn-outline-secondary btn-sm">New Arrivals</button>
+            <button class="btn btn-success btn-sm">New Arrivals</button>
+            <button class="btn btn-outline-secondary btn-sm d-none">Top Books</button>
           </div>
           <ul class="list-unstyled">
+            {% for book in new_arrivals %}
             <li class="mb-4">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <div class="book-title">Magnolia Palace</div>
-                  <div class="book-author">Cristofer Bator</div>
+                  <div class="book-title">{{ book.title }}</div>
+                  <div class="book-author">{{book.author}}</div>
                 </div>
-                <span class="text-success">Available</span>
+                <span>
+                <span>{{ book.stock }} </span><span class="text-success">Available</span>
+                </span>
               </div>
             </li>
-            <li class="mb-4">
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <div class="book-title">Don Quixote</div>
-                  <div class="book-author">Aspen Siphron</div>
-                </div>
-                <span class="text-success">Available</span>
-              </div>
-            </li>
-            <li>
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <div class="book-title">Pride and Prejudice</div>
-                  <div class="book-author">Kianna Geidt</div>
-                </div>
-                <span class="text-success">Available</span>
-              </div>
-            </li>
+            <hr>
+            {% endfor %}
           </ul>
         </div>
       </div>

@@ -178,6 +178,13 @@ def update_balance():
         # transaction.fee = int(transaction.fee) if transaction.fee else 0
         # transaction.amount_paid = int(transaction.amount_paid) if transaction.amount_paid else 0,
         transaction.save()
+def update_debt():
+    members = Member.objects.all()
+
+    for member in members:
+        if member.outstanding_debt > 500:
+            member.outstanding_debt = 200
+            member.save()
 
 
     
@@ -191,4 +198,5 @@ if __name__ == "__main__":
     # # Populate transactions
     # populate_transactions()
 
-    update_balance()
+    # update_balance()
+    update_debt()

@@ -134,6 +134,8 @@ $('#book-search-query').on('input', function () {
         const bookId = $('#book-id').val();
         const url = bookId ? `/books/update/${bookId}/` : '/books/create/';
         const method = bookId ? 'POST' : 'POST';
+         $('#book-spinner').removeClass('d-none');
+         
 
         $.ajax({
             url: url,
@@ -151,9 +153,14 @@ $('#book-search-query').on('input', function () {
                     showSuccessModal(response.message);
                 } else {
                     $('#addEditBookModal').modal('hide');
+                    $('#book-spinner').addClass('d-none');
                     showErrorModal(response.message);
                 }
             },
+            complete: function () {
+                  // Hide spinner and re-enable login button
+                  $('#book-spinner').addClass('d-none');
+              }
         });
     });
 

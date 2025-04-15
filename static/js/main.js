@@ -245,3 +245,61 @@ $(document).on('click', '.modern-search-bar .close-search', function () {
   $('.general-search-filter-wrapper').removeClass('results-filter-open')
 });
 
+// Handle Login
+$('#login-btn').on('click', function () {
+    const username = $('#login-username').val();
+    const password = $('#login-password').val();
+
+    $('#login-spinner').removeClass('d-none');
+    $('#login-btn').prop('disabled', true);
+    $.ajax({
+        url: '/login/',
+        method: 'POST',
+        data: { username: username, password: password },
+        success: function (response) {
+            if (response.success) {
+                window.location.href = response.redirect_url; 
+            } else {
+              $('#loginModal').modal('hide')
+              $('#login-spinner').addClass('d-none');
+              showErrorModal(response.message);
+            }
+        },
+        error: function () {
+            showErrorModal('An error occurred while logging in.');
+        },
+       complete: function () {
+          // Hide spinner and re-enable login button
+          $('#login-spinner').addClass('d-none');
+          $('#login-btn').prop('disabled', false);
+      },
+    });
+});
+
+
+
+$(document).on('click', '.logout-btn', function () {
+    $('.confirm-modal .modal-body').html('Are you sure you want to log out?');
+    $('.confirm-modal .modal-footer .btn-primary').attr('id', 'confirmModalBtn-logout');
+    $('.confirm-modal').modal('show')
+})
+
+// Handle Logout
+$(document).on('click', '#confirmModalBtn-logout', function (e) {
+    e.preventDefault();
+        $.ajax({
+            url: '/logout/',
+            method: 'POST',
+            success: function (response) {
+                if (response.success) {
+                    location.reload(); // Reload the page to reflect the logged-out state
+                } else {
+                    showErrorModal(response.message);
+                }
+            },
+            error: function () {
+                showErrorModal('An error occurred while logging out.');
+            },
+        });
+
+});

@@ -93,6 +93,7 @@ $(document).ready(function () {
     $('#member-form').on('submit', function (e) {
         e.preventDefault();
         const formData = $(this).serialize();
+        $('#member-spinner').removeClass('d-none')
         $.ajax({
             url: '/members/add-edit/',
             method: 'POST',
@@ -104,14 +105,20 @@ $(document).ready(function () {
                     $('#addEditMemberModal').modal('hide'); 
                     showSuccessModal(response.message);
                 } else {
+                    $('#member-spinner').addClass('d-none');
                     $('#addEditMemberModal').modal('hide');
                     showErrorModal(response.message);
                 }
             },
             error: function () {
                 $('#addEditMemberModal').modal('hide');
+                $('#member-spinner').addClass('d-none');
                 showErrorModal('Error saving member.');
             },
+            complete: function () {
+                  // Hide spinner and re-enable login button
+                  $('#member-spinner').addClass('d-none');
+              }
         });
     });
 

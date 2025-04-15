@@ -14,29 +14,55 @@ from datetime import date
 from .models import Book, Member, Transaction
 from datetime import timedelta
 from django.utils.timezone import now
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth.decorators import login_required
 
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return JsonResponse({'success': True, 'redirect_url': '/'})
+        else:
+            return JsonResponse({'success': False, 'message': 'Invalid username or password.'})
+    else:
+        return render(request, 'base.html')
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+    
+def user_logout(request):
+    if request.method == 'POST':
+        logout(request)
+        return JsonResponse({'success': True, 'message': 'Logout successful.'})
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+@login_required(login_url='/login/')
 def dashboard(request):
     
 
-    # Fetch data for the "Overdue History" table
+    #  uncomment the filters
     overdue_history = Transaction.objects.filter(
-        return_date__isnull=True
+            # return_date__isnull=True,
+            # issue_date__lt=timezone.now() - timedelta(days=7)
     ).select_related('book', 'member').values(
         'member__id', 'book__title', 'book__isbn'
-    )[:5] 
+    )[:5]
 
     # Fetch data for the "Recent Check-out’s" table
     recent_checkouts = Transaction.objects.filter(
         return_date__isnull=True
     ).select_related('book', 'member').order_by('-issue_date').values(
         'id', 'book__isbn', 'book__title', 'book__author', 'member__name', 'issue_date'
-    )[:5] 
-    six_months_ago = now().date() - timedelta(days=180)
+    )[:5]
 
     # Fetch raw data for borrowed and returned books
-    checkout_stats = Transaction.objects.all(
-        
-    ).values('issue_date', 'return_date')
+    checkout_stats = Transaction.objects.all().values('issue_date', 'return_date')
 
     # Initialize a single dictionary to store counts for both borrowed and returned books
     monthly_stats = {}
@@ -68,6 +94,7 @@ def dashboard(request):
     overdue_books = Transaction.objects.filter(
                     return_date__isnull=True, 
                     issue_date__lt=now().date() - timedelta(days=7)).count()
+    new_arrivals = Book.objects.all().order_by('-id')[:3]
 
     # Pass data to the template
     context = {
@@ -80,6 +107,8 @@ def dashboard(request):
         'overdue_history': overdue_history,
         'recent_checkouts': recent_checkouts,
 
+        'new_arrivals': new_arrivals,
+
 
         'checkout_stats_months': months,
         'checkout_stats_borrowed': borrowed_data,
@@ -89,6 +118,7 @@ def dashboard(request):
 
     return render(request, 'dashboard.html', context)
 
+@login_required(login_url='/login/')
 def general_search(request):
     search_type = request.GET.get('search_type', '')
     search_query = request.GET.get('search_query', '')
@@ -112,6 +142,7 @@ def general_search(request):
 
     return JsonResponse(results, safe=False)
 
+@login_required(login_url='/login/')
 def book_list(request):
     page = request.GET.get('page', 1)
     search_type = request.GET.get('search_type', '')
@@ -162,6 +193,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .models import Book
 
+@login_required(login_url='/login/')
 def create_book(request):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -187,7 +219,7 @@ def create_book(request):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
 
-
+@login_required(login_url='/login/')
 def update_book(request, book_id):
     if request.method == 'POST':
         book = get_object_or_404(Book, id=book_id)
@@ -204,6 +236,7 @@ def update_book(request, book_id):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
 
+@login_required(login_url='/login/')
 def delete_book(request, book_id):
     if request.method == 'POST':
         book = get_object_or_404(Book, id=book_id)
@@ -215,7 +248,7 @@ def delete_book(request, book_id):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
 
-
+@login_required(login_url='/login/')
 def fetch_book_details(request, book_id):
     if request.method == 'GET':
         # Fetch the book by ID
@@ -233,7 +266,7 @@ def fetch_book_details(request, book_id):
 
         return JsonResponse(data)
 
-
+@login_required(login_url='/login/')
 def book_details(request, book_id):
     # Fetch the book
     book = get_object_or_404(Book, id=book_id)
@@ -271,6 +304,7 @@ def book_details(request, book_id):
     # Render the template for non-AJAX requests
     return render(request, 'book_details.html', {'book': book, 'transactions': transactions, 'b_d': 'b_d'})
 
+@login_required(login_url='/login/')
 def fetch_all_books(request):
 
     books = Book.objects.all()
@@ -284,7 +318,7 @@ def fetch_all_books(request):
     return JsonResponse(data)
 
 
-
+@login_required(login_url='/login/')
 def member_list(request):
     page = request.GET.get('page', 1)
     search_query = request.GET.get('search', '')
@@ -330,7 +364,7 @@ def member_list(request):
     # Render the template for non-AJAX requests
     return render(request, 'member_list.html')
 
-
+@login_required(login_url='/login/')
 def add_or_edit_member(request):
     if request.method == 'POST':
         member_id = request.POST.get('id')  # ID will be empty for "Add"
@@ -366,7 +400,7 @@ def add_or_edit_member(request):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
 
-
+@login_required(login_url='/login/')
 def delete_member(request, member_id):
     if request.method == 'POST':
         member = get_object_or_404(Member, id=member_id)
@@ -376,7 +410,7 @@ def delete_member(request, member_id):
             return JsonResponse({'success': True, 'message': 'Member deleted successfully.'})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
-
+@login_required(login_url='/login/')
 def fetch_member_details(request, member_id):
     if request.method == 'GET':
         member = get_object_or_404(Member, id=member_id)
@@ -393,6 +427,7 @@ def fetch_member_details(request, member_id):
 
         return JsonResponse(data)
 
+@login_required(login_url='/login/')
 def fetch_all_members(request):
     members = Member.objects.all()
 
@@ -407,6 +442,7 @@ def fetch_all_members(request):
 
     return JsonResponse(data)
 
+@login_required(login_url='/login/')
 def member_details(request, member_id):
     # Fetch the member
     member = get_object_or_404(Member, id=member_id)
@@ -442,9 +478,7 @@ def member_details(request, member_id):
     # Render the template for non-AJAX requests
     return render(request, 'member_details.html', {'member': member, 'transactions': transactions, 'm_d': 'm_d'})
 
-
-
-
+@login_required(login_url='/login/')
 def issue_book(request):
     if request.method == 'POST':
         book_id = request.POST.get('book_id')
@@ -478,7 +512,7 @@ def issue_book(request):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
 
-
+@login_required(login_url='/login/')
 def return_book(request):
     if request.method == 'POST':
         # Get transaction ID and amount paid from the request
@@ -537,7 +571,7 @@ def return_book(request):
         except Exception as e:
             return JsonResponse({'success': False, 'message': f'An error occurred: {str(e)}'})
 
-
+@login_required(login_url='/login/')
 def transaction_list(request):
     page = request.GET.get('page', 1)
     member_id = request.GET.get('member_id', '')
@@ -559,6 +593,9 @@ def transaction_list(request):
     elif search_type == 'member':
         transactions = transactions.filter(member__name__icontains=search_query)
 
+    transactions = transactions.order_by('-id')
+    for transaction in transactions:
+        print(transaction.id)
     # Paginate results
     paginator = Paginator(transactions, 10)  # 10 transactions per page
     transactions_page = paginator.get_page(page)
@@ -595,7 +632,7 @@ def transaction_list(request):
     # Render the template for non-AJAX requests
     return render(request, 'transaction_list.html', {'transactions': transactions_page, 'filters': {'member_id': member_id, 'book_id': book_id}})
 
-
+@login_required(login_url='/login/')
 def pay_debt(request):
     if request.method == 'POST':
         transaction_id = request.POST.get('transaction_id')
@@ -633,7 +670,7 @@ def pay_debt(request):
             return JsonResponse({'success': False, 'message': str(e)})
 
 
-
+@login_required(login_url='/login/')
 def librarian_list(request):
     # Get query parameters
     page = request.GET.get('page', 1)
@@ -678,10 +715,8 @@ def librarian_list(request):
     return render(request, 'librarian_list.html', {'librarians': librarians_page})
 
 
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.http import JsonResponse
 
+@login_required(login_url='/login/')
 def add_or_edit_librarian(request):
     if request.method == 'POST':
         librarian_id = request.POST.get('librarian_id')
@@ -707,7 +742,7 @@ def add_or_edit_librarian(request):
     
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
-
+@login_required(login_url='/login/')
 def get_librarian_details(request, pk):
     librarian = get_object_or_404(User, pk=pk)
 
@@ -718,7 +753,7 @@ def get_librarian_details(request, pk):
     }
     return JsonResponse(data)
 
-
+@login_required(login_url='/login/')
 def delete_librarian(request, pk):
     librarian = get_object_or_404(User, pk=pk)
     librarian.delete()

@@ -199,6 +199,7 @@ $(document).on('click', '.issue-book-link', function (e) {
             $('#member-id-option').prop('disabled', true);
         }
         const issueBookurl = $("#issue-book-form").data('url')
+        $('#issue-book-spinner').removeClass('d-none');
         $.ajax({
             url: issueBookurl,
             method: 'POST',
@@ -213,6 +214,10 @@ $(document).on('click', '.issue-book-link', function (e) {
                     showErrorModal(response.message);
                 }
             },
+            complete: function () {
+                  // Hide spinner and re-enable login button
+                  $('#issue-book-spinner').addClass('d-none');
+              }
         });
     });
 
@@ -226,6 +231,7 @@ $(document).on('click', '.issue-book-link', function (e) {
     // Handle return book form submission
     $('#return-book-form').on('submit', function (e) {
         e.preventDefault();
+        $('#return-book-spinner').removeClass('d-none');
         const formData = $(this).serialize();
         $.ajax({
             url: '/transactions/return/',
@@ -237,16 +243,22 @@ $(document).on('click', '.issue-book-link', function (e) {
                     fetchTransactions(currentPage, memberId, bookId);
                     showSuccessModal(`Book returned successfully.\nTotal Fee: KES ${response.total_fee}\nAmount Paid: KES ${response.amount_paid}\nRemaining Fee: KES ${response.remaining_fee}`);
                 } else {
+                     $('#return-book-spinner').addClass('d-none');
                     $('#returnBookModal').modal('hide');
                     showErrorModal(response.message);
                 }
             },
+            complete: function () {
+                  // Hide spinner and re-enable login button
+                  $('#return-book-spinner').addClass('d-none');
+              }
         });
     });
 
     $(document).on('click', '#submitPaymentBtn', function () {
     const transactionId = $('#transactionId').val();
     const paymentAmount = $('#paymentAmount').val();
+    $('#pay-debt-spinner').removeClass('d-none');
     $.ajax({
         url: '/pay-debt/',  // URL to the pay_debt view
         method: 'POST',
@@ -261,14 +273,21 @@ $(document).on('click', '.issue-book-link', function (e) {
                 showSuccessModal(response.message);
                 
             } else {
+                 $('#return-book-spinner').addClass('d-none');
                 $('#payDebtModal').modal('hide');
                 showErrorModal(response.message);
             }
         },
         error: function () {
+             $('#return-book-spinner').addClass('d-none');
             $('#payDebtModal').modal('hide');
             showErrorModal('An error occurred while processing the payment.');
-        }
+        },
+        complete: function () {
+              // Hide spinner and re-enable login button
+              $('#return-book-spinner').addClass('d-none');
+          }
+
     });
 });
 

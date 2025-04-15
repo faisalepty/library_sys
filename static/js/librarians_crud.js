@@ -16,13 +16,18 @@ function fetchLibrarians(page = 1, search = '') {
                         <td>${librarian.email}</td>
                         <td>${librarian.phone_number || '-'}</td>
                         <td>${librarian.address || '-'}</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary edit-librarian-btn" data-id="${librarian.id}">
-                                Edit
-                            </button>
-                            <button class="btn btn-sm btn-danger delete-librarian-btn" data-id="${librarian.id}">
-                                Delete
-                            </button>
+                        
+                    <td>
+                            <!-- Dropdown Menu -->
+                            <div class="dropdown">
+                                <button class="action-dropdown-btn" type="button" id="actionsDropdown-${librarian.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="actionsDropdown-${librarian.id}">
+                                    <li><a class="dropdown-item edit-librarian-btn" href="#" data-id="${librarian.id}">Edit</a></li>
+                                    <li><a class="dropdown-item delete-librarian-btn" href="#" data-id="${librarian.id}">Delete</a></li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                 `);
@@ -42,23 +47,32 @@ $('#save-librarian-btn').on('click', function () {
     const id = $('#librarian-id').val();
     const url = '/librarians/add-or-edit/';
     const method = 'POST';
-
+    $('#librarians-spinner').removeClass('d-none');
     $.ajax({
         url: url,
         method: method,
         data: $('#librarian-form').serialize(),
         success: function (response) {
             if (response.success) {
-                fetchLibrarians(); // Refresh the table
-                $('#addEditLibrarianModal').modal('hide'); // Close the modal
-                resetLibrarianForm(); // Reset the form
+                fetchLibrarians(); 
+                $('#addEditLibrarianModal').modal('hide'); 
+                resetLibrarianForm(); 
+                 showSuccessModal(response.message);
             } else {
-                alert(response.message);
+                $('#librarians-spinner').addClass('d-none');
+                $('#addEditLibrarianModal').modal('hide');
+                showErrorModal(response.message);
             }
         },
         error: function () {
-            alert('An error occurred while saving the librarian.');
+            $('#librarians-spinner').addClass('d-none');
+            $('#addEditLibrarianModal').modal('hide');
+            showErrorModal('An error occurred while saving the librarian.');
         },
+        complete: function () {
+              // Hide spinner and re-enable login button
+              $('#librarians-spinner').addClass('d-none');
+        }
     });
 });
 
@@ -72,6 +86,7 @@ $('.add-librarian-btn').on('click', function () {
 // Open the Edit Librarian Modal
 $(document).on('click', '.edit-librarian-btn', function () {
     const id = $(this).data('id');
+    
 
     $.ajax({
         url: `/librarians/get/${id}/`,
@@ -88,31 +103,41 @@ $(document).on('click', '.edit-librarian-btn', function () {
             $('#addEditLibrarianModal').modal('show');
         },
         error: function () {
-            alert('Error fetching librarian details.');
+            showErrorModal('Error fetching librarian details.');
         },
+        
     });
 });
 
-// Delete a Librarian
+let delLibrarianId
 $(document).on('click', '.delete-librarian-btn', function () {
-    const id = $(this).data('id');
+    delLibrarianId = $(this).data('id');
+    $('.confirm-modal .modal-body').html('Are you sure you want to delete this librarian?');
+    $('.confirm-modal .modal-footer .btn-primary').attr('id', 'confirmModalBtn-librarian');
+    $('.confirm-modal').modal('show')
 
-    if (confirm('Are you sure you want to delete this librarian?')) {
+
+})
+
+// Delete a Librarian
+$(document).on('click', '#confirmModalBtn-librarian', function () {
+    
+    $('.confirm-modal').modal('hide')
         $.ajax({
-            url: `/librarians/delete/${id}/`,
+            url: `/librarians/delete/${delLibrarianId}/`,
             method: 'POST',
             success: function (response) {
                 if (response.success) {
-                    fetchLibrarians(); // Refresh the table
+                    fetchLibrarians(); 
+                    showSuccessModal(response.message);
                 } else {
-                    alert(response.message);
+                    showErrorModal(response.message);
                 }
             },
             error: function () {
-                alert('An error occurred while deleting the librarian.');
+                showErrorModal('An error occurred while deleting the librarian.');
             },
         });
-    }
 });
 
 // Reset the Librarian Form

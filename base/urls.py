@@ -36,4 +36,8 @@ urlpatterns = [
     path('librarians/get/<int:pk>/', views.get_librarian_details, name='get_librarian_details'),
     path('librarians/delete/<int:pk>/', views.delete_librarian, name='delete_librarian'),
 
+
+    path('login/', views.user_login, name='user_login'),
+    path('logout/', views.user_logout, name='user_logout'),
+
     ]
