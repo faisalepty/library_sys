@@ -112,11 +112,7 @@ function fetchSearchResults(searchType, searchQuery) {
             displayText = `${result.name} (${result.email})`;
             link = `/member/${result.id}/`;
           }
-          resultsDropdown.append(`
-            <div class="dropdown-item">
-              <a href="${link}" style="text-decoration: none; color: inherit;">${displayText}</a>
-            </div>
-          `);
+          resultsDropdown.append(`<div class="dropdown-item"><a href="${link}" style="text-decoration: none; color: inherit;">${displayText}</a></div>`);
         });
         // Show the dropdown
         resultsDropdown.removeClass('d-none').addClass('active');

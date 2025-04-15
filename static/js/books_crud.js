@@ -19,19 +19,7 @@ function fetchBooks(page = 1, searchType = '', searchQuery = '') {
                         <td>${book.author}</td>
                         <td>${book.genre || '-'}</td>
                         <td>${book.stock}</td>
-                        <td>
-                            <!-- Dropdown Menu -->
-                            <div class="dropdown">
-                                <button class="action-dropdown-btn" type="button" id="actionsDropdown-${book.id}" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="actionsDropdown-${book.id}">
-                                    <li><a class="dropdown-item" href="/book/${book.id}/">View details</a></li>
-                                    <li><a class="dropdown-item issue-book-link" href="#" data-id="${book.id}" data-type="book">Issue Book</a></li>
-                                    <li><a class="dropdown-item edit-book-action" href="#" data-id="${book.id}">Edit</a></li>
-                                    <li><a class="dropdown-item delete-book-action" href="#" data-id="${book.id}">Delete</a></li>
-                                </ul>
-                            </div>
+                        <td><!-- Dropdown Menu --><div class="dropdown"><button class="action-dropdown-btn" type="button" id="actionsDropdown-${book.id}" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button><ul class="dropdown-menu" aria-labelledby="actionsDropdown-${book.id}"><li><a class="dropdown-item" href="/book/${book.id}/">View details</a></li><li><a class="dropdown-item issue-book-link" href="#" data-id="${book.id}" data-type="book">Issue Book</a></li><li><a class="dropdown-item edit-book-action" href="#" data-id="${book.id}">Edit</a></li><li><a class="dropdown-item delete-book-action" href="#" data-id="${book.id}">Delete</a></li></ul></div>
                         </td>
                     </tr>
                 `);

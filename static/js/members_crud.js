@@ -20,17 +20,7 @@ $(document).ready(function () {
                             <td>${member.outstanding_debt}</td>
                             <td>${member.is_active ? 'Active' : 'Inactive'}</td>
                             <td>
-                                <!-- Dropdown Menu -->
-                                <div class="dropdown">
-                                    <button class="action-dropdown-btn" type="button" id="memberActionsDropdown-${member.id}" data-bs-toggle="dropdown" aria-expanded="false">
-                                        ...
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="memberActionsDropdown-${member.id}">
-                                        <li><a class="dropdown-item " href="/member/${member.id}/">View details</a></li>
-                                        <li><a class="dropdown-item issue-book-link" href="#" data-id="${member.id}" data-type="member">Issue Book</a></li>
-                                        <li><a class="dropdown-item edit-member-action" href="#" data-id="${member.id}">Edit</a></li>
-                                        <li><a class="dropdown-item delete-member-action" href="#" data-id="${member.id}">Delete</a></li>
-                                    </ul>
+                                <!-- Dropdown Menu --><div class="dropdown"><button class="action-dropdown-btn" type="button" id="memberActionsDropdown-${member.id}" data-bs-toggle="dropdown" aria-expanded="false">...</button><ul class="dropdown-menu" aria-labelledby="memberActionsDropdown-${member.id}"><li><a class="dropdown-item " href="/member/${member.id}/">View details</a></li><li><a class="dropdown-item issue-book-link" href="#" data-id="${member.id}" data-type="member">Issue Book</a></li><li><a class="dropdown-item edit-member-action" href="#" data-id="${member.id}">Edit</a></li><li><a class="dropdown-item delete-member-action" href="#" data-id="${member.id}">Delete</a></li></ul>
                                 </div>
                             </td>
                         </tr>
@@ -117,8 +107,6 @@ $(document).on('click', '.delete-member-action', function () {
     $('.confirm-modal .modal-body').html('Are you sure you want to delete this member?');
     $('.confirm-modal .modal-footer .btn-primary').attr('id', 'confirmModalBtn-member');
     $('.confirm-modal').modal('show')
-
-
 })
    // Handle "Delete Member" button click
     $(document).on('click', '#confirmModalBtn-member', function () {
@@ -137,22 +125,17 @@ $(document).on('click', '.delete-member-action', function () {
                 error: function () {
                     showErrorModal('Error deleting member.');
                 },
-            });
-        
+            });       
     });
  function updateMemberPagination(pagination, currentPage) {
     const paginationControls = $('#members-pagination-controls'); // Unique ID
     paginationControls.empty();
     if (pagination.has_previous) {
-        paginationControls.append(`
-            <button class="page-btn member-page-btn" data-page="${pagination.previous_page_number}">Previous</button>
-        `);
+        paginationControls.append(`<button class="page-btn member-page-btn" data-page="${pagination.previous_page_number}">Previous</button>`);
     }
     paginationControls.append(`<span>Page ${pagination.current_page} of ${pagination.total_pages}</span>`);
     if (pagination.has_next) {
-        paginationControls.append(`
-            <button class="page-btn member-page-btn" data-page="${pagination.next_page_number}">Next</button>
-        `);
+        paginationControls.append(`<button class="page-btn member-page-btn" data-page="${pagination.next_page_number}">Next</button>`);
     }
 }
  // Handle pagination button clicks

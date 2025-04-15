@@ -1,6 +1,5 @@
  $(document).ready(function () {
-
-    function getQueryParams() {
+function getQueryParams() {
     const params = {};
     const queryString = window.location.search.substring(1); // Remove the leading '?'
     queryString.split('&').forEach(pair => {
@@ -12,13 +11,11 @@
     return params;
 }
 let currentPage = 1; // Global variable to track the current page
-
 // Function to fetch transactions with search functionality
 function fetchTransactions(page = 1, member_id = '', book_id = '') {
     // Get the current search type and query
     const searchType = $('.transaction-search-type-options li.selected').data('value');
     const searchQuery = $('#transaction-search-query').val();
-
     $.ajax({
         url: '/transactions/',
         method: 'GET',
@@ -46,7 +43,6 @@ function fetchTransactions(page = 1, member_id = '', book_id = '') {
                         <li><a class="dropdown-item disabled" href="#" data-id="${t.id}">No actions required</a></li>
                     `;
                 }
-
                 $('#transactions-table-body').append(`
                     <tr>
                         <td>#${t.id}</td>
@@ -56,13 +52,7 @@ function fetchTransactions(page = 1, member_id = '', book_id = '') {
                         <td>${t.return_date || '-'}</td>
                         <td>${t.amount_paid || '0.00'}</td>
                         <td>${t.balance || '0.00'}</td>
-                        <td>
-                            <!-- Dropdown Menu -->
-                            <div class="dropdown">
-                                <button class="action-dropdown-btn" type="button" id="transactionActionsDropdown-${t.id}" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="transactionActionsDropdown-${t.id}">
+                        <td><!-- Dropdown Menu --><div class="dropdown"><button class="action-dropdown-btn" type="button" id="transactionActionsDropdown-${t.id}" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button><ul class="dropdown-menu" aria-labelledby="transactionActionsDropdown-${t.id}">
                                    ${dropdownAction}
                                 </ul>
                             </div>
@@ -84,10 +74,8 @@ const queryParams = getQueryParams(); // Parse query parameters from the URL
 currentPage = parseInt(queryParams.page) || 1; // Use the current page from the URL or default to 1
 const memberId = queryParams.member_id || ''; // Use the member_id filter if present
 const bookId = queryParams.book_id || ''; // Use the book_id filter if present
-
 // Fetch transactions with the parsed query parameters
 fetchTransactions(currentPage, memberId, bookId);
-
     // Handle "Issue Book" button click
     $('.issue-book-btn').on('click', function () {
         // Populate book options
@@ -101,7 +89,6 @@ fetchTransactions(currentPage, memberId, bookId);
                 });
             },
         });
-
         // Populate member options
         $.ajax({
             url: '/members-details/',
@@ -118,54 +105,43 @@ fetchTransactions(currentPage, memberId, bookId);
     // Handle "Issue Book" button click
 $(document).on('click', '.issue-book-link', function (e) {
     e.preventDefault(); // Prevent default link behavior
-
     // Get the selected ID and type from the clicked link
     const selectedId = $(this).data('id'); // ID of the selected book or member
     const selectedType = $(this).data('type'); // Type ('book' or 'member')
-
     // Populate book options
     $.ajax({
         url: '/books-details/',
         method: 'GET',
         success: function (response) {
             $('#book-id-option').empty(); // Clear the dropdown
-
             // Populate book options
             response.books.forEach(function (book) {
-                $('#book-id-option').append(`<option value="${book.id}">${book.title}</option>`);
-                
+                $('#book-id-option').append(`<option value="${book.id}">${book.title}</option>`);                
             });
-
             // Pre-select the book if applicable
             if (selectedType === 'book' && selectedId) {
                 $('#book-id-option').val(selectedId); // Pre-select the book
                 $('#book-id-option').prop('disabled', true); // Make the dropdown read-only
-                $('#member-id-option').prop('disabled', false); // Ensure member dropdown is editable
-               
+                $('#member-id-option').prop('disabled', false); // Ensure member dropdown is editable               
             }
         },
     });
-
     // Populate member options
     $.ajax({
         url: '/members-details/',
         method: 'GET',
         success: function (response) {
             $('#member-id-option').empty(); // Clear the dropdown
-
             // Populate member options
             response.members.forEach(function (member) {
                 $('#member-id-option').append(`<option value="${member.id}">${member.name}</option>`);
             });
-
             // Pre-select the member if applicable
             if (selectedType === 'member' && selectedId) {
                 $('#member-id-option').val(selectedId); // Pre-select the member
                 $('#member-id-option').prop('disabled', true); // Make the dropdown read-only
                 $('#book-id-option').prop('disabled', false); // Ensure book dropdown is editable
             }
-
-            // Show the modal after both dropdowns are populated
             $('#issueBookModal').modal('show');
         },
     });
@@ -173,17 +149,12 @@ $(document).on('click', '.issue-book-link', function (e) {
 
     // Handle issue book form submission
     $('#issue-book-form').on('submit', function (e) {
-        e.preventDefault();
-        // Temporarily enable disabled fields
+        e.preventDefault(); 
         $('#book-id-option, #member-id-option').prop('disabled', false);
-
-        // Serialize the form data
         const formData = $(this).serialize();
-
         // Re-disable fields if necessary (optional, based on UI needs)
         if ($('#book-id-option').data('was-disabled')) {
-            $('#book-id-option').prop('disabled', true);
-        }
+            $('#book-id-option').prop('disabled', true);        }
         if ($('#member-id-option').data('was-disabled')) {
             $('#member-id-option').prop('disabled', true);
         }
@@ -204,7 +175,6 @@ $(document).on('click', '.issue-book-link', function (e) {
                 }
             },
             complete: function () {
-                  // Hide spinner and re-enable login button
                   $('#issue-book-spinner').addClass('d-none');
               }
         });
@@ -216,7 +186,6 @@ $(document).on('click', '.issue-book-link', function (e) {
         $('#transaction-id').val(transactionId);
         $('#returnBookModal').modal('show');
     });
-
     // Handle return book form submission
     $('#return-book-form').on('submit', function (e) {
         e.preventDefault();
@@ -238,7 +207,6 @@ $(document).on('click', '.issue-book-link', function (e) {
                 }
             },
             complete: function () {
-                  // Hide spinner and re-enable login button
                   $('#return-book-spinner').addClass('d-none');
               }
         });
@@ -249,7 +217,7 @@ $(document).on('click', '.issue-book-link', function (e) {
     const paymentAmount = $('#paymentAmount').val();
     $('#pay-debt-spinner').removeClass('d-none');
     $.ajax({
-        url: '/pay-debt/',  // URL to the pay_debt view
+        url: '/pay-debt/', 
         method: 'POST',
         data: {
             transaction_id: transactionId,
@@ -259,8 +227,7 @@ $(document).on('click', '.issue-book-link', function (e) {
             if (response.success) {
                 $('#payDebtModal').modal('hide');
                 fetchTransactions(currentPage, memberId, bookId);
-                showSuccessModal(response.message);
-                
+                showSuccessModal(response.message);                            
             } else {
                  $('#return-book-spinner').addClass('d-none');
                 $('#payDebtModal').modal('hide');
@@ -276,35 +243,20 @@ $(document).on('click', '.issue-book-link', function (e) {
               // Hide spinner and re-enable login button
               $('#return-book-spinner').addClass('d-none');
           }
-
     });
 });
  function updateTransactionsPagination(pagination, currentPage) {
     const queryParams = getQueryParams(); // Get existing query parameters
     const paginationControls = $('#transactions-pagination-controls');
     paginationControls.empty();
-
-    // Add "Previous" button
     if (pagination.has_previous) {
         const prevPage = pagination.previous_page_number;
-        paginationControls.append(`
-            <button class="page-btn transaction-page-btn" data-page="${prevPage}">
-                Previous
-            </button>
-        `);
+        paginationControls.append(`<button class="page-btn transaction-page-btn" data-page="${prevPage}">Previous</button>`);
     }
-
-    // Add current page indicator
     paginationControls.append(`<span>Page ${pagination.current_page} of ${pagination.total_pages}</span>`);
-
-    // Add "Next" button
     if (pagination.has_next) {
         const nextPage = pagination.next_page_number;
-        paginationControls.append(`
-            <button class="page-btn transaction-page-btn" data-page="${nextPage}">
-                Next
-            </button>
-        `);
+        paginationControls.append(`<button class="page-btn transaction-page-btn" data-page="${nextPage}">Next</button>`);
     }
 }
 // Handle pagination button clicks
@@ -329,8 +281,6 @@ $(document).on('click', '.pay-debt-btn', function () {
     // Populate the modal with transaction details
     $('#transactionId').val(transactionId);
     $('#remainingBalance').text(balance);
-
-    // Show the modal
     $('#payDebtModal').modal('show');
 });
 

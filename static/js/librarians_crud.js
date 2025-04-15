@@ -15,19 +15,8 @@ function fetchLibrarians(page = 1, search = '') {
                         <td>${librarian.username}</td>
                         <td>${librarian.email}</td>
                         <td>${librarian.phone_number || '-'}</td>
-                        <td>${librarian.address || '-'}</td>
-                        
-                    <td>
-                            <!-- Dropdown Menu -->
-                            <div class="dropdown">
-                                <button class="action-dropdown-btn" type="button" id="actionsDropdown-${librarian.id}" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="actionsDropdown-${librarian.id}">
-                                    <li><a class="dropdown-item edit-librarian-btn" href="#" data-id="${librarian.id}">Edit</a></li>
-                                    <li><a class="dropdown-item delete-librarian-btn" href="#" data-id="${librarian.id}">Delete</a></li>
-                                </ul>
-                            </div>
+                        <td>${librarian.address || '-'}</td>     
+                    <td><!-- Dropdown Menu --><div class="dropdown"><button class="action-dropdown-btn" type="button" id="actionsDropdown-${librarian.id}" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button><ul class="dropdown-menu" aria-labelledby="actionsDropdown-${librarian.id}"><li><a class="dropdown-item edit-librarian-btn" href="#" data-id="${librarian.id}">Edit</a></li><li><a class="dropdown-item delete-librarian-btn" href="#" data-id="${librarian.id}">Delete</a></li></ul></div>
                         </td>
                     </tr>
                 `);
