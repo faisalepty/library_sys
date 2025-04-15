@@ -1,4 +1,3 @@
-// script.js
 document.addEventListener("DOMContentLoaded", () => {
   const searchToggle = document.querySelector(".search-toggle");
   const closeSearch = document.querySelector(".close-search");
@@ -6,23 +5,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const navbarLogo = document.querySelector(".navbar-logo");
   const navbarRight = document.querySelector(".navbar-right");
   const sidebar = document.querySelector(".sidebar");
-
-  // Toggle search bar on mobile
+// Toggle search bar on mobile
   searchToggle.addEventListener("click", (e) => {
     e.preventDefault();
     searchForm.classList.toggle("d-none");
     navbarLogo.classList.toggle("d-none");
     navbarRight.classList.toggle("d-none");
   });
-
-  // Close search bar on mobile
+// Close search bar on mobile
   closeSearch.addEventListener("click", () => {
     searchForm.classList.add("d-none");
     navbarLogo.classList.remove("d-none");
     navbarRight.classList.remove("d-none");
   });
-
-  // Toggle sidebar on mobile (for now, we'll trigger this manually; you can add a hamburger icon later)
+// Toggle sidebar on mobile (for now, we'll trigger this manually; you can add a hamburger icon later)
   window.toggleSidebar = () => {
     sidebar.classList.toggle("active");
   };
@@ -59,23 +55,22 @@ $(document).ready(function () {
 });
 // Function to show the Success Modal
 function showSuccessModal(message, duration = 3000) {
-    $('#successModalBody').text(message); // Set the success message
-    $('#successModal').modal('show'); // Show the modal
+    $('#successModalBody').text(message);
+    $('#successModal').modal('show'); 
 
     // Automatically hide the modal after the specified duration
     setTimeout(function () {
-        $('#successModal').modal('hide'); // Hide the modal
+        $('#successModal').modal('hide');
     }, duration);
 }
-
 // Function to show the Error Modal
 function showErrorModal(message, duration = 3000) {
-    $('#errorModalBody').text(message); // Set the error message
-    $('#errorModal').modal('show'); // Show the modal
+    $('#errorModalBody').text(message); 
+    $('#errorModal').modal('show'); 
 
     // Automatically hide the modal after the specified duration
     setTimeout(function () {
-        $('#errorModal').modal('hide'); // Hide the modal
+        $('#errorModal').modal('hide');
     }, duration);
 }
 // Toggle Search Bar on Small Devices
@@ -84,7 +79,6 @@ $(document).on('click', '.search-toggle-btn', function () {
   const $toggleBtn = $(this);
   
   $searchBar.toggleClass('active');
-  
   // Toggle magnifying glass icon between search and close
   if ($searchBar.hasClass('active')) {
     $toggleBtn.html('<i class="fas fa-times"></i>'); // Show close icon when search bar is visible
@@ -118,14 +112,12 @@ function fetchSearchResults(searchType, searchQuery) {
             displayText = `${result.name} (${result.email})`;
             link = `/member/${result.id}/`;
           }
-
           resultsDropdown.append(`
             <div class="dropdown-item">
               <a href="${link}" style="text-decoration: none; color: inherit;">${displayText}</a>
             </div>
           `);
         });
-
         // Show the dropdown
         resultsDropdown.removeClass('d-none').addClass('active');
         $('.modern-search-bar').addClass('results-open');
@@ -143,14 +135,12 @@ function fetchSearchResults(searchType, searchQuery) {
     },
   });
 }
-
 // Toggle Filter Dropdown Options
 $(document).on('click', '.modern-search-bar .general-search-type-btn', function (e) {
   e.stopPropagation();
   const $dropdown = $(this).siblings('.general-search-type-options');
   $dropdown.toggleClass('active');
 });
-
 // Handle Filter Dropdown Option Selection
 $(document).on('click', '.modern-search-bar .general-search-type-options li', function (e) {
   e.stopPropagation();
@@ -196,7 +186,6 @@ $(document).ready(function () {
   }
   $('.modern-search-bar .general-search-filter-display').text(displayText);
 });
-
 // Listen for Changes in the Search Input
 let debounceTimer;
 $('#search-query').on('input', function () {

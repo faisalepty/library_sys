@@ -151,8 +151,6 @@ $(document).on('click', '.delete-book-action', function () {
     $('.confirm-modal .modal-body').html('Are you sure you want to delete this book?');
     $('.confirm-modal .modal-footer .btn-primary').attr('id', 'confirmModalBtn-book');
     $('.confirm-modal').modal('show')
-
-
 })
     // Handle "Delete Book" button click
     $(document).on('click', '#confirmModalBtn-book', function () {
@@ -173,7 +171,6 @@ $(document).on('click', '.delete-book-action', function () {
                     }
                 },
             });
-
     });
 
 });

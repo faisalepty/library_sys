@@ -102,7 +102,6 @@ $(document).on('click', '.edit-librarian-btn', function () {
         
     });
 });
-
 let delLibrarianId
 $(document).on('click', '.delete-librarian-btn', function () {
     delLibrarianId = $(this).data('id');
@@ -111,8 +110,7 @@ $(document).on('click', '.delete-librarian-btn', function () {
     $('.confirm-modal').modal('show')
 })
 // Delete a Librarian
-$(document).on('click', '#confirmModalBtn-librarian', function () {
-    
+$(document).on('click', '#confirmModalBtn-librarian', function () { 
     $('.confirm-modal').modal('hide')
         $.ajax({
             url: `/librarians/delete/${delLibrarianId}/`,

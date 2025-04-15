@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    let currentPage = 1; // Global variable to track the current page
+    let currentPage = 1; 
 
     // Fetch and display members
     function fetchMembers(page = 1, search = '') {
@@ -8,9 +8,7 @@ $(document).ready(function () {
             method: 'GET',
             data: { page: page, search: search },
             success: function (response) {
-                // Clear existing rows
                 $('#members-table-body').empty();
-
                 // Populate table with new rows
                 response.members.forEach(function (member) {
                     $('#members-table-body').append(`
@@ -38,8 +36,6 @@ $(document).ready(function () {
                         </tr>
                     `);
                 });
-
-                // Update pagination controls
                 updateMemberPagination(response.pagination, page);
             },
             error: function () {
@@ -47,16 +43,12 @@ $(document).ready(function () {
             },
         });
     }
-
-    // Initial load
     fetchMembers();
-
     // Handle search input
     $('#search-members').on('input', function () {
         const searchQuery = $(this).val();
         fetchMembers(1, searchQuery); // Reset to page 1 when searching
     });
-
     // Handle "Add Member" button click
     $('.add-member-btn').on('click', function () {
         $('#member-id').val('');
@@ -67,7 +59,6 @@ $(document).ready(function () {
         $('#outstanding_debt').val('');
         $('#addEditMemberModal').modal('show');
     });
-
     // Handle "Edit Member" button click
     $(document).on('click', '.edit-member-action', function () {
         const memberId = $(this).data('id');
@@ -88,7 +79,6 @@ $(document).ready(function () {
             },
         });
     });
-
     // Handle form submission
     $('#member-form').on('submit', function (e) {
         e.preventDefault();
@@ -165,7 +155,7 @@ $(document).on('click', '.delete-member-action', function () {
         `);
     }
 }
-   // Handle pagination button clicks
+ // Handle pagination button clicks
     $(document).on('click', '.member-page-btn', function () {
         currentPage = $(this).data('page'); // Update the current page
         const searchQuery = $('#search-members').val();
