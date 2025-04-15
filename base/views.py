@@ -594,8 +594,6 @@ def transaction_list(request):
         transactions = transactions.filter(member__name__icontains=search_query)
 
     transactions = transactions.order_by('-id')
-    for transaction in transactions:
-        print(transaction.id)
     # Paginate results
     paginator = Paginator(transactions, 10)  # 10 transactions per page
     transactions_page = paginator.get_page(page)
