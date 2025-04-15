@@ -32,7 +32,6 @@ function fetchLibrarians(page = 1, search = '') {
                     </tr>
                 `);
             });
-
             // Update pagination controls
             updateLibrarianPagination(response.pagination, page);
         },
@@ -41,7 +40,6 @@ function fetchLibrarians(page = 1, search = '') {
         },
     });
 }
-
 // Save Librarian (Add or Edit)
 $('#save-librarian-btn').on('click', function () {
     const id = $('#librarian-id').val();
@@ -75,19 +73,15 @@ $('#save-librarian-btn').on('click', function () {
         }
     });
 });
-
 // Open the Add Librarian Modal
 $('.add-librarian-btn').on('click', function () {
     resetLibrarianForm();
     $('#addEditLibrarianModalLabel').text('Add Librarian');
     $('.optional-fields').show(); // Show all fields for adding
 });
-
 // Open the Edit Librarian Modal
 $(document).on('click', '.edit-librarian-btn', function () {
     const id = $(this).data('id');
-    
-
     $.ajax({
         url: `/librarians/get/${id}/`,
         method: 'GET',
@@ -115,10 +109,7 @@ $(document).on('click', '.delete-librarian-btn', function () {
     $('.confirm-modal .modal-body').html('Are you sure you want to delete this librarian?');
     $('.confirm-modal .modal-footer .btn-primary').attr('id', 'confirmModalBtn-librarian');
     $('.confirm-modal').modal('show')
-
-
 })
-
 // Delete a Librarian
 $(document).on('click', '#confirmModalBtn-librarian', function () {
     
@@ -139,7 +130,6 @@ $(document).on('click', '#confirmModalBtn-librarian', function () {
             },
         });
 });
-
 // Reset the Librarian Form
 function resetLibrarianForm() {
     $('#librarian-id').val('');
@@ -150,7 +140,6 @@ function resetLibrarianForm() {
     $('#librarian-address').val('');
     $('.optional-fields').show(); // Ensure all fields are visible after resetting
 }
-
 // Update Pagination Controls
 function updateLibrarianPagination(pagination, currentPage) {
     const paginationControls = $('#librarians-pagination-controls');
@@ -179,9 +168,6 @@ function updateLibrarianPagination(pagination, currentPage) {
         fetchLibrarians(page);
     });
 }
-
-// Search Librarians
-
 $('#search-librarians').on('input', function () {
     const searchQuery = $(this).val().trim();
 
@@ -191,8 +177,4 @@ $('#search-librarians').on('input', function () {
         fetchLibrarians(1, searchQuery); // Reset to the first page when searching
     }, 300);
 });
-
-// Initial Load
-$(document).ready(function () {
-    fetchLibrarians();
-});
+fetchLibrarians();

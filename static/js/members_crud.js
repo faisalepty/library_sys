@@ -121,8 +121,6 @@ $(document).ready(function () {
               }
         });
     });
-
-
 let delmemberId
 $(document).on('click', '.delete-member-action', function () {
     delmemberId = $(this).data('id');
@@ -132,7 +130,7 @@ $(document).on('click', '.delete-member-action', function () {
 
 
 })
-    // Handle "Delete Member" button click
+   // Handle "Delete Member" button click
     $(document).on('click', '#confirmModalBtn-member', function () {
         $('.confirm-modal').modal('hide')
             $.ajax({
@@ -152,8 +150,6 @@ $(document).on('click', '.delete-member-action', function () {
             });
         
     });
-
-    // Update pagination controls
  function updateMemberPagination(pagination, currentPage) {
     const paginationControls = $('#members-pagination-controls'); // Unique ID
     paginationControls.empty();
@@ -169,9 +165,7 @@ $(document).on('click', '.delete-member-action', function () {
         `);
     }
 }
-
-
-    // Handle pagination button clicks
+   // Handle pagination button clicks
     $(document).on('click', '.member-page-btn', function () {
         currentPage = $(this).data('page'); // Update the current page
         const searchQuery = $('#search-members').val();

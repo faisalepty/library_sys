@@ -27,9 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
     sidebar.classList.toggle("active");
   };
 });
-
-
-
 // function to get the CSRF token from cookies
 function getCookie(name) {
     let cookieValue = null;
@@ -46,7 +43,6 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-
 // Use the CSRF token in all AJAX requests
 $(document).ready(function () {
     const csrftoken = getCookie('csrftoken'); // Get CSRF token
@@ -61,7 +57,6 @@ $(document).ready(function () {
     });
 
 });
-
 // Function to show the Success Modal
 function showSuccessModal(message, duration = 3000) {
     $('#successModalBody').text(message); // Set the success message
@@ -83,7 +78,6 @@ function showErrorModal(message, duration = 3000) {
         $('#errorModal').modal('hide'); // Hide the modal
     }, duration);
 }
-
 // Toggle Search Bar on Small Devices
 $(document).on('click', '.search-toggle-btn', function () {
   const $searchBar = $('.transaction-search-bar');
@@ -98,9 +92,6 @@ $(document).on('click', '.search-toggle-btn', function () {
     $toggleBtn.html('<i class="fas fa-search"></i>'); // Show search icon when search bar is hidden
   }
 });
-
-
-
 // Function to fetch search results
 function fetchSearchResults(searchType, searchQuery) {
   $.ajax({
@@ -211,11 +202,8 @@ let debounceTimer;
 $('#search-query').on('input', function () {
   const searchType = $('.modern-search-bar .general-search-type-options li.selected').data('value');
   const searchQuery = $(this).val().trim();
-
-  // Clear previous timeout
   clearTimeout(debounceTimer);
-
-  // Debounce the search input to avoid excessive AJAX calls
+// Debounce the search input to avoid excessive AJAX calls
   debounceTimer = setTimeout(function () {
     if (searchQuery.length > 2) { // Only trigger search if query is longer than 2 characters
       fetchSearchResults(searchType, searchQuery);
@@ -226,7 +214,6 @@ $('#search-query').on('input', function () {
     }
   }, 300); // Wait 300ms before triggering the search
 });
-
 // Hide the Dropdown When Clicking Outside
 $(document).on('click', function (e) {
   if (!$(e.target).closest('.search-form').length) {
@@ -236,7 +223,6 @@ $(document).on('click', function (e) {
 
   }
 });
-
 // Close Search Results When Clicking the Close Icon
 $(document).on('click', '.modern-search-bar .close-search', function () {
   $('#search-query').val('');
@@ -244,7 +230,6 @@ $(document).on('click', '.modern-search-bar .close-search', function () {
   $('.modern-search-bar').removeClass('results-open');
   $('.general-search-filter-wrapper').removeClass('results-filter-open')
 });
-
 // Handle Login
 $('#login-btn').on('click', function () {
     const username = $('#login-username').val();
@@ -275,15 +260,11 @@ $('#login-btn').on('click', function () {
       },
     });
 });
-
-
-
 $(document).on('click', '.logout-btn', function () {
     $('.confirm-modal .modal-body').html('Are you sure you want to log out?');
     $('.confirm-modal .modal-footer .btn-primary').attr('id', 'confirmModalBtn-logout');
     $('.confirm-modal').modal('show')
 })
-
 // Handle Logout
 $(document).on('click', '#confirmModalBtn-logout', function (e) {
     e.preventDefault();

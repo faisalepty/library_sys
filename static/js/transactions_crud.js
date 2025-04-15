@@ -11,8 +11,6 @@
     });
     return params;
 }
-
-
 let currentPage = 1; // Global variable to track the current page
 
 // Function to fetch transactions with search functionality
@@ -76,23 +74,16 @@ function fetchTransactions(page = 1, member_id = '', book_id = '') {
         },
     });
 }
-
-
-
 // Listen for changes in the search input
 $('#transaction-search-query').on('input', function () {
     currentPage = 1; // Reset to the first page when searching
     fetchTransactions(currentPage);
 });
-
-
 // Initial load
 const queryParams = getQueryParams(); // Parse query parameters from the URL
 currentPage = parseInt(queryParams.page) || 1; // Use the current page from the URL or default to 1
 const memberId = queryParams.member_id || ''; // Use the member_id filter if present
 const bookId = queryParams.book_id || ''; // Use the book_id filter if present
-
-
 
 // Fetch transactions with the parsed query parameters
 fetchTransactions(currentPage, memberId, bookId);
@@ -124,8 +115,6 @@ fetchTransactions(currentPage, memberId, bookId);
             },
         });
     });
-
-
     // Handle "Issue Book" button click
 $(document).on('click', '.issue-book-link', function (e) {
     e.preventDefault(); // Prevent default link behavior
@@ -290,9 +279,7 @@ $(document).on('click', '.issue-book-link', function (e) {
 
     });
 });
-
-
-   function updateTransactionsPagination(pagination, currentPage) {
+ function updateTransactionsPagination(pagination, currentPage) {
     const queryParams = getQueryParams(); // Get existing query parameters
     const paginationControls = $('#transactions-pagination-controls');
     paginationControls.empty();
@@ -320,7 +307,6 @@ $(document).on('click', '.issue-book-link', function (e) {
         `);
     }
 }
-
 // Handle pagination button clicks
 $(document).on('click', '.transaction-page-btn', function() {
     const newPage = $(this).data('page');
@@ -330,18 +316,12 @@ $(document).on('click', '.transaction-page-btn', function() {
   
     fetchTransactions(newPage, memberId, bookId);
     history.pushState(null, '', '?' + queryString);
-});
-
-    
+});   
 // Open Return Book Modal
 $('.return-book-btn').on('click', function () {
     $('#returnBookModal').modal('show');
 });
 });
-
-
-
-
 $(document).on('click', '.pay-debt-btn', function () {
     const transactionId = $(this).data('id');
     const balance = $(this).data('balance');

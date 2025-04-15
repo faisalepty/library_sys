@@ -43,10 +43,7 @@ function fetchBooks(page = 1, searchType = '', searchQuery = '') {
         },
     });
 }
-
-    // Initial load
-    fetchBooks();
-
+fetchBooks();
 let bookSearchType = $('.books-search-bar .book-search-type-options li.selected').data('value');
 let bookSearchQuery = $('#book-search-query').val();
 // Listen for changes in the search input
@@ -56,11 +53,6 @@ $('#book-search-query').on('input', function () {
     const searchQuery = $(this).val();
     fetchBooks(currentPage, searchType, searchQuery);
 });
-
-
-
-
-
     // Function to update pagination controls
   function updateBookPagination(pagination) {
     const paginationControls = $('#books-pagination-controls'); // Unique ID
@@ -77,8 +69,6 @@ $('#book-search-query').on('input', function () {
         `);
     }
 }
-
-
     // Handle pagination button clicks
     $(document).on('click', '.book-page-btn', function () {
         let page = $(this).data('page');
@@ -88,9 +78,6 @@ $('#book-search-query').on('input', function () {
        
         fetchBooks(page, bookSearchType, bookSearchQuery);
     });
-
-
-
 // Handle "Add Book" button click
     $('.add-book-btn').on('click', function () {
         $('#book-id').val(''); // Clear ID for new book
@@ -101,11 +88,9 @@ $('#book-search-query').on('input', function () {
         $('#stock').val('');
         $('#addEditBookModal').modal('show');
     });
-
     // Handle "Edit Book" button click
     $(document).on('click', '.edit-book-action', function () {
         const bookId = $(this).data('id');
-
         // Fetch book details using the new endpoint
         $.ajax({
             url: `/books/${bookId}/`,  // Fetch book details by ID
@@ -127,7 +112,6 @@ $('#book-search-query').on('input', function () {
             },
         });
     });
-
     // Handle form submission
     $('#book-form').on('submit', function (e) {
         e.preventDefault();
@@ -135,8 +119,6 @@ $('#book-search-query').on('input', function () {
         const url = bookId ? `/books/update/${bookId}/` : '/books/create/';
         const method = bookId ? 'POST' : 'POST';
          $('#book-spinner').removeClass('d-none');
-         
-
         $.ajax({
             url: url,
             method: method,
@@ -163,7 +145,6 @@ $('#book-search-query').on('input', function () {
               }
         });
     });
-
 let delbookId
 $(document).on('click', '.delete-book-action', function () {
     delbookId = $(this).data('id');
@@ -196,8 +177,6 @@ $(document).on('click', '.delete-book-action', function () {
     });
 
 });
-
-
 // Toggle Search Bar on Small Devices
 $(document).on('click', '.books-header .book-search-toggle-btn', function () {
   const $searchBar = $('.books-search-bar');
@@ -212,13 +191,11 @@ $(document).on('click', '.books-header .book-search-toggle-btn', function () {
     $toggleBtn.html('<i class="fas fa-search"></i>'); // Show search icon when search bar is hidden
   }
 });
-
 $(document).on('click', '.books-search-bar .book-search-type-btn', function (e) {
   e.stopPropagation(); // Prevent event bubbling
   const dropdown = $(this).siblings('.book-search-type-options');
   dropdown.addClass('active');
 });
-
 // Handle Dropdown Option Selection
 $(document).on('click', '.books-search-bar .book-search-type-options li', function (e) {
   e.stopPropagation(); // Prevent event bubbling
@@ -237,9 +214,6 @@ $(document).on('click', '.books-search-bar .book-search-type-options li', functi
   $(this).addClass('selected');
   $(this).closest('.book-search-type-options').removeClass('active'); // Close dropdown
 });
-
-
-
 // Initialize Filter Display on Page Load
 $(document).ready(function () {
   const selectedOption = $('.books-search-bar .book-search-type-options li.selected');
