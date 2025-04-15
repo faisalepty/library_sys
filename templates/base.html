@@ -547,6 +547,7 @@
     </div>
   </div>
 </div>
+{% csrf_token %}
 <!-- Serialize the data into JSON -->
 {{ checkout_stats_months|json_script:"checkout-stats-months" }}
 {{ checkout_stats_borrowed|json_script:"checkout-stats-borrowed" }}
