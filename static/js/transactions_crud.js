@@ -230,19 +230,19 @@ $(document).on('click', '.issue-book-link', function (e) {
                 fetchTransactions(currentPage, memberId, bookId);
                 showSuccessModal(response.message);                            
             } else {
-                 $('#return-book-spinner').addClass('d-none');
+                 $('#pay-debt-spinner').addClass('d-none');
                 $('#payDebtModal').modal('hide');
                 showErrorModal(response.message);
             }
         },
         error: function () {
-             $('#return-book-spinner').addClass('d-none');
+             $('#pay-debt-spinner').addClass('d-none');
             $('#payDebtModal').modal('hide');
             showErrorModal('An error occurred while processing the payment.');
         },
         complete: function () {
               // Hide spinner and re-enable login button
-              $('#return-book-spinner').addClass('d-none');
+              $('#pay-debt-spinner').addClass('d-none');
           }
     });
 });
