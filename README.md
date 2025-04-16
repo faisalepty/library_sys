@@ -55,7 +55,7 @@ The project fulfills the following objectives:
 1. Clone the Repository:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/faisalepty/library_sys.git
    cd library
 2. Set Up Virtual Environment:
    ```bash
