@@ -181,8 +181,9 @@ $(document).on('click', '.books-header .book-search-toggle-btn', function () {
 $(document).on('click', '.books-search-bar .book-search-type-btn', function (e) {
   e.stopPropagation(); // Prevent event bubbling
   const dropdown = $(this).siblings('.book-search-type-options');
-  dropdown.addClass('active');
+  dropdown.toggleClass('active');
 });
+
 // Handle Dropdown Option Selection
 $(document).on('click', '.books-search-bar .book-search-type-options li', function (e) {
   e.stopPropagation(); // Prevent event bubbling
