@@ -202,10 +202,10 @@ hr{margin: 0 0 10px 0}
 #addEditBookModal .form-control:focus, #addEditMemberModal .form-control:focus, #addEditLibrarianModal .form-control:focus, #issueBookModal .form-control:focus, #returnBookModal .form-control:focus, #payDebtModal .form-control:focus {border-color: #28a745;box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);}
 #addEditBookModal .form-label, #addEditMemberModal .form-label, #addEditLibrarianModal .form-label, #issueBookModal .form-label, #returnBookModal .form-label, #payDebtModal .form-label {color: #495057;font-weight: 500;}
 #addEditBookModal .text-danger, #addEditMemberModal .text-danger, #addEditLibrarianModal .text-danger, #issueBookModal .text-danger, #returnBookModal .text-danger, #payDebtModal .text-danger {font-size: 0.9em;}
-#addEditBookModal .btn-primary, #addEditMemberModal .btn-primary, #addEditLibrarianModal .btn-primary, #issueBookModal .btn-primary, #returnBookModal .btn-primary, #payDebtModal .btn-primary {background-color: #28a745;border-color: #28a745;border-radius: 6px;font-weight: 500;padding: 8px 20px;transition: background-color 0.3s ease, transform 0.1s ease;}
+#addEditBookModal .btn-primary, #addEditMemberModal .btn-primary, #addEditLibrarianModal .btn-primary, #issueBookModal .btn-primary, #returnBookModal .btn-primary, #payDebtModal .btn-primary {background-color: #28a745;border-color: #28a745;border-radius: 25px;font-weight: 500;padding: 8px 20px;transition: background-color 0.3s ease, transform 0.1s ease;}
 #addEditBookModal .btn-primary:hover, #addEditMemberModal .btn-primary:hover, #addEditLibrarianModal .btn-primary:hover, #issueBookModal .btn-primary:hover, #returnBookModal .btn-primary:hover, #payDebtModal .btn-primary:hover {background-color: #218838;border-color: #1e7e34;transform: translateY(-1px);}
 #addEditBookModal .btn-primary:active, #addEditMemberModal .btn-primary:active, #addEditLibrarianModal .btn-primary:active, #issueBookModal .btn-primary:active, #returnBookModal .btn-primary:active, #payDebtModal .btn-primary:active {transform: translateY(0);}
-#addEditBookModal .btn-secondary, #addEditMemberModal .btn-secondary, #addEditLibrarianModal .btn-secondary, #issueBookModal .btn-secondary, #returnBookModal .btn-secondary, #payDebtModal .btn-secondary {background-color: #6c757d;border-color: #6c757d;border-radius: 6px;font-weight: 500;padding: 8px 20px;}
+#addEditBookModal .btn-secondary, #addEditMemberModal .btn-secondary, #addEditLibrarianModal .btn-secondary, #issueBookModal .btn-secondary, #returnBookModal .btn-secondary, #payDebtModal .btn-secondary {background-color: #6c757d;border-color: #6c757d;border-radius: 25px;font-weight: 500;padding: 8px 20px;}
 #addEditBookModal .btn-secondary:hover, #addEditMemberModal .btn-secondary:hover, #addEditLibrarianModal .btn-secondary:hover, #issueBookModal .btn-secondary:hover, #returnBookModal .btn-secondary алгорит: #5a6268;border-color: #545b62;}
 #successModal .modal-content, #errorModal .modal-content {border-radius: 10px;box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);}
 #successModal .modal-header {background-color: #28a745;border-bottom: 2px solid #218838;}
@@ -416,4 +416,15 @@ hr{margin: 0 0 10px 0}
 
 @media (max-width: 767px) {
 .access-denied-section .btn-secondary {font-size: 0.875rem;padding: 0.375rem 1.5rem;}
+}
+
+/* Credential Text Styling */
+.credential-text {font-size: 0.875rem;font-weight: 500;color: #343a40;background-color: #f8f9fa;border-radius: 6px;padding: 0.5rem 1rem;margin: 0.5rem 1rem;text-align: center;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);transition: transform 0.2s ease, box-shadow 0.2s ease;}
+.credential-text:hover {transform: translateY(-2px);box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);}
+.credential-username {border-left: 4px solid #28a745;}
+.credential-password {border-left: 4px solid #dc3545;}
+
+/* Responsive */
+@media (max-width: 767px) {
+.credential-text {font-size: 0.75rem;padding: 0.375rem 0.75rem;margin: 0.375rem 0.75rem;}
 }

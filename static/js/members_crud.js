@@ -47,11 +47,13 @@ $(document).ready(function () {
         $('#phone_number').val('');
         $('#address').val('');
         $('#outstanding_debt').val('');
+        $('#memberModalTitle').text('Add member')
         $('#addEditMemberModal').modal('show');
     });
     // Handle "Edit Member" button click
     $(document).on('click', '.edit-member-action', function () {
         const memberId = $(this).data('id');
+
         $.ajax({
             url: `/members/${memberId}/`,
             method: 'GET',
@@ -63,6 +65,7 @@ $(document).ready(function () {
                 $('#address').val(response.address);
                 $('#outstanding_debt').val(response.outstanding_debt);
                 $('#addEditMemberModal').modal('show');
+                $('#memberModalTitle').text(`Edit ${response.name}'s details`)
             },
             error: function () {
                 showErrorModal('Error fetching member details.');

@@ -74,6 +74,7 @@ $('#book-search-query').on('input', function () {
         $('#genre').val('');
         $('#isbn').val('');
         $('#stock').val('');
+        $('#bookModalTitle').text('Add book')
         $('#addEditBookModal').modal('show');
     });
     // Handle "Edit Book" button click
@@ -91,6 +92,7 @@ $('#book-search-query').on('input', function () {
                 $('#genre').val(response.genre);
                 $('#isbn').val(response.isbn);
                 $('#stock').val(response.stock);
+                $('#bookModalTitle').text(`Edit ${response.title} by ${response.author}`)
 
                 // Show the modal
                 $('#addEditBookModal').modal('show');

@@ -200,8 +200,7 @@
     <div class="modal-content">
       <div class="modal-header" style="border-bottom: 2px solid #28a745;">
         <h5 class="modal-title" id="addEditBookModalLabel">
-          <span class="title-text">Add Book</span>
-          <span class="title-underline"></span>
+          <span class="title-text" id="bookModalTitle">Add Book</span>
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -249,8 +248,7 @@
     <div class="modal-content">
       <div class="modal-header" style="border-bottom: 2px solid #28a745;">
         <h5 class="modal-title" id="addEditMemberModalLabel">
-          <span class="title-text">Add/Edit Member</span>
-          <span class="title-underline"></span>
+          <span class="title-text" id="memberModalTitle">Add Member</span>
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -299,7 +297,6 @@
       <div class="modal-header" style="border-bottom: 2px solid #28a745;">
         <h5 class="modal-title" id="issueBookModalLabel">
           <span class="title-text">Issue Book</span>
-          <span class="title-underline"></span>
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -338,7 +335,6 @@
       <div class="modal-header" style="border-bottom: 2px solid #28a745;">
         <h5 class="modal-title" id="returnBookModalLabel">
           <span class="title-text">Return Book</span>
-          <span class="title-underline"></span>
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -373,7 +369,6 @@
       <div class="modal-header" style="border-bottom: 2px solid #28a745;">
         <h5 class="modal-title" id="payDebtModalLabel">
           <span class="title-text">Pay Debt</span>
-          <span class="title-underline"></span>
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -406,7 +401,6 @@
       <div class="modal-header" style="background-color: #28a745; border-bottom: 2px solid #218838;">
         <h5 class="modal-title" id="successModalLabel">
           <span class="title-text">Success</span>
-          <span class="title-underline"></span>
         </h5>
       </div>
       <div class="modal-body text-center">
@@ -431,7 +425,6 @@
       <div class="modal-header" style="background-color: #dc3545; border-bottom: 2px solid #c82333;">
         <h5 class="modal-title" id="errorModalLabel">
           <span class="title-text">Error</span>
-          <span class="title-underline"></span>
         </h5>
       </div>
       <div class="modal-body text-center">
@@ -515,7 +508,7 @@
       </div>
     </div>
   </div>
-  <!-- Login Modal -->
+<!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content custom-modal-content">
@@ -540,6 +533,8 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
+      <p class="credential-text credential-username">USERNAME: admin</p>
+      <p class="credential-text credential-password">PASSWORD: admin123</p>
       <div class="modal-footer custom-modal-footer">
         <button type="button" class="btn btn-secondary custom-btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary custom-btn-primary" id="login-btn">Login</button>
