@@ -12,7 +12,7 @@ urlpatterns = [
     path('books/<int:book_id>/', views.fetch_book_details, name='fetch_book_details'),
     path('books-details/', views.fetch_all_books, name='fetch_all_books'),
 
-    path('book/<int:book_id>/', views.book_details, name='book_details'),
+    path('book/<int:book_id>/', views.book_details_page, name='book_details'),
 
 
     path('members/', views.member_list, name='member_list'),
@@ -20,7 +20,7 @@ urlpatterns = [
     path('members/delete/<int:member_id>/', views.delete_member, name='delete_member'),
     path('members/<int:member_id>/', views.fetch_member_details, name='fetch_member_details'),
     path('members-details/', views.fetch_all_members, name='fetch_all_members'),
-    path('member/<int:member_id>/', views.member_details, name='member_details'),
+    path('member/<int:member_id>/', views.member_details_page, name='member_details'),
 
 
 

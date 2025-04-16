@@ -212,7 +212,18 @@ def fetch_book_details(request, book_id):
         return JsonResponse(data)
 
 @login_required(login_url='/login/')
-def book_details(request, book_id):
+def fetch_all_books(request):
+    """Fetch all books."""
+    books = Book.objects.all()
+    data = {'books': [{'id': book.id,
+                'title': book.title,
+                'author': book.author,
+                'genre': book.genre,
+                'stock': book.stock,} for book in books]}
+    return JsonResponse(data)
+
+@login_required(login_url='/login/')
+def book_details_page(request, book_id):
     """Display book details and transaction history."""
     book = get_object_or_404(Book, id=book_id)
     transactions = Transaction.objects.filter(book=book).order_by('-issue_date')
@@ -243,16 +254,7 @@ def book_details(request, book_id):
         print(transaction.id, transaction.return_date)
     return render(request, 'book_details.html', {'book': book, 'transactions': transactions, 'b_d': 'b_d'})
 
-@login_required(login_url='/login/')
-def fetch_all_books(request):
-    """Fetch all books."""
-    books = Book.objects.all()
-    data = {'books': [{'id': book.id,
-                'title': book.title,
-                'author': book.author,
-                'genre': book.genre,
-                'stock': book.stock,} for book in books]}
-    return JsonResponse(data)
+
 
 # Member Management
 @login_required(login_url='/login/')
@@ -366,7 +368,7 @@ def fetch_all_members(request):
     return JsonResponse(data)
 
 @login_required(login_url='/login/')
-def member_details(request, member_id):
+def member_details_page(request, member_id):
     """Display member details and transaction history."""
     member = get_object_or_404(Member, id=member_id)
     transactions = Transaction.objects.filter(member=member).order_by('-issue_date')
