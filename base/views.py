@@ -493,8 +493,8 @@ def issue_book(request):
             return JsonResponse({'success': False, 'message': 'Book is out of stock.'})
 
         # Validate outstanding debt limit
-        if member.outstanding_debt >= 500:
-            return JsonResponse({'success': False, 'message': 'Member has exceeded the debt limit of KES 500.'})
+        if member.outstanding_debt + 150 >= 500:
+            return JsonResponse({'success': False, 'message': 'Transaction denied. Member’s total debt cannot exceed KES 500.'})
 
         try:
             # Create the transaction
