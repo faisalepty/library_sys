@@ -435,7 +435,7 @@ def return_book(request):
         days_borrowed = (return_date - issue_date).days
         initial_fee = Decimal(150)
         late_fee = Decimal(max(0, (days_borrowed - 7) * 50))
-        total_fee = initial_fee + late_fee
+        total_fee = Decimal(initial_fee + late_fee)
         remaining_fee = total_fee - amount_paid
         try:
             transaction.return_date = return_date
