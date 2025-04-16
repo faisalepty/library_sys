@@ -171,6 +171,7 @@ $(document).on('click', '.issue-book-link', function (e) {
                     showSuccessModal(response.message);
                 } else {
                     $('#issueBookModal').modal('hide');
+                    $('#issue-book-spinner').addClass('d-none');
                     showErrorModal(response.message);
                 }
             },
