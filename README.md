@@ -26,7 +26,7 @@ The project fulfills the following objectives:
 
 - CRUD Operations: Librarians can add, view, update, and remove members.
 - Outstanding debt is monitored to enforce the KES 500 limit.
-- 
+
 ### 3. Transaction Management
 
 - Book Issuance: Librarians can issue books to members, ensuring stock is available and the member’s debt stays within KES 500. An initial fee of KES 150 is applied.
