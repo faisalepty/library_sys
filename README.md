@@ -21,17 +21,20 @@ The project fulfills the following objectives:
 
 - CRUD Operations: Librarians can create, read, update, and delete books.
 - Stock is maintained to prevent issuing books when unavailable.
-  
+  ![Image](https://github.com/user-attachments/assets/a6651c9d-3b6b-4724-9719-bca30c43cad1)
+    
 ### 2. Member Management
 
 - CRUD Operations: Librarians can add, view, update, and remove members.
 - Outstanding debt is monitored to enforce the KES 500 limit.
+  ![Image](https://github.com/user-attachments/assets/189d0c33-de33-4d0a-a2a6-75536fc7b349)
 
 ### 3. Transaction Management
 
 - Book Issuance: Librarians can issue books to members, ensuring stock is available and the member’s debt stays within KES 500. An initial fee of KES 150 is applied.
 - Book Return: Handles returns, calculating fees (KES 150 initial, plus KES 50/day for late returns after 7 days) and updating stock and debt.
 - Debt Payment: Allows members to pay off transaction balances partially or fully.
+  ![Image](https://github.com/user-attachments/assets/70c51c92-8f6d-4d48-9b76-fe3ba88dd4d0)
 
 ### 4. Search Functionality
 
