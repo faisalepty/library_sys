@@ -83,7 +83,7 @@
                   <th class="truncate">Author</th>
                   <th class="truncate">Member</th>
                   <th>Issued Date</th>
-                  <th>Return Date</th>
+                  
                 </tr>
               </thead>
               <tbody>
@@ -94,8 +94,8 @@
                   <td class="truncate">{{ entry.book__title }}</td>
                   <td class="truncate">{{ entry.book__author }}</td>
                   <td class="truncate">{{ entry.member__name }}</td>
-                  <td>{{ entry.issue_date }}</td>
-                  <td>{{ entry.due_date }}</td>
+                  <td class="truncate">{{ entry.issue_date }}</td>
+                  
                 </tr>
                 {% endfor %}
               </tbody>
@@ -113,21 +113,21 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th>Member ID</th>
-                  <th>Title</th>
-                  <th>ISBN</th>
-                  <th>Due Date</th>
-                  <th>Fine</th>
+                  <th>Transaction ID</th>
+                  <th>Book</th>
+                  <th>Member</th>
+                  <th>Issue Date</th>
+                  <!-- <th>Fine</th> -->
                 </tr>
               </thead>
               <tbody>
                 {% for entry in overdue_history %}
                 <tr>
-                  <td>#{{ entry.member__id }}</td>
-                  <td>{{ entry.book__title }}</td>
-                  <td>{{ entry.book__isbn }}</td>
-                  <td>{{ entry.due_date }}</td>
-                  <td>$10</td>
+                  <td>#{{ entry.id }}</td>
+                  <td class="truncate">{{ entry.book.title }}</td>
+                  <td class="truncate">{{ entry.member.name }}</td>
+                  <td class="truncate">{{ entry.issue_date }}</td>
+                  <!-- <td></td> -->
                 </tr>
                 {% endfor %}
               </tbody>

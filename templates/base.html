@@ -21,9 +21,11 @@
   <div class="container-fluid">
     <!-- Logo (Visible on Mobile and Desktop) -->
     <div class="navbar-logo d-flex align-items-center">
+      {% if request.user.is_authenticated %}
       <button class="navbar-toggler d-md-none" onclick="toggleSidebar()">
         <i class="bi bi-list"></i>
       </button>
+      {% endif %}
       <a class="navbar-brand d-flex align-items-center" href="/">
         <i class="bi bi-book me-2"></i>
         <span>Library App</span>
@@ -63,9 +65,11 @@
     <!-- Right Side (Mobile: Magnifying Glass + User Profile; Desktop: Calendar + Bell + User Profile) -->
     <div class="navbar-right d-flex align-items-center">
       <!-- Magnifying Glass (Visible on Mobile Only) -->
+      {% if request.user.is_authenticated %}
       <a href="#" class="nav-link search-toggle d-block d-md-none me-2">
         <i class="bi bi-search"></i>
       </a>
+      {% endif %}
       <!-- Calendar Dropdown (Visible on Desktop Only) -->
       <div class="dropdown position-relative d-none me-2">
         <a
@@ -88,9 +92,11 @@
         </ul>
       </div>
       <!-- Notification Bell (Visible on Desktop Only) -->
+      {% if user.is_authenticated%}
       <a class="nav-link me-2 d-none d-md-block" href="#">
         <i class="bi bi-bell"></i>
       </a>
+      {% endif %}
       <!-- User Profile Dropdown (Visible on Mobile and Desktop) -->
       
       <div class="dropdown user-profile">

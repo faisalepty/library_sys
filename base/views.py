@@ -39,8 +39,6 @@ def user_logout(request):
 def dashboard(request):
     """Display library statistics and recent activities."""
     overdue_history = Transaction.objects.filter(
-    ).select_related('book', 'member').values(
-        'member__id', 'book__title', 'book__isbn'
     )[:5]
 
     recent_checkouts = Transaction.objects.filter(

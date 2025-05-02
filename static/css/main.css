@@ -260,7 +260,7 @@ hr{margin: 0 0 10px 0}
 .text-danger {color: #dc3545 !important;font-size: 0.875rem;}
 .checkout-section .view-all {color: #28a745;font-size: 0.875rem;text-decoration: none;transition: color 0.3s ease;}
 .checkout-section .view-all:hover {color: #1f7a38; /* Darker green on hover */text-decoration: underline;}
-.checkout-section .truncate {max-width: 150px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+.checkout-section .truncate, .truncate {max-width: 150px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
 .card-body .status {font-weight: 500;}
 .card-body .status::before {border-radius: 50%;content: '';display: inline-block;height: 10px;margin-right: 0.5rem;vertical-align: middle;width: 10px;}
 .card-body .status.active::before {background-color: #28a745; /* Green for Active */}
