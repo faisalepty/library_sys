@@ -1,7 +1,7 @@
 $(document).ready(function () {
     let currentPage = 1; 
 
-    // Fetch and display members
+    // Fetch and populate table with members
     function fetchMembers(page = 1, search = '') {
         $.ajax({
             url: '/members/',
@@ -9,7 +9,7 @@ $(document).ready(function () {
             data: { page: page, search: search },
             success: function (response) {
                 $('#members-table-body').empty();
-                // Populate table with new rows
+                
                 response.members.forEach(function (member) {
                     $('#members-table-body').append(`
                         <tr>
@@ -18,7 +18,7 @@ $(document).ready(function () {
                             <td>${member.email}</td>
                             <td>${member.phone_number || '-'}</td>
                             <td>${member.outstanding_debt}</td>
-                            <td>${member.is_active ? 'Active' : 'Inactive'}</td>
+                            
                             <td>
                                 <!-- Dropdown Menu --><div class="dropdown"><button class="action-dropdown-btn" type="button" id="memberActionsDropdown-${member.id}" data-bs-toggle="dropdown" aria-expanded="false">...</button><ul class="dropdown-menu" aria-labelledby="memberActionsDropdown-${member.id}"><li><a class="dropdown-item " href="/member/${member.id}/">View details</a></li><li><a class="dropdown-item issue-book-link" href="#" data-id="${member.id}" data-type="member">Issue Book</a></li><li><a class="dropdown-item edit-member-action" href="#" data-id="${member.id}">Edit</a></li><li><a class="dropdown-item delete-member-action" href="#" data-id="${member.id}">Delete</a></li></ul>
                                 </div>
@@ -34,12 +34,15 @@ $(document).ready(function () {
         });
     }
     fetchMembers();
+
+
     // Handle search input
     $('#search-members').on('input', function () {
         const searchQuery = $(this).val();
-        fetchMembers(1, searchQuery); // Reset to page 1 when searching
+        fetchMembers(1, searchQuery); 
     });
-    // Handle "Add Member" button click
+
+    // clear inputs on Add Member button click
     $('.add-member-btn').on('click', function () {
         $('#member-id').val('');
         $('#name').val('');
@@ -50,7 +53,8 @@ $(document).ready(function () {
         $('#memberModalTitle').text('Add member')
         $('#addEditMemberModal').modal('show');
     });
-    // Handle "Edit Member" button click
+
+    // populate input on Edit Member button click
     $(document).on('click', '.edit-member-action', function () {
         const memberId = $(this).data('id');
 
@@ -72,7 +76,9 @@ $(document).ready(function () {
             },
         });
     });
-    // Handle form submission
+
+
+    // submit member form "add/edit"
     $('#member-form').on('submit', function (e) {
         e.preventDefault();
         const formData = $(this).serialize();
@@ -99,11 +105,13 @@ $(document).ready(function () {
                 showErrorModal('Error saving member.');
             },
             complete: function () {
-                  // Hide spinner and re-enable login button
+                  
                   $('#member-spinner').addClass('d-none');
               }
         });
     });
+
+
 let delmemberId
 $(document).on('click', '.delete-member-action', function () {
     delmemberId = $(this).data('id');
@@ -111,7 +119,7 @@ $(document).on('click', '.delete-member-action', function () {
     $('.confirm-modal .modal-footer .btn-primary').attr('id', 'confirmModalBtn-member');
     $('.confirm-modal').modal('show')
 })
-   // Handle "Delete Member" button click
+   // call delete on Delete Member button click
     $(document).on('click', '#confirmModalBtn-member', function () {
         $('.confirm-modal').modal('hide')
             $.ajax({
@@ -130,20 +138,28 @@ $(document).on('click', '.delete-member-action', function () {
                 },
             });       
     });
+
  function updateMemberPagination(pagination, currentPage) {
-    const paginationControls = $('#members-pagination-controls'); // Unique ID
+    const paginationControls = $('#members-pagination-controls'); 
     paginationControls.empty();
     if (pagination.has_previous) {
         paginationControls.append(`<button class="page-btn member-page-btn" data-page="${pagination.previous_page_number}">Previous</button>`);
+    }
+    else{
+         paginationControls.append(`<button class="page-btn member-page-btn" disabled aria-disabled="true">Previous</button>`);
     }
     paginationControls.append(`<span>Page ${pagination.current_page} of ${pagination.total_pages}</span>`);
     if (pagination.has_next) {
         paginationControls.append(`<button class="page-btn member-page-btn" data-page="${pagination.next_page_number}">Next</button>`);
     }
+    else{
+         paginationControls.append(`<button class="page-btn member-page-btn" disabled aria-disabled="true">Next</button>`);
+    }
 }
+
  // Handle pagination button clicks
     $(document).on('click', '.member-page-btn', function () {
-        currentPage = $(this).data('page'); // Update the current page
+        currentPage = $(this).data('page'); 
         const searchQuery = $('#search-members').val();
         fetchMembers(currentPage, searchQuery);
     });

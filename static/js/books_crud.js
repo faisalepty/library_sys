@@ -1,5 +1,5 @@
-   $(document).ready(function () {
-    // Function to fetch books with search functionality
+$(document).ready(function () {
+    // fetch books with search functionality
 function fetchBooks(page = 1, searchType = '', searchQuery = '') {
     $.ajax({
         url: '/books/',
@@ -32,22 +32,29 @@ function fetchBooks(page = 1, searchType = '', searchQuery = '') {
     });
 }
 fetchBooks();
+
 let bookSearchType = $('.books-search-bar .book-search-type-options li.selected').data('value');
 let bookSearchQuery = $('#book-search-query').val();
 // Listen for changes in the search input
 $('#book-search-query').on('input', function () {
-    currentPage = 1; // Reset to the first page when searching
+    currentPage = 1; 
     const searchType = $('.books-search-bar .book-search-type-options li.selected').data('value');
     const searchQuery = $(this).val();
     fetchBooks(currentPage, searchType, searchQuery);
 });
-    // Function to update pagination controls
-  function updateBookPagination(pagination) {
-    const paginationControls = $('#books-pagination-controls'); // Unique ID
+
+    // update pagination controls
+function updateBookPagination(pagination) {
+    const paginationControls = $('#books-pagination-controls');
     paginationControls.empty();
     if (pagination.has_previous) {
         paginationControls.append(`
             <button class="page-btn book-page-btn" data-page="${pagination.previous_page_number}">Previous</button>
+        `);
+    }
+    else{
+        paginationControls.append(`
+            <button class="page-btn book-page-btn" disabled aria-disabled="true">Previous</button>
         `);
     }
     paginationControls.append(`<span>Page ${pagination.current_page} of ${pagination.total_pages}</span>`);
@@ -56,19 +63,26 @@ $('#book-search-query').on('input', function () {
             <button class="page-btn book-page-btn" data-page="${pagination.next_page_number}">Next</button>
         `);
     }
+    else{
+        paginationControls.append(`
+            <button class="page-btn book-page-btn" disabled aria-disabled="true">Next</button>
+        `);
+    }
 }
-    // Handle pagination button clicks
-    $(document).on('click', '.book-page-btn', function () {
+
+    // pagination button clicks
+$(document).on('click', '.book-page-btn', function () {
         let page = $(this).data('page');
         let searchQuery = $('#search-books').val();
         let bookSearchType = $('.books-search-bar .search-type-options li.selected').data('value');
         let bookSearchQuery = $('#search-query').val();
        
         fetchBooks(page, bookSearchType, bookSearchQuery);
-    });
-// Handle "Add Book" button click
-    $('.add-book-btn').on('click', function () {
-        $('#book-id').val(''); // Clear ID for new book
+});
+
+// clear input fields on Add Book button click
+$('.add-book-btn').on('click', function () {
+        $('#book-id').val(''); 
         $('#title').val('');
         $('#author').val('');
         $('#genre').val('');
@@ -76,16 +90,17 @@ $('#book-search-query').on('input', function () {
         $('#stock').val('');
         $('#bookModalTitle').text('Add book')
         $('#addEditBookModal').modal('show');
-    });
-    // Handle "Edit Book" button click
-    $(document).on('click', '.edit-book-action', function () {
+});
+    
+// populate form on Edit Book button click
+$(document).on('click', '.edit-book-action', function () {
         const bookId = $(this).data('id');
-        // Fetch book details using the new endpoint
+        
         $.ajax({
-            url: `/books/${bookId}/`,  // Fetch book details by ID
+            url: `/books/${bookId}/`, 
             method: 'GET',
             success: function (response) {
-                // Populate the modal fields with the fetched data
+                
                 $('#book-id').val(response.id);
                 $('#title').val(response.title);
                 $('#author').val(response.author);
@@ -94,7 +109,7 @@ $('#book-search-query').on('input', function () {
                 $('#stock').val(response.stock);
                 $('#bookModalTitle').text(`Edit ${response.title} by ${response.author}`)
 
-                // Show the modal
+               
                 $('#addEditBookModal').modal('show');
             },
             error: function () {
@@ -102,8 +117,9 @@ $('#book-search-query').on('input', function () {
             },
         });
     });
-    // Handle form submission
-    $('#book-form').on('submit', function (e) {
+
+// submit add/edit book form
+$('#book-form').on('submit', function (e) {
         e.preventDefault();
         const bookId = $('#book-id').val();
         const url = bookId ? `/books/update/${bookId}/` : '/books/create/';
@@ -130,11 +146,12 @@ $('#book-search-query').on('input', function () {
                 }
             },
             complete: function () {
-                  // Hide spinner and re-enable login button
+                  
                   $('#book-spinner').addClass('d-none');
               }
         });
     });
+
 let delbookId
 $(document).on('click', '.delete-book-action', function () {
     delbookId = $(this).data('id');
@@ -142,7 +159,7 @@ $(document).on('click', '.delete-book-action', function () {
     $('.confirm-modal .modal-footer .btn-primary').attr('id', 'confirmModalBtn-book');
     $('.confirm-modal').modal('show')
 })
-    // Handle "Delete Book" button click
+    // call for delete on Delete Book button click
     $(document).on('click', '#confirmModalBtn-book', function () {
             $('.confirm-modal').modal('hide')
             $.ajax({
@@ -164,6 +181,8 @@ $(document).on('click', '.delete-book-action', function () {
     });
 
 });
+
+
 // Toggle Search Bar on Small Devices
 $(document).on('click', '.books-header .book-search-toggle-btn', function () {
   const $searchBar = $('.books-search-bar');
@@ -171,22 +190,21 @@ $(document).on('click', '.books-header .book-search-toggle-btn', function () {
   
   $searchBar.toggleClass('active');
   
-  // Toggle magnifying glass icon between search and close
+  
   if ($searchBar.hasClass('active')) {
-    $toggleBtn.html('<i class="fas fa-times"></i>'); // Show close icon when search bar is visible
-  } else {
-    $toggleBtn.html('<i class="fas fa-search"></i>'); // Show search icon when search bar is hidden
+    $toggleBtn.html('<i class="fas fa-times"></i>'); 
+    $toggleBtn.html('<i class="fas fa-search"></i>');
   }
 });
 $(document).on('click', '.books-search-bar .book-search-type-btn', function (e) {
-  e.stopPropagation(); // Prevent event bubbling
+  e.stopPropagation(); 
   const dropdown = $(this).siblings('.book-search-type-options');
   dropdown.toggleClass('active');
 });
 
 // Handle Dropdown Option Selection
 $(document).on('click', '.books-search-bar .book-search-type-options li', function (e) {
-  e.stopPropagation(); // Prevent event bubbling
+  e.stopPropagation(); 
   const value = $(this).data('value');
   let displayText = '';
   switch (value) {
@@ -200,8 +218,9 @@ $(document).on('click', '.books-search-bar .book-search-type-options li', functi
   $(this).closest('.book-search-filter-wrapper').find('.book-search-filter-display').text(displayText);
   $(this).siblings().removeClass('selected');
   $(this).addClass('selected');
-  $(this).closest('.book-search-type-options').removeClass('active'); // Close dropdown
+  $(this).closest('.book-search-type-options').removeClass('active'); 
 });
+
 // Initialize Filter Display on Page Load
 $(document).ready(function () {
   const selectedOption = $('.books-search-bar .book-search-type-options li.selected');

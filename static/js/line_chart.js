@@ -1,25 +1,25 @@
- // Retrieve the serialized JSON data
+ // json data retrival from DOM
   const checkoutStatsMonths = JSON.parse(document.getElementById('checkout-stats-months').textContent);
   const checkoutStatsBorrowed = JSON.parse(document.getElementById('checkout-stats-borrowed').textContent);
   const checkoutStatsReturned = JSON.parse(document.getElementById('checkout-stats-returned').textContent);
 
-  // Initialize the chart
+  // chart init
   const ctx = document.getElementById('checkoutChart').getContext('2d');
   const checkoutChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: checkoutStatsMonths, // Months passed from the backend
+      labels: checkoutStatsMonths, 
       datasets: [
         {
           label: 'Borrowed',
-          data: checkoutStatsBorrowed, // Borrowed counts passed from the backend
+          data: checkoutStatsBorrowed, 
           borderColor: '#28a745',
           borderWidth: 2,
           fill: false,
         },
         {
           label: 'Returned',
-          data: checkoutStatsReturned, // Returned counts passed from the backend
+          data: checkoutStatsReturned,
           borderColor: '#dc3545',
           borderWidth: 2,
           fill: false,

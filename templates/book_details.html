@@ -60,7 +60,7 @@
                           {% elif transaction.balance > 0 %}
                             <li><a class="dropdown-item pay-debt-btn" href="#" data-id="{{transaction.id}}" data-balance="{{transaction.balance}}">Pay Debt</a></li>
                           {% else %}
-                          <li><a class="dropdown-item return-btn" href="#" data-id="{{transaction.id}}">No actoins required</a></li>
+                          <li><a class="dropdown-item disabled" href="#" data-id="{{transaction.id}}">No actoins required</a></li>
                           {% endif %}
                         </ul>
                     </div>

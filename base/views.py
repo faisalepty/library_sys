@@ -13,7 +13,7 @@ from .models import Book, Member, Transaction
 
 # User Authentication
 def user_login(request):
-    """Handle user login with username and password."""
+    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -28,7 +28,7 @@ def user_login(request):
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
 def user_logout(request):
-    """Handle user logout."""
+    
     if request.method == 'POST':
         logout(request)
         return JsonResponse({'success': True, 'message': 'Logout successful.'})
@@ -37,7 +37,7 @@ def user_logout(request):
 # Dashboard
 @login_required(login_url='/login/')
 def dashboard(request):
-    """Display library statistics and recent activities."""
+    
     overdue_history = Transaction.objects.filter(
     )[:5]
 
@@ -89,7 +89,7 @@ def dashboard(request):
 # Search
 @login_required(login_url='/login/')
 def general_search(request):
-    """Search books or members by title, author, or name."""
+    
     search_type = request.GET.get('search_type', '')
     search_query = request.GET.get('search_query', '')
     results = []
@@ -109,7 +109,7 @@ def general_search(request):
 # Book Management
 @login_required(login_url='/login/')
 def book_list(request):
-    """List books with pagination and search by title or author."""
+    
     page = request.GET.get('page', 1)
     search_type = request.GET.get('search_type', '')
     search_query = request.GET.get('search_query', '')
@@ -146,7 +146,7 @@ def book_list(request):
 
 @login_required(login_url='/login/')
 def create_book(request):
-    """Create a new book."""
+    
     if request.method == 'POST':
         title = request.POST.get('title')
         author = request.POST.get('author')
@@ -169,7 +169,7 @@ def create_book(request):
 
 @login_required(login_url='/login/')
 def update_book(request, book_id):
-    """Update an existing book."""
+    
     if request.method == 'POST':
         book = get_object_or_404(Book, id=book_id)
         book.title = request.POST.get('title', book.title)
@@ -185,7 +185,7 @@ def update_book(request, book_id):
 
 @login_required(login_url='/login/')
 def delete_book(request, book_id):
-    """Delete a book."""
+    
     if request.method == 'POST':
         book = get_object_or_404(Book, id=book_id)
         try:
@@ -196,7 +196,7 @@ def delete_book(request, book_id):
 
 @login_required(login_url='/login/')
 def fetch_book_details(request, book_id):
-    """Fetch details of a specific book."""
+   
     if request.method == 'GET':
         book = get_object_or_404(Book, id=book_id)
         data = {
@@ -211,7 +211,7 @@ def fetch_book_details(request, book_id):
 
 @login_required(login_url='/login/')
 def fetch_all_books(request):
-    """Fetch all books."""
+    
     books = Book.objects.all()
     data = {'books': [{'id': book.id,
                 'title': book.title,
@@ -222,7 +222,7 @@ def fetch_all_books(request):
 
 @login_required(login_url='/login/')
 def book_details_page(request, book_id):
-    """Display book details and transaction history."""
+    
     book = get_object_or_404(Book, id=book_id)
     transactions = Transaction.objects.filter(book=book).order_by('-issue_date')
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -257,7 +257,7 @@ def book_details_page(request, book_id):
 # Member Management
 @login_required(login_url='/login/')
 def member_list(request):
-    """List members with pagination and search by name or email."""
+    
     page = request.GET.get('page', 1)
     search_query = request.GET.get('search', '')
     members = Member.objects.filter(
@@ -273,7 +273,7 @@ def member_list(request):
                 'email': member.email,
                 'phone_number': member.phone_number or '-',
                 'outstanding_debt': str(member.outstanding_debt),
-                'is_active': member.is_active,
+                
             }
             for member in members_page
         ],
@@ -292,7 +292,7 @@ def member_list(request):
 
 @login_required(login_url='/login/')
 def add_or_edit_member(request):
-    """Add or edit a member."""
+    
     if request.method == 'POST':
         member_id = request.POST.get('id')
         name = request.POST.get('name')
@@ -326,7 +326,7 @@ def add_or_edit_member(request):
 
 @login_required(login_url='/login/')
 def delete_member(request, member_id):
-    """Delete a member."""
+    
     if request.method == 'POST':
         member = get_object_or_404(Member, id=member_id)
         try:
@@ -337,7 +337,7 @@ def delete_member(request, member_id):
 
 @login_required(login_url='/login/')
 def fetch_member_details(request, member_id):
-    """Fetch details of a specific member."""
+   
     if request.method == 'GET':
         member = get_object_or_404(Member, id=member_id)
         data = {
@@ -353,7 +353,7 @@ def fetch_member_details(request, member_id):
 
 @login_required(login_url='/login/')
 def fetch_all_members(request):
-    """Fetch all members."""
+
     members = Member.objects.all()
     data = {'members':
             [{
@@ -367,7 +367,7 @@ def fetch_all_members(request):
 
 @login_required(login_url='/login/')
 def member_details_page(request, member_id):
-    """Display member details and transaction history."""
+   
     member = get_object_or_404(Member, id=member_id)
     transactions = Transaction.objects.filter(member=member).order_by('-issue_date')
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -398,7 +398,7 @@ def member_details_page(request, member_id):
 # Transaction Management
 @login_required(login_url='/login/')
 def issue_book(request):
-    """Issue a book to a member."""
+    
     if request.method == 'POST':
         book_id = request.POST.get('book_id')
         member_id = request.POST.get('member_id')
@@ -420,7 +420,7 @@ def issue_book(request):
 
 @login_required(login_url='/login/')
 def return_book(request):
-    """Return a book and calculate fees."""
+   
     if request.method == 'POST':
         transaction_id = request.POST.get('transaction_id')
         try:
@@ -458,7 +458,7 @@ def return_book(request):
 
 @login_required(login_url='/login/')
 def transaction_list(request):
-    """List transactions with pagination and filters."""
+    
     page = request.GET.get('page', 1)
     member_id = request.GET.get('member_id', '')
     book_id = request.GET.get('book_id', '')
@@ -505,7 +505,7 @@ def transaction_list(request):
 
 @login_required(login_url='/login/')
 def pay_debt(request):
-    """Process payment for transaction balance."""
+    
     if request.method == 'POST':
         transaction_id = request.POST.get('transaction_id')
         payment_amount = request.POST.get('payment_amount')
@@ -533,7 +533,7 @@ def pay_debt(request):
 # Librarian Management
 @login_required(login_url='/login/')
 def librarian_list(request):
-    """List librarians with pagination and search by username or email."""
+    
     page = request.GET.get('page', 1)
     search_query = request.GET.get('search', '')
     librarians = User.objects.filter(
@@ -566,7 +566,7 @@ def librarian_list(request):
 
 @login_required(login_url='/login/')
 def add_or_edit_librarian(request):
-    """Add or edit a librarian."""
+    
     if request.method == 'POST':
         librarian_id = request.POST.get('librarian_id')
         username = request.POST.get('username')
@@ -590,7 +590,7 @@ def add_or_edit_librarian(request):
 
 @login_required(login_url='/login/')
 def get_librarian_details(request, pk):
-    """Fetch details of a specific librarian."""
+    
     librarian = get_object_or_404(User, pk=pk)
     data = {
         'id': librarian.id,
@@ -601,7 +601,7 @@ def get_librarian_details(request, pk):
 
 @login_required(login_url='/login/')
 def delete_librarian(request, pk):
-    """Delete a librarian."""
+    
     librarian = get_object_or_404(User, pk=pk)
     librarian.delete()
     return JsonResponse({'success': True, 'message': 'Librarian deleted successfully.'})

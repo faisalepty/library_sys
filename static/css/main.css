@@ -132,7 +132,7 @@ hr{margin: 0 0 10px 0}
 .sidebar .nav-link:hover i {color: #28a745;}
 .sidebar .nav-link.active {background-color: #28a745;color: #fff;}
 .sidebar .nav-link.active i {color: #fff;}
-.sidebar .logout {color: #dc3545;font-weight: 500;}
+.sidebar .logout {color: #dc3545;font-weight: 500; position: absolute; bottom: 15px}
 .sidebar .logout i {color: #dc3545;}
 .sidebar .logout:hover {background-color: #dc3545;color: #fff;padding-left: 1.75rem;}
 .sidebar .logout:hover i {color: #fff;}
@@ -243,7 +243,7 @@ hr{margin: 0 0 10px 0}
 #issueBookModal .custom-select option:hover, #issueBookModal .custom-select option:focus, #issueBookModal .custom-select option:checked, #issueBookModal .custom-select option:selected {background-color: #28a745 !important; /* Green highlight */color: #fff !important; /* White text for contrast */}
 #issueBookModal .custom-select:disabled {background-color: #e9ecef;color: #6c757d;cursor: not-allowed;opacity: 0.65;}
 /* Pagination */
-.pagination {align-items: center;display: flex;gap: 8px;justify-content: start;padding: 10px; background-color: #e5e5e5; border-radius: 0 0 20px 20px;}
+.pagination {align-items: center;display: flex;gap: 8px;justify-content: start;padding: 10px; background-color: white; border-radius: 0 0 20px 20px;}
 .pagination .page-btn {background-color: #28a745;border: 1px solid #28a745;border-radius: 6px;color: #fff;cursor: pointer;font-size: 1rem;font-weight: 500;min-width: 40px;padding: 6px 12px;text-align: center;transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease, transform 0.1s ease;}
 .pagination .page-btn:hover {background-color: #f8f9fa;border-color: #ced4da;box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);color: #343a40;transform: translateY(-1px);}
 .pagination .page-btn.active {background-color: #28a745; /* Green for active page */border-color: #28a745;box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);color: #fff;font-weight: 600;}

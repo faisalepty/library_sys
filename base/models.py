@@ -10,7 +10,7 @@ class Book(models.Model):
     description = models.TextField(blank=True, null=True)  
     stock = models.PositiveIntegerField(default=0) 
     
-    #cover_image = models.ImageField(upload_to='book_covers/', blank=True, null=True)  # Cover image
+    #cover_image = models.ImageField(upload_to='book_covers/', blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -24,7 +24,7 @@ class Member(models.Model):
     address = models.TextField(blank=True, null=True) 
     membership_date = models.DateField(auto_now_add=True)  
     outstanding_debt = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  
-    is_active = models.BooleanField(default=True)  
+     
 
     def __str__(self):
         return self.name
@@ -40,7 +40,7 @@ class Transaction(models.Model):
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0) 
 
     def save(self, *args, **kwargs):
-        # Automatically calculate balance when saving
+        
         self.balance = self.fee - self.amount_paid
         super().save(*args, **kwargs)
 

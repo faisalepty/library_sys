@@ -7,7 +7,7 @@ function fetchLibrarians(page = 1, search = '') {
         success: function (response) {
             $('#librarians-table-body').empty();
 
-            // Populate table rows
+           
             response.librarians.forEach(function (librarian) {
                 $('#librarians-table-body').append(`
                     <tr>
@@ -21,7 +21,7 @@ function fetchLibrarians(page = 1, search = '') {
                     </tr>
                 `);
             });
-            // Update pagination controls
+           
             updateLibrarianPagination(response.pagination, page);
         },
         error: function () {
@@ -29,6 +29,7 @@ function fetchLibrarians(page = 1, search = '') {
         },
     });
 }
+
 // Save Librarian (Add or Edit)
 $('#save-librarian-btn').on('click', function () {
     const id = $('#librarian-id').val();
@@ -57,18 +58,21 @@ $('#save-librarian-btn').on('click', function () {
             showErrorModal('An error occurred while saving the librarian.');
         },
         complete: function () {
-              // Hide spinner and re-enable login button
+              
               $('#librarians-spinner').addClass('d-none');
         }
     });
 });
+
+
 // Open the Add Librarian Modal
 $('.add-librarian-btn').on('click', function () {
     resetLibrarianForm();
     $('#addEditLibrarianModalLabel').text('Add Librarian');
-    $('.optional-fields').show(); // Show all fields for adding
+    $('.optional-fields').show(); 
 });
-// Open the Edit Librarian Modal
+
+// Open the Edit Librarian Modal and populate data
 $(document).on('click', '.edit-librarian-btn', function () {
     const id = $(this).data('id');
     $.ajax({
@@ -82,7 +86,7 @@ $(document).on('click', '.edit-librarian-btn', function () {
             $('#librarian-address').val(response.address || '');
 
             $('#addEditLibrarianModalLabel').text('Edit Librarian');
-            $('.optional-fields').hide(); // Hide optional fields for editing
+            $('.optional-fields').hide();
             $('#addEditLibrarianModal').modal('show');
         },
         error: function () {
@@ -91,6 +95,8 @@ $(document).on('click', '.edit-librarian-btn', function () {
         
     });
 });
+
+
 let delLibrarianId
 $(document).on('click', '.delete-librarian-btn', function () {
     delLibrarianId = $(this).data('id');
@@ -98,6 +104,7 @@ $(document).on('click', '.delete-librarian-btn', function () {
     $('.confirm-modal .modal-footer .btn-primary').attr('id', 'confirmModalBtn-librarian');
     $('.confirm-modal').modal('show')
 })
+
 // Delete a Librarian
 $(document).on('click', '#confirmModalBtn-librarian', function () { 
     $('.confirm-modal').modal('hide')
@@ -117,6 +124,7 @@ $(document).on('click', '#confirmModalBtn-librarian', function () {
             },
         });
 });
+
 // Reset the Librarian Form
 function resetLibrarianForm() {
     $('#librarian-id').val('');
@@ -125,8 +133,10 @@ function resetLibrarianForm() {
     $('#librarian-password').val('');
     $('#librarian-phone').val('');
     $('#librarian-address').val('');
-    $('.optional-fields').show(); // Ensure all fields are visible after resetting
+    $('.optional-fields').show(); 
 }
+
+
 // Update Pagination Controls
 function updateLibrarianPagination(pagination, currentPage) {
     const paginationControls = $('#librarians-pagination-controls');
@@ -134,8 +144,13 @@ function updateLibrarianPagination(pagination, currentPage) {
 
     if (pagination.has_previous) {
         paginationControls.append(`
-            <a href="#" class="page-link" data-page="${pagination.previous_page_number}">Previous</a>
+            <button href="#" class="page-link page-btn" data-page="${pagination.previous_page_number}">Previous</button>
         `);
+    }
+    else{
+       paginationControls.append(`
+            <button href="#" class="page-link page-btn" disabled aria-disabled="true">Previous</button>
+        `); 
     }
 
     paginationControls.append(`
@@ -144,8 +159,13 @@ function updateLibrarianPagination(pagination, currentPage) {
 
     if (pagination.has_next) {
         paginationControls.append(`
-            <a href="#" class="page-link" data-page="${pagination.next_page_number}">Next</a>
+            <button href="#" class="page-link page-btn" data-page="${pagination.next_page_number}">Next</button>
         `);
+    }
+    else{
+       paginationControls.append(`
+            <button href="#" class="page-link page-btn" disabled aria-disabled="true">Next</button>
+        `); 
     }
 
     // Handle pagination link clicks
@@ -161,7 +181,7 @@ $('#search-librarians').on('input', function () {
     clearTimeout(debounceTimer);
 
     debounceTimer = setTimeout(function () {
-        fetchLibrarians(1, searchQuery); // Reset to the first page when searching
+        fetchLibrarians(1, searchQuery);
     }, 300);
 });
 fetchLibrarians();

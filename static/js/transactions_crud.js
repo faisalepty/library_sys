@@ -1,7 +1,7 @@
  $(document).ready(function () {
 function getQueryParams() {
     const params = {};
-    const queryString = window.location.search.substring(1); // Remove the leading '?'
+    const queryString = window.location.search.substring(1); 
     queryString.split('&').forEach(pair => {
         const [key, value] = pair.split('=');
         if (key && value) {
@@ -10,10 +10,12 @@ function getQueryParams() {
     });
     return params;
 }
-let currentPage = 1; // Global variable to track the current page
-// Function to fetch transactions with search functionality
+
+let currentPage = 1; 
+
+//fetch transactions with embeded search query and populate trasaction table
 function fetchTransactions(page = 1, member_id = '', book_id = '') {
-    // Get the current search type and query
+    
     const searchType = $('.transaction-search-type-options li.selected').data('value');
     const searchQuery = $('#transaction-search-query').val();
     $.ajax({
@@ -64,21 +66,25 @@ function fetchTransactions(page = 1, member_id = '', book_id = '') {
         },
     });
 }
+
+
 // Listen for changes in the search input
 $('#transaction-search-query').on('input', function () {
     currentPage = 1; // Reset to the first page when searching
     fetchTransactions(currentPage);
 });
-// Initial load
-const queryParams = getQueryParams(); // Parse query parameters from the URL
-currentPage = parseInt(queryParams.page) || 1; // Use the current page from the URL or default to 1
-const memberId = queryParams.member_id || ''; // Use the member_id filter if present
-const bookId = queryParams.book_id || ''; // Use the book_id filter if present
-// Fetch transactions with the parsed query parameters
+
+const queryParams = getQueryParams(); 
+currentPage = parseInt(queryParams.page) || 1; 
+const memberId = queryParams.member_id || ''; 
+const bookId = queryParams.book_id || '';
+
+// initial call
 fetchTransactions(currentPage, memberId, bookId);
-    // Handle "Issue Book" button click
-    $('.issue-book-btn').on('click', function () {
-        // Populate book options
+
+// fetch and populate options with book and member options on Main Issue Book button click
+$('.issue-book-btn').on('click', function () {
+        
         $.ajax({
             url: '/books-details/',
             method: 'GET',
@@ -89,7 +95,7 @@ fetchTransactions(currentPage, memberId, bookId);
                 });
             },
         });
-        // Populate member options
+        
         $.ajax({
             url: '/members-details/',
             method: 'GET',
@@ -102,37 +108,39 @@ fetchTransactions(currentPage, memberId, bookId);
             },
         });
     });
-    // Handle "Issue Book" button click
+
+// fetch and populate form with book or member options on Link Issue Book button click
 $(document).on('click', '.issue-book-link', function (e) {
-    e.preventDefault(); // Prevent default link behavior
-    // Get the selected ID and type from the clicked link
-    const selectedId = $(this).data('id'); // ID of the selected book or member
-    const selectedType = $(this).data('type'); // Type ('book' or 'member')
-    // Populate book options
+    e.preventDefault(); 
+    
+    const selectedId = $(this).data('id'); 
+    const selectedType = $(this).data('type'); 
+    
     $.ajax({
         url: '/books-details/',
         method: 'GET',
         success: function (response) {
-            $('#book-id-option').empty(); // Clear the dropdown
-            // Populate book options
+            $('#book-id-option').empty(); 
+           
             response.books.forEach(function (book) {
                 $('#book-id-option').append(`<option value="${book.id}">${book.title}</option>`);                
             });
-            // Pre-select the book if applicable
+            
             if (selectedType === 'book' && selectedId) {
-                $('#book-id-option').val(selectedId); // Pre-select the book
-                $('#book-id-option').prop('disabled', true); // Make the dropdown read-only
-                $('#member-id-option').prop('disabled', false); // Ensure member dropdown is editable               
+                $('#book-id-option').val(selectedId); 
+                $('#book-id-option').prop('disabled', true); 
+                $('#member-id-option').prop('disabled', false);               
             }
         },
     });
-    // Populate member options
+
+    
     $.ajax({
         url: '/members-details/',
         method: 'GET',
         success: function (response) {
-            $('#member-id-option').empty(); // Clear the dropdown
-            // Populate member options
+            $('#member-id-option').empty(); 
+            
             response.members.forEach(function (member) {
                 $('#member-id-option').append(`<option value="${member.id}">${member.name}</option>`);
             });
@@ -152,9 +160,9 @@ $(document).on('click', '.issue-book-link', function (e) {
         e.preventDefault(); 
         $('#book-id-option, #member-id-option').prop('disabled', false);
         const formData = $(this).serialize();
-        // Re-disable fields if necessary (optional, based on UI needs)
+        
         if ($('#book-id-option').data('was-disabled')) {
-            $('#book-id-option').prop('disabled', true);        }
+            $('#book-id-option').prop('disabled', true);}
         if ($('#member-id-option').data('was-disabled')) {
             $('#member-id-option').prop('disabled', true);
         }
@@ -187,6 +195,7 @@ $(document).on('click', '.issue-book-link', function (e) {
         $('#transaction-id').val(transactionId);
         $('#returnBookModal').modal('show');
     });
+
     // Handle return book form submission
     $('#return-book-form').on('submit', function (e) {
         e.preventDefault();
@@ -241,25 +250,33 @@ $(document).on('click', '.issue-book-link', function (e) {
             showErrorModal('An error occurred while processing the payment.');
         },
         complete: function () {
-              // Hide spinner and re-enable login button
+              
               $('#pay-debt-spinner').addClass('d-none');
           }
     });
 });
+
  function updateTransactionsPagination(pagination, currentPage) {
-    const queryParams = getQueryParams(); // Get existing query parameters
+    const queryParams = getQueryParams(); 
     const paginationControls = $('#transactions-pagination-controls');
     paginationControls.empty();
     if (pagination.has_previous) {
         const prevPage = pagination.previous_page_number;
         paginationControls.append(`<button class="page-btn transaction-page-btn" data-page="${prevPage}">Previous</button>`);
     }
+    else{
+        paginationControls.append(`<button class="page-btn transaction-page-btn" disabled aria-disabled="true">Previous</button>`);
+    }
     paginationControls.append(`<span>Page ${pagination.current_page} of ${pagination.total_pages}</span>`);
     if (pagination.has_next) {
         const nextPage = pagination.next_page_number;
         paginationControls.append(`<button class="page-btn transaction-page-btn" data-page="${nextPage}">Next</button>`);
     }
+     else{
+        paginationControls.append(`<button class="page-btn transaction-page-btn" disabled aria-disabled="true">Next</button>`);
+    }
 }
+
 // Handle pagination button clicks
 $(document).on('click', '.transaction-page-btn', function() {
     const newPage = $(this).data('page');
@@ -269,17 +286,20 @@ $(document).on('click', '.transaction-page-btn', function() {
   
     fetchTransactions(newPage, memberId, bookId);
     history.pushState(null, '', '?' + queryString);
-});   
-// Open Return Book Modal
+}); 
+
+
 $('.return-book-btn').on('click', function () {
     $('#returnBookModal').modal('show');
 });
 });
+
+ // Populate pay debt modal with transaction details
 $(document).on('click', '.pay-debt-btn', function () {
     const transactionId = $(this).data('id');
     const balance = $(this).data('balance');
 
-    // Populate the modal with transaction details
+    
     $('#transactionId').val(transactionId);
     $('#remainingBalance').text(balance);
     $('#payDebtModal').modal('show');
@@ -317,12 +337,11 @@ $(document).on('click', '.transaction-search-type-options li', function (e) {
   $('.transaction-search-type-options').removeClass('active'); // Close dropdown
 });
 
-// Close Dropdown When Clicking Outside
 $(document).on('click', function () {
   $('.transaction-search-type-options').removeClass('active');
 });
 
-// Initialize Filter Display on Page Load
+
 $(document).ready(function () {
   const selectedOption = $('.transaction-search-type-options li.selected');
   const value = selectedOption.data('value');
@@ -353,16 +372,16 @@ $(document).on('click', '.transactions-header .transaction-search-toggle-btn', f
   
   $transactionsearchBar.toggleClass('active');
   
-  // Toggle magnifying glass icon between search and close
+  
   if ($transactionsearchBar.hasClass('active')) {
-    $transactiontoggleBtn.html('<i class="fas fa-times"></i>'); // Show close icon when search bar is visible
+    $transactiontoggleBtn.html('<i class="fas fa-times"></i>'); 
   } else {
-    $transactiontoggleBtn.html('<i class="fas fa-search"></i>'); // Show search icon when search bar is hidden
+    $transactiontoggleBtn.html('<i class="fas fa-search"></i>');
   }
 });
 
 $(document).on('click', '.transactions-search-bar .transaction-search-type-btn', function (e) {
-  e.stopPropagation(); // Prevent event bubbling
+  e.stopPropagation();
   const dropdown = $(this).siblings('.transaction-search-type-options');
   dropdown.addClass('active');
 });
