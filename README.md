@@ -5,6 +5,7 @@
 The Library Management Web Application is a Django-based system designed to streamline operations for a library. Built to assist librarians in managing books, members, and transactions. The system focuses on simplicity, assuming use by librarians only.
 
 Visit  [live site](https://flibrary.pythonanywhere.com/). login with username: admin, password: admin123
+visit similar application built with frappe [Frappe library management system app](https://github.com/faisalepty/library-sys-frappe)
 
 The project fulfills the following objectives:
 
