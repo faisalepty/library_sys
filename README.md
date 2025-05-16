@@ -42,6 +42,8 @@ The project fulfills the following objectives:
 
 - General Search: Librarians can search for books by title or author to quickly locate inventory.
 
+![image](https://github.com/user-attachments/assets/2684354e-63b8-42f0-9425-8d56e725892a)
+
 ### 5. Financial Rules
 
 - Debt Limit: Prevents book issuance if a member’s outstanding debt would exceed KES 500.
